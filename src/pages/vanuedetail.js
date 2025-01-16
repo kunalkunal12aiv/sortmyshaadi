@@ -10,6 +10,7 @@ import '../styles/calendar-override.css';
 import { motion } from 'framer-motion';
 import { useAuth } from '../contexts/AuthContext';
 import PhoneVerification from '../components/PhoneVerification';
+import { setRedirectUrl } from '../utils/auth';
 
 function VenueDetail() {
   const { id } = useParams();
@@ -42,11 +43,14 @@ function VenueDetail() {
 
   useEffect(() => {
     if (!user) {
+      // Save current URL before redirecting
+      setRedirectUrl(window.location.pathname);
       navigate('/signin');
       return;
     }
 
     if (user && (!userDetails?.phoneVerified)) {
+      setRedirectUrl(window.location.pathname);
       setShowPhoneVerification(true);
     }
 

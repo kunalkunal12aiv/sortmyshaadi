@@ -1,19 +1,24 @@
 import React from 'react';
-import HeroSection from '../components/hero_section';
-import ServiceCards from '../components/ServiceCards';
-import FeaturedVendors from '../components/featured_vendor';
-import HowItWorks from '../components/howitworks';
-import TestimonialSection from '../components/testimonial_section';
+import HeroSection from '../components/home/HeroSection';
+import Features from '../components/home/Features';
+import VenueShowcase from '../components/home/VenueShowcase';
+import DecorGallery from '../components/home/DecorGallery';
+import BudgetPlanner from '../components/home/BudgetPlanner';
+import WhyChooseUs from '../components/home/WhyChooseUs';
+import TestimonialCarousel from '../components/home/TestimonialCarousel';
+import Footer from '../components/footer';
 
 function Home() {
-  
   return (
-    <div className="home">
+    <div className="overflow-hidden">
       <HeroSection />
-      <ServiceCards />
-      <HowItWorks />
-      <FeaturedVendors />
-      <TestimonialSection />
+      <Features />
+      <VenueShowcase />
+      <DecorGallery />
+      <BudgetPlanner />
+      <WhyChooseUs />
+      <TestimonialCarousel />
+      <Footer />
     </div>
   );
 }

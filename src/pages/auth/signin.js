@@ -1,10 +1,13 @@
 import React, { useState } from "react";
-import { auth, db } from "../../firebase"; // Correct import statement
+import { useNavigate } from "react-router-dom";
+import { auth, db } from "../../firebase";
 import { GoogleAuthProvider, signInWithPopup } from "firebase/auth";
-import { doc, setDoc } from "firebase/firestore"; // Import Firestore functions
+import { doc, getDoc } from "firebase/firestore";
+import { getRedirectUrl } from "../../utils/auth";
+import { motion } from "framer-motion";
 
 const SignIn = () => {
-  const [user, setUser] = useState(null);
+  const navigate = useNavigate();
   const [error, setError] = useState("");
 
   const handleGoogleSignIn = async () => {
@@ -13,55 +16,68 @@ const SignIn = () => {
     try {
       const result = await signInWithPopup(auth, provider);
       const user = result.user;
-      console.log(user);
-      setUser(user); // Set user info to state
 
-      // Create or update user document in Firestore
-      await setDoc(doc(db, "users", user.uid), {
-        displayName: user.displayName,
-        email: user.email,
-        photoURL: user.photoURL,
-      });
-    } catch (error) {
-      setError(error.message);
-    }
-  };
+      // Check if user exists and has phone verification
+      const userDoc = await getDoc(doc(db, "users", user.uid));
+      const userData = userDoc.data();
 
-  const handleSignOut = async () => {
-    try {
-      await auth.signOut();
-      setUser(null); // Clear user info
+      // Get redirect URL if exists
+      const redirectUrl = getRedirectUrl() || '/';
+
+      if (!userData?.phoneVerified) {
+        // If phone not verified, redirect to phone verification
+        navigate('/phone-verification', { state: { returnUrl: redirectUrl } });
+      } else {
+        // If everything is verified, redirect to original destination
+        navigate(redirectUrl);
+      }
     } catch (error) {
       setError(error.message);
     }
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-100">
-      <div className="bg-white p-8 rounded-lg shadow-lg w-full max-w-md">
-        {user ? (
-          <div>
-            <h1 className="text-2xl font-bold mb-6 text-center">Welcome, {user.displayName}</h1>
-            <button
-              onClick={handleSignOut}
-              className="w-full bg-red-500 text-white py-2 px-4 rounded-lg hover:bg-red-600 transition duration-300"
-            >
-              Sign Out
-            </button>
-          </div>
-        ) : (
-          <div>
-            <h1 className="text-2xl font-bold mb-6 text-center">Please Sign In</h1>
-            <button
-              onClick={handleGoogleSignIn}
-              className="w-full bg-blue-500 text-white py-2 px-4 rounded-lg hover:bg-blue-600 transition duration-300"
-            >
-              Sign in with Google
-            </button>
-            {error && <p className="text-red-500 mt-4 text-center">{error}</p>}
-          </div>
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-pink-50 to-purple-50">
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        className="bg-white p-8 rounded-2xl shadow-xl w-full max-w-md"
+      >
+        <div className="text-center mb-8">
+          <h1 className="text-3xl font-bold text-gray-900">Welcome Back</h1>
+          <p className="text-gray-600 mt-2">Please sign in to continue</p>
+        </div>
+
+        <button
+          onClick={handleGoogleSignIn}
+          className="w-full flex items-center justify-center gap-3 bg-white border-2 border-gray-200 py-3 px-4 rounded-lg hover:bg-gray-50 transition duration-200"
+        >
+          <img src="/google-icon.png" alt="Google" className="w-5 h-5" />
+          <span className="text-gray-700 font-medium">Continue with Google</span>
+        </button>
+
+        {error && (
+          <motion.p
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            className="text-red-500 mt-4 text-center"
+          >
+            {error}
+          </motion.p>
         )}
-      </div>
+
+        <div className="mt-8 text-center">
+          <p className="text-gray-600">
+            Don't have an account?{" "}
+            <button 
+              onClick={() => navigate('/signup')}
+              className="text-pink-600 font-medium hover:text-pink-700"
+            >
+              Sign Up
+            </button>
+          </p>
+        </div>
+      </motion.div>
     </div>
   );
 };
