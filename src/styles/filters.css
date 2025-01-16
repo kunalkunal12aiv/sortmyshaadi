@@ -1,0 +1,29 @@
+/* Add these styles to improve the range inputs */
+input[type="range"] {
+    height: 4px;
+    background: #e5e7eb;
+    border-radius: 2px;
+    outline: none;
+  }
+  
+  input[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 16px;
+    height: 16px;
+    background: #ec4899;
+    border-radius: 50%;
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+  
+  input[type="range"]::-webkit-slider-thumb:hover {
+    transform: scale(1.2);
+    box-shadow: 0 0 0 3px rgba(236, 72, 153, 0.1);
+  }
+  
+  .filter-group {
+    padding: 1rem;
+    background: #f9fafb;
+    border-radius: 0.5rem;
+  }
