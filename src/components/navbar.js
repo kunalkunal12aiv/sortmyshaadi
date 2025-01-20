@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import { auth } from '../firebase';
@@ -6,20 +6,30 @@ import '../styles/navbar.css';
 import { AnimatePresence, motion } from 'framer-motion';
 
 function Navbar() {
-  const { user, userDetails } = useAuth();
+  const { currentUser, userDetails } = useAuth();
   const [showProfileMenu, setShowProfileMenu] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const navigate = useNavigate();
 
+  useEffect(() => {
+    // Debug logging
+    console.log('Current user:', currentUser);
+    console.log('User details:', userDetails);
+  }, [currentUser, userDetails]);
+
   const handleSignOut = async () => {
     try {
       await auth.signOut();
+      setShowProfileMenu(false);
       setIsMobileMenuOpen(false);
       navigate('/');
     } catch (error) {
       console.error('Error signing out:', error);
     }
   };
+
+  const profilePhoto = userDetails?.photoURL || currentUser?.photoURL || '/default-avatar.png';
+  const displayName = userDetails?.displayName || currentUser?.displayName || 'User';
 
   const NavLinks = ({ onClick }) => (
     <ul className="nav-links">
@@ -67,7 +77,7 @@ function Navbar() {
 
         {/* Desktop Auth/Profile */}
         <div className="hidden md:flex items-center space-x-4">
-          {!user ? (
+          {!currentUser ? (
             <>
               <Link to="/signin" className="btn-secondary">Sign In</Link>
               <Link to="/signup" className="btn-primary">Sign Up</Link>
@@ -79,11 +89,11 @@ function Navbar() {
                 className="flex items-center space-x-2"
               >
                 <img
-                  src={user.photoURL || '/default-avatar.png'}
+                  src={profilePhoto}
                   alt="Profile"
                   className="w-8 h-8 rounded-full"
                 />
-                <span className="text-gray-700">{user.displayName}</span>
+                <span className="text-gray-700">{displayName}</span>
               </button>
 
               {/* Desktop Profile Menu */}
@@ -155,17 +165,17 @@ function Navbar() {
                 </div>
 
                 {/* Mobile User Profile */}
-                {user && (
+                {currentUser && (
                   <div className="mb-6 p-4 bg-gray-50 rounded-lg">
                     <div className="flex items-center space-x-3">
                       <img
-                        src={user.photoURL || '/default-avatar.png'}
+                        src={profilePhoto}
                         alt="Profile"
                         className="w-10 h-10 rounded-full"
                       />
                       <div>
-                        <p className="font-medium">{user.displayName}</p>
-                        <p className="text-sm text-gray-500">{user.email}</p>
+                        <p className="font-medium">{displayName}</p>
+                        <p className="text-sm text-gray-500">{currentUser.email}</p>
                       </div>
                     </div>
                   </div>
@@ -178,7 +188,7 @@ function Navbar() {
 
                 {/* Mobile Auth Buttons */}
                 <div className="mt-auto p-4 border-t">
-                  {!user ? (
+                  {!currentUser ? (
                     <div className="space-y-2">
                       <Link 
                         to="/signin" 

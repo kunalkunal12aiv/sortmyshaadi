@@ -9,7 +9,7 @@ import { motion } from 'framer-motion';
 function PhoneVerification() {
   const [phoneNumber, setPhoneNumber] = useState('');
   const [error, setError] = useState('');
-  const { user, setUserDetails } = useAuth();
+  const { currentUser, setUserDetails } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -21,17 +21,25 @@ function PhoneVerification() {
     }
 
     try {
-      const userRef = doc(db, 'users', user.uid);
-      await updateDoc(userRef, {
+      const userRef = doc(db, 'users', currentUser.uid);
+      const updatedData = {
         phoneNumber: phoneNumber,
         phoneVerified: true
-      });
-      setUserDetails(prev => ({ ...prev, phoneNumber, phoneVerified: true }));
+      };
       
-      // Redirect to saved URL or location state
-      const redirectUrl = getRedirectUrl() || location.state?.returnUrl || '/';
-      navigate(redirectUrl);
+      await updateDoc(userRef, updatedData);
+      
+      // Update user details in context
+      setUserDetails(prev => ({
+        ...prev,
+        ...updatedData
+      }));
+
+      // Navigate to return URL or home
+      const returnUrl = location.state?.returnUrl || '/';
+      navigate(returnUrl);
     } catch (error) {
+      console.error('Error updating phone:', error);
       setError('Failed to update phone number');
     }
   };

@@ -1,29 +1,46 @@
-import React, { createContext, useState, useContext, useEffect } from 'react';
+import React, { createContext, useContext, useState, useEffect } from 'react';
 import { auth, db } from '../firebase';
 import { doc, getDoc } from 'firebase/firestore';
 
-export const AuthContext = createContext();
+const AuthContext = createContext();
 
 export function AuthProvider({ children }) {
-  const [user, setUser] = useState(null);
-  const [loading, setLoading] = useState(true);
+  const [currentUser, setCurrentUser] = useState(null);
+  const [userRole, setUserRole] = useState(null);
   const [userDetails, setUserDetails] = useState(null);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const unsubscribe = auth.onAuthStateChanged(async (user) => {
-      setUser(user);
+    return auth.onAuthStateChanged(async (user) => {
       if (user) {
-        const userDoc = await getDoc(doc(db, 'users', user.uid));
-        setUserDetails(userDoc.data());
+        setCurrentUser(user);
+        try {
+          const userDoc = await getDoc(doc(db, 'users', user.uid));
+          if (userDoc.exists()) {
+            const userData = userDoc.data();
+            setUserRole(userData.role);
+            setUserDetails({
+              ...userData,
+              displayName: userData.displayName || user.displayName,
+              photoURL: userData.photoURL || user.photoURL,
+            });
+            console.log('User data loaded:', userData);
+          }
+        } catch (error) {
+          console.error('Error fetching user data:', error);
+        }
+      } else {
+        setCurrentUser(null);
+        setUserRole(null);
+        setUserDetails(null);
       }
       setLoading(false);
     });
-
-    return unsubscribe;
   }, []);
 
   const value = {
-    user,
+    currentUser,
+    userRole,
     userDetails,
     setUserDetails,
     loading

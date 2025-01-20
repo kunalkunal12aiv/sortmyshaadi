@@ -25,6 +25,7 @@ const CalendarManager = React.lazy(() => import('./pages/CalendarManager'));
 const GoogleSignIn = React.lazy(() => import('./pages/auth/signin'));
 const SignUp = React.lazy(() => import('./pages/auth/signup'));
 const Calendar = React.lazy(() => import('./components/calendar/calendar'));
+const PhoneVerification = React.lazy(() => import('./components/PhoneVerification'));
 
 function App() {
   return (
@@ -48,6 +49,9 @@ function App() {
                     <Route path="/cart" element={<Cart />} />
                     <Route path="/signin" element={<GoogleSignIn />} />
                     <Route path="/signup" element={<SignUp />} />
+
+                    {/* Auth Routes */}
+                    <Route path="/phone-verification" element={<PhoneVerification />} />
 
                     {/* Admin Protected Routes */}
                     <Route 

@@ -1,10 +1,12 @@
 // SignUp.js
 import React, { useState } from "react";
-import { auth, db } from "../../firebase"; // Correct import statement
+import { useNavigate } from "react-router-dom";
+import { auth, db } from "../../firebase";
 import { GoogleAuthProvider, signInWithPopup } from "firebase/auth";
-import { doc, setDoc } from "firebase/firestore"; // Import Firestore functions
+import { doc, setDoc } from "firebase/firestore";
 
 const SignUp = ({ switchToSignIn }) => {
+  const navigate = useNavigate();
   const [error, setError] = useState("");
 
   const handleGoogleSignUp = async () => {
@@ -14,13 +16,23 @@ const SignUp = ({ switchToSignIn }) => {
       const result = await signInWithPopup(auth, provider);
       const user = result.user;
       console.log(user);
-      // Create user document with default role
+      // Create new user document in Firestore
       await setDoc(doc(db, "users", user.uid), {
+        uid: user.uid,
         email: user.email,
-        role: "user"
+        displayName: user.displayName,
+        photoURL: user.photoURL,
+        role: 'user',
+        createdAt: new Date().toISOString(),
+        phoneVerified: false
       });
-      // Handle successful sign-up
+
+      // Redirect to phone verification
+      navigate('/phone-verification', { 
+        state: { returnUrl: '/' }
+      });
     } catch (error) {
+      console.error("Sign-up error:", error);
       setError(error.message);
     }
   };
@@ -33,7 +45,7 @@ const SignUp = ({ switchToSignIn }) => {
           onClick={handleGoogleSignUp}
           className="w-full bg-red-500 text-white py-2 px-4 rounded-lg hover:bg-red-600 transition duration-300"
         >
-          Sign Up with Google
+          Continue with Google
         </button>
         {error && <p className="text-red-500 mt-4 text-center">{error}</p>}
         <p className="mt-6 text-center">

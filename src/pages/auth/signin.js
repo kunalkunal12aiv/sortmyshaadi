@@ -2,9 +2,10 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { auth, db } from "../../firebase";
 import { GoogleAuthProvider, signInWithPopup } from "firebase/auth";
-import { doc, getDoc } from "firebase/firestore";
+import { doc, getDoc, setDoc } from "firebase/firestore";
 import { getRedirectUrl } from "../../utils/auth";
 import { motion } from "framer-motion";
+import { useGoogleLogin } from '@react-oauth/google';
 
 const SignIn = () => {
   const navigate = useNavigate();
@@ -17,24 +18,47 @@ const SignIn = () => {
       const result = await signInWithPopup(auth, provider);
       const user = result.user;
 
-      // Check if user exists and has phone verification
-      const userDoc = await getDoc(doc(db, "users", user.uid));
-      const userData = userDoc.data();
+      // Check if user exists in Firestore
+      const userRef = doc(db, "users", user.uid);
+      const userSnap = await getDoc(userRef);
 
-      // Get redirect URL if exists
+      if (!userSnap.exists()) {
+        // If new user, create profile
+        await setDoc(userRef, {
+          uid: user.uid,
+          email: user.email,
+          displayName: user.displayName,
+          photoURL: user.photoURL,
+          role: 'user',
+          createdAt: new Date().toISOString(),
+          phoneVerified: false
+        });
+      }
+
+      const userData = userSnap.exists() ? userSnap.data() : { phoneVerified: false };
       const redirectUrl = getRedirectUrl() || '/';
 
-      if (!userData?.phoneVerified) {
-        // If phone not verified, redirect to phone verification
+      if (!userData.phoneVerified) {
         navigate('/phone-verification', { state: { returnUrl: redirectUrl } });
       } else {
-        // If everything is verified, redirect to original destination
         navigate(redirectUrl);
       }
     } catch (error) {
+      console.error("Sign-in error:", error);
       setError(error.message);
     }
   };
+
+  const handleGoogleSuccess = async (tokenResponse) => {
+    // Handle the token response here
+  };
+
+  const googleLogin = useGoogleLogin({
+    onSuccess: tokenResponse => handleGoogleSuccess(tokenResponse),
+    onError: error => console.log('Login Failed:', error),
+    flow: 'auth-code',
+    popup: false // Change this to false to use redirect flow instead of popup
+  });
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-pink-50 to-purple-50">
