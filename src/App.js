@@ -37,21 +37,59 @@ function App() {
                 <Navbar />
                 <Suspense fallback={<LoadingFallback />}>
                   <Routes>
+                    {/* Public Routes */}
+                    <Route path="/" element={<Home />} />
                     <Route path="/venues" element={<VenueList />} />
-                    <Route path="/calendar" element={<Calendar />} />
-                    <Route path="/bulk-upload" element={<BulkUpload />} />
-                    <Route path="/signin" element={<GoogleSignIn />} />
-                    <Route path="/signup" element={<SignUp />} />
-                    <Route path="/calendar-manager" element={<CalendarManager />} />
                     <Route path="/venue/:id" element={<VenueDetail />} />
-                    <Route path="/manage-venues" element={<VenueList2 />} />
-                    <Route path="/edit-venue/:id" element={<EditVenue />} />
                     <Route path="/decor" element={<DecorList />} />
                     <Route path="/decor/:categoryId" element={<DecorCategory />} />
                     <Route path="/decor/:categoryId/:itemId" element={<DecorDetail />} />
-                    <Route path="/" element={<Home />} />
                     <Route path="/budget-calculator" element={<BudgetCalculator />} />
                     <Route path="/cart" element={<Cart />} />
+                    <Route path="/signin" element={<GoogleSignIn />} />
+                    <Route path="/signup" element={<SignUp />} />
+
+                    {/* Admin Protected Routes */}
+                    <Route 
+                      path="/calendar" 
+                      element={
+                        <AdminRoute>
+                          <Calendar />
+                        </AdminRoute>
+                      } 
+                    />
+                    <Route 
+                      path="/bulk-upload" 
+                      element={
+                        <AdminRoute>
+                          <BulkUpload />
+                        </AdminRoute>
+                      } 
+                    />
+                    <Route 
+                      path="/calendar-manager" 
+                      element={
+                        <AdminRoute>
+                          <CalendarManager />
+                        </AdminRoute>
+                      } 
+                    />
+                    <Route 
+                      path="/manage-venues" 
+                      element={
+                        <AdminRoute>
+                          <VenueList2 />
+                        </AdminRoute>
+                      } 
+                    />
+                    <Route 
+                      path="/edit-venue/:id" 
+                      element={
+                        <AdminRoute>
+                          <EditVenue />
+                        </AdminRoute>
+                      } 
+                    />
                     <Route 
                       path="/add-venue" 
                       element={

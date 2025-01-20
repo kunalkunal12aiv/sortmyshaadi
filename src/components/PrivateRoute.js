@@ -1,27 +1,19 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { Navigate } from 'react-router-dom';
-import { auth } from '../firebase';
-import { checkAdminRole } from '../utils/adminAuth';
+import { useAuth } from '../contexts/AuthContext';
 
 function AdminRoute({ children }) {
-  const [isAdmin, setIsAdmin] = useState(false);
-  const [loading, setLoading] = useState(true);
+  const { currentUser, userRole } = useAuth();
 
-  useEffect(() => {
-    const unsubscribe = auth.onAuthStateChanged(async (user) => {
-      if (user) {
-        const adminStatus = await checkAdminRole(user.uid);
-        setIsAdmin(adminStatus);
-      }
-      setLoading(false);
-    });
+  if (!currentUser) {
+    return <Navigate to="/signin" />;
+  }
 
-    return () => unsubscribe();
-  }, []);
+  if (userRole !== 'admin') {
+    return <Navigate to="/" />;
+  }
 
-  if (loading) return <div>Loading...</div>;
-
-  return isAdmin ? children : <Navigate to="/" />;
+  return children;
 }
 
 export default AdminRoute;
