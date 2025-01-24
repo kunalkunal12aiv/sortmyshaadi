@@ -46,15 +46,11 @@ function Navbar() {
       <nav className="navbar bg-white shadow-lg px-6 py-4 flex items-center justify-between">
         <div className="flex items-center">
           <Link to="/" className="nav-brand">
-            <img 
-              src="/logo.png" 
-              alt="Sort my Shaadi" 
-              className="h-10 w-auto"
-              onError={(e) => {
-                console.error('Logo failed to load');
-                e.target.src = '/default-logo.png'; // Fallback logo
-              }}
-            />
+            <h1 className="text-2xl md:text-3xl font-bold">
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-pink-500 to-purple-500">
+                Sort My Shaadi
+              </span>
+            </h1>
           </Link>
           <div className="hidden md:block ml-10">
             <NavLinks />
