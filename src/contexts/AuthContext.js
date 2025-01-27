@@ -11,11 +11,15 @@ export function AuthProvider({ children }) {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    return auth.onAuthStateChanged(async (user) => {
+    const unsubscribe = auth.onAuthStateChanged(async (user) => {
+      console.log('Auth state changed:', user); // Debug log
+
       if (user) {
         setCurrentUser(user);
         try {
           const userDoc = await getDoc(doc(db, 'users', user.uid));
+          console.log('User doc:', userDoc.data()); // Debug log
+          
           if (userDoc.exists()) {
             const userData = userDoc.data();
             setUserRole(userData.role);
@@ -23,8 +27,10 @@ export function AuthProvider({ children }) {
               ...userData,
               displayName: userData.displayName || user.displayName,
               photoURL: userData.photoURL || user.photoURL,
+              uid: user.uid,
             });
-            console.log('User data loaded:', userData);
+          } else {
+            console.log('No user document found'); // Debug log
           }
         } catch (error) {
           console.error('Error fetching user data:', error);
@@ -36,6 +42,8 @@ export function AuthProvider({ children }) {
       }
       setLoading(false);
     });
+
+    return () => unsubscribe();
   }, []);
 
   const value = {

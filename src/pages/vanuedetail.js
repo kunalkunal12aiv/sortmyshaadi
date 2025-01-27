@@ -14,7 +14,7 @@ import { setRedirectUrl } from '../utils/auth';
 
 function VenueDetail() {
   const { id } = useParams();
-  const { user, userDetails } = useAuth();
+  const { currentUser, userDetails } = useAuth(); // Change from user to currentUser to match AuthContext
   const navigate = useNavigate();
   const [venue, setVenue] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -28,34 +28,38 @@ function VenueDetail() {
   const [hasEnquired, setHasEnquired] = useState(false);
 
   const checkPreviousEnquiry = useCallback(async () => {
-    if (!user || !venue) return;
+    if (!currentUser || !venue) return;
 
-    const enquiriesRef = collection(db, 'enquiries');
+    const enquiriesRef = collection(db, 'users', currentUser.uid, 'enquiries');
     const q = query(
       enquiriesRef,
-      where('userId', '==', user.uid),
       where('venueId', '==', id)
     );
 
-    const querySnapshot = await getDocs(q);
-    setHasEnquired(!querySnapshot.empty);
-  }, [user, venue, id]);
+    try {
+      const querySnapshot = await getDocs(q);
+      setHasEnquired(!querySnapshot.empty);
+    } catch (error) {
+      console.error('Error checking enquiries:', error);
+    }
+  }, [currentUser, venue, id]);
 
   useEffect(() => {
-    if (!user) {
-      // Save current URL before redirecting
-      setRedirectUrl(window.location.pathname);
-      navigate('/signin');
-      return;
-    }
+    const checkAuth = async () => {
+      if (!currentUser) {
+        setRedirectUrl(window.location.pathname);
+        navigate('/signin');
+        return;
+      }
 
-    if (user && (!userDetails?.phoneVerified)) {
-      setRedirectUrl(window.location.pathname);
-      setShowPhoneVerification(true);
-    }
+      if (currentUser && userDetails && !userDetails.phoneVerified) {
+        setRedirectUrl(window.location.pathname);
+        setShowPhoneVerification(true);
+      }
+    };
 
-    checkPreviousEnquiry();
-  }, [user, userDetails, navigate, checkPreviousEnquiry]); // Add missing dependencies
+    checkAuth();
+  }, [currentUser, userDetails, navigate]);
 
   useEffect(() => {
     const fetchVenue = async () => {
@@ -81,13 +85,16 @@ function VenueDetail() {
   }, []);
 
   const handleEnquiry = async () => {
-    if (!user || !userDetails?.phoneVerified) return;
+    if (!currentUser || !userDetails?.phoneVerified) {
+      setShowPhoneVerification(true);
+      return;
+    }
 
     try {
       await addDoc(collection(db, 'enquiries'), {
-        userId: user.uid,
-        userName: user.displayName,
-        userEmail: user.email,
+        userId: currentUser.uid,
+        userName: currentUser.displayName,
+        userEmail: currentUser.email,
         userPhone: userDetails.phoneNumber,
         venueId: id,
         venueName: venue.name,
@@ -201,6 +208,15 @@ function VenueDetail() {
 
   if (showPhoneVerification) {
     return <PhoneVerification onComplete={() => setShowPhoneVerification(false)} />;
+  }
+
+  // Add loading state for auth
+  if (!currentUser || !userDetails) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-pink-50 to-purple-50">
+        <div className="animate-spin rounded-full h-16 w-16 border-4 border-pink-500 border-t-transparent shadow-lg"></div>
+      </div>
+    );
   }
 
   return (

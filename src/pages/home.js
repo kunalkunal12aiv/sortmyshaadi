@@ -15,7 +15,7 @@ function Home() {
       <Features />
       <VenueShowcase />
       <DecorGallery />
-      <BudgetPlanner />
+    
       <WhyChooseUs />
       <TestimonialCarousel />
       <Footer />

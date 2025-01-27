@@ -40,32 +40,11 @@ function HeroSection() {
 
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Link 
-              to="/venues" 
+              to="/budget-calculator" 
               className="btn-primary px-8 py-4 text-lg font-semibold rounded-xl bg-gradient-to-r from-pink-500 to-purple-500 text-white hover:from-pink-600 hover:to-purple-600 transform hover:scale-105 transition-all duration-200"
             >
-              Explore Venues
+              Let's Sort it For You
             </Link>
-            <Link 
-              to="/budget-calculator" 
-              className="btn-secondary px-8 py-4 text-lg font-semibold rounded-xl border-2 border-pink-500 text-pink-500 hover:bg-pink-50 transform hover:scale-105 transition-all duration-200"
-            >
-              Plan Your Budget
-            </Link>
-          </div>
-
-          <div className="mt-16 grid grid-cols-3 gap-8 max-w-2xl mx-auto">
-            <div className="text-center">
-              <h3 className="text-3xl font-bold text-pink-500">500+</h3>
-              <p className="text-gray-600">Venues</p>
-            </div>
-            <div className="text-center">
-              <h3 className="text-3xl font-bold text-pink-500">1000+</h3>
-              <p className="text-gray-600">Happy Couples</p>
-            </div>
-            <div className="text-center">
-              <h3 className="text-3xl font-bold text-pink-500">200+</h3>
-              <p className="text-gray-600">Decor Options</p>
-            </div>
           </div>
         </motion.div>
       </div>

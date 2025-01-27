@@ -61,6 +61,34 @@ function BudgetForm({ onSubmit }) {
     return 0;
   };
 
+  const getCurrentDate = () => {
+    return new Date().toISOString().split('T')[0];
+  };
+
+  const getMinCheckoutDate = () => {
+    if (!formData.checkInDate) return getCurrentDate();
+    const nextDay = new Date(formData.checkInDate);
+    nextDay.setDate(nextDay.getDate() + 1);
+    return nextDay.toISOString().split('T')[0];
+  };
+
+  const handleCheckInChange = (e) => {
+    const newCheckInDate = e.target.value;
+    setFormData(prev => {
+      if (prev.checkOutDate && prev.checkOutDate <= newCheckInDate) {
+        return {
+          ...prev,
+          checkInDate: newCheckInDate,
+          checkOutDate: ''
+        };
+      }
+      return {
+        ...prev,
+        checkInDate: newCheckInDate
+      };
+    });
+  };
+
   const handleSubmit = () => {
     const stayDuration = calculateStayDuration();
     onSubmit({ ...formData, stayDuration });
@@ -147,9 +175,9 @@ function BudgetForm({ onSubmit }) {
             <input
               type="date"
               value={formData.checkInDate}
-              onChange={(e) => setFormData({...formData, checkInDate: e.target.value})}
+              onChange={handleCheckInChange}
               className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-pink-500 focus:border-transparent"
-              min={new Date().toISOString().split('T')[0]}
+              min={getCurrentDate()}
               required
             />
           </div>
@@ -162,7 +190,8 @@ function BudgetForm({ onSubmit }) {
               value={formData.checkOutDate}
               onChange={(e) => setFormData({...formData, checkOutDate: e.target.value})}
               className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-pink-500 focus:border-transparent"
-              min={formData.checkInDate || new Date().toISOString().split('T')[0]}
+              min={getMinCheckoutDate()}
+              disabled={!formData.checkInDate}
               required
             />
           </div>
