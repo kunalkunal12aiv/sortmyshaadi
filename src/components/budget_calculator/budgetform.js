@@ -89,6 +89,19 @@ function BudgetForm({ onSubmit }) {
     });
   };
 
+  const handleDateInput = (e) => {
+    const input = e.target;
+    const selectedDate = new Date(input.value);
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+
+    if (selectedDate < today) {
+      // Reset to today's date if past date selected
+      input.value = getCurrentDate();
+      return;
+    }
+  };
+
   const handleSubmit = () => {
     const stayDuration = calculateStayDuration();
     onSubmit({ ...formData, stayDuration });
@@ -176,6 +189,7 @@ function BudgetForm({ onSubmit }) {
               type="date"
               value={formData.checkInDate}
               onChange={handleCheckInChange}
+              onInput={handleDateInput}
               className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-pink-500 focus:border-transparent"
               min={getCurrentDate()}
               required
@@ -208,7 +222,7 @@ function BudgetForm({ onSubmit }) {
           type="button"
           className="w-full bg-gradient-to-r from-pink-600 to-purple-600 text-white py-4 px-6 rounded-xl text-lg font-semibold hover:from-pink-700 hover:to-purple-700 transition-all duration-200"
         >
-          Calculate Venues
+          Sort Hotels
         </button>
       </form>
     </div>

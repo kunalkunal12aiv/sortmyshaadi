@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react'; // Add useRef import
 import BudgetForm from '../components/budget_calculator/budgetform';
 import VenueRecommendations from '../components/budget_calculator/vanue_recommendations';
 import { calculateVenueRecommendations } from '../utils/budgetcalculations';
@@ -6,12 +6,25 @@ import { calculateVenueRecommendations } from '../utils/budgetcalculations';
 function BudgetCalculator() {
   const [recommendations, setRecommendations] = useState(null);
   const [loading, setLoading] = useState(false);
+  const resultsRef = useRef(null); // Add ref for results section
 
   const handleCalculation = async (formData) => {
     setLoading(true);
     try {
       const results = await calculateVenueRecommendations(formData);
       setRecommendations(results);
+      
+      // Enhanced smooth scroll with better offset
+      setTimeout(() => {
+        const yOffset = -50; // Adjust this value to control how far from the top
+        const element = resultsRef.current;
+        const y = element.getBoundingClientRect().top + window.pageYOffset + yOffset;
+
+        window.scrollTo({
+          top: y,
+          behavior: 'smooth'
+        });
+      }, 100);
     } catch (error) {
       console.error('Error calculating recommendations:', error);
     }
@@ -30,13 +43,19 @@ function BudgetCalculator() {
         
         <div className="grid lg:grid-cols-2 gap-8">
           <BudgetForm onSubmit={handleCalculation} />
-          {loading ? (
-            <div className="flex items-center justify-center">
-              <div className="animate-spin rounded-full h-12 w-12 border-4 border-pink-500 border-t-transparent"></div>
-            </div>
-          ) : (
-            recommendations && <VenueRecommendations recommendations={recommendations} />
-          )}
+          <div 
+            ref={resultsRef} 
+            tabIndex="-1" 
+            className="scroll-mt-20" // Add this class for better scroll positioning
+          >
+            {loading ? (
+              <div className="flex items-center justify-center">
+                <div className="animate-spin rounded-full h-12 w-12 border-4 border-pink-500 border-t-transparent"></div>
+              </div>
+            ) : (
+              recommendations && <VenueRecommendations recommendations={recommendations} />
+            )}
+          </div>
         </div>
       </div>
     </div>

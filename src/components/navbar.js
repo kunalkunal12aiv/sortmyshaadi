@@ -83,6 +83,12 @@ function Navbar() {
             <>
               <Link to="/signin" className="btn-secondary">Sign In</Link>
               <Link to="/signup" className="btn-primary">Sign Up</Link>
+              <Link 
+                to="/venue-owner/auth" 
+                className="px-4 py-2 border-2 border-pink-600 text-pink-600 rounded-lg hover:bg-pink-50 transition-colors"
+              >
+                Register Venue
+              </Link>
             </>
           ) : (
             <div className="relative">
@@ -205,6 +211,13 @@ function Navbar() {
                         className="block w-full py-2 px-4 text-center border border-pink-600 text-pink-600 rounded-lg"
                       >
                         Sign Up
+                      </Link>
+                      <Link 
+                        to="/venue-owner/auth"
+                        onClick={() => setIsMobileMenuOpen(false)}
+                        className="block w-full py-2 px-4 text-center bg-gray-100 text-gray-700 rounded-lg"
+                      >
+                        Register Venue
                       </Link>
                     </div>
                   ) : (

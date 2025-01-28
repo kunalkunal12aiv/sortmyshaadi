@@ -126,6 +126,12 @@ function AddVenue() {
             </div>
             <div className="flex gap-4">
               <Link 
+                to={`/add-previous-weddings/${venueData.id}`}
+                className="bg-white text-pink-600 px-6 py-2 rounded-lg hover:bg-pink-50"
+              >
+                Add Previous Weddings
+              </Link>
+              <Link 
                 to="/calendar-manager" 
                 className="bg-white text-pink-600 px-6 py-2 rounded-lg hover:bg-pink-50 transition-colors duration-200 font-semibold"
               >

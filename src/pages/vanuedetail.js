@@ -1,16 +1,17 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useParams, useNavigate, Link } from 'react-router-dom';
 import { getVenueById } from '../utils/firebase';
 import Calendar from '../components/calendar/calendar';
 import format from 'date-fns/format';
-import { collection, onSnapshot, addDoc, query, where, getDocs } from 'firebase/firestore';
+import { collection, onSnapshot, addDoc, query, where, getDocs, doc, getDoc } from 'firebase/firestore';
 import { db } from '../firebase';
 import 'react-big-calendar/lib/css/react-big-calendar.css';
 import '../styles/calendar-override.css';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import { useAuth } from '../contexts/AuthContext';
 import PhoneVerification from '../components/PhoneVerification';
 import { setRedirectUrl } from '../utils/auth';
+import 'swiper/css/effect-coverflow';
 
 function VenueDetail() {
   const { id } = useParams();
@@ -26,6 +27,10 @@ function VenueDetail() {
   const [isReadMore, setIsReadMore] = useState(false);
   const [showPhoneVerification, setShowPhoneVerification] = useState(false);
   const [hasEnquired, setHasEnquired] = useState(false);
+  const [showGallery, setShowGallery] = useState(false);
+  const [previousWeddings, setPreviousWeddings] = useState([]);
+  const [showPreviousWeddings, setShowPreviousWeddings] = useState(false);
+  const [selectedWedding, setSelectedWedding] = useState(null);
 
   const checkPreviousEnquiry = useCallback(async () => {
     if (!currentUser || !venue) return;
@@ -83,6 +88,16 @@ function VenueDetail() {
 
     return () => unsubscribe();
   }, []);
+
+  useEffect(() => {
+    const fetchPreviousWeddings = async () => {
+      const venueDoc = await getDoc(doc(db, 'venues', id));
+      if (venueDoc.exists()) {
+        setPreviousWeddings(venueDoc.data().previousWeddings || []);
+      }
+    };
+    fetchPreviousWeddings();
+  }, [id]);
 
   const handleEnquiry = async () => {
     if (!currentUser || !userDetails?.phoneVerified) {
@@ -198,6 +213,164 @@ function VenueDetail() {
     </motion.div>
   );
 
+  const GalleryModal = () => (
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      className="fixed inset-0 z-50 bg-black/95"
+    >
+      <div className="relative h-full">
+        <button 
+          className="absolute top-4 right-4 text-white p-2 z-50 bg-white/10 rounded-full hover:bg-white/20 transition-colors"
+          onClick={() => setShowGallery(false)}
+        >
+          <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+          </svg>
+        </button>
+        <div className="h-full overflow-y-auto py-16" onClick={(e) => e.stopPropagation()}>
+          <div className="max-w-7xl mx-auto p-4">
+            <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+              {venue.media.map((url, index) => (
+                <motion.img
+                  key={index}
+                  src={url}
+                  alt={`Gallery ${index + 1}`}
+                  className="w-full h-80 object-cover rounded-lg"
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: index * 0.1 }}
+                />
+              ))}
+            </div>
+          </div>
+        </div>
+      </div>
+    </motion.div>
+  );
+
+  const VideoGallery = () => (
+    <motion.div 
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      className="mb-8"
+    >
+      <div className="max-w-7xl mx-auto">
+        <h2 className="text-2xl font-bold mb-6 text-center">Previous Celebrations</h2>
+        <div className="flex overflow-x-auto gap-4 pb-4 scrollbar-hide">
+          {previousWeddings.map((wedding, index) => (
+            <div 
+              key={index}
+              className="flex-none relative cursor-pointer group w-[225px] h-[400px]"
+              onClick={() => navigate(`/wedding-events/${id}`)}
+            >
+              <video
+                className="w-full h-full object-cover rounded-lg"
+                src={wedding.videoUrl}
+                autoPlay
+                muted
+                loop
+                playsInline
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                <div className="absolute bottom-4 left-4 right-4 text-white">
+                  <h3 className="font-semibold">{wedding.title}</h3>
+                  <p className="text-sm text-white/80">{wedding.date}</p>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </motion.div>
+  );
+  
+  
+  
+
+  const PreviousWeddingsModal = () => (
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      className="fixed inset-0 z-50 bg-black/95 overflow-y-auto"
+    >
+      <div className="min-h-screen">
+        <button 
+          className="fixed top-4 right-4 text-white p-2 z-50 bg-white/10 rounded-full hover:bg-white/20 transition-colors"
+          onClick={() => setShowPreviousWeddings(false)}
+        >
+          <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+          </svg>
+        </button>
+
+        <div className="max-w-7xl mx-auto p-4 py-20">
+          <h2 className="text-4xl font-bold text-white mb-12 text-center">Wedding Stories</h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+            {previousWeddings.map((wedding, index) => (
+              <motion.div
+                key={index}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: index * 0.1 }}
+                className="bg-white/10 rounded-xl overflow-hidden backdrop-blur-sm"
+              >
+                <div className="aspect-video relative">
+                  <video
+                    className="w-full h-full object-cover"
+                    src={wedding.videoUrl}
+                    controls
+                    muted
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent">
+                    <div className="absolute bottom-4 left-4">
+                      <p className="text-white/80 text-sm">{wedding.date}</p>
+                    </div>
+                  </div>
+                </div>
+                <div className="p-6">
+                  <h3 className="text-2xl font-bold text-white mb-4">{wedding.title}</h3>
+                  <p className="text-white/80 mb-6">{wedding.description}</p>
+                  <div className="grid grid-cols-3 gap-4">
+                    {wedding.images.map((image, imgIndex) => (
+                      <img
+                        key={imgIndex}
+                        src={image}
+                        alt={`Wedding ${imgIndex + 1}`}
+                        className="w-full h-24 object-cover rounded-lg hover:scale-105 transition-transform duration-300 cursor-pointer"
+                        onClick={() => window.open(image, '_blank')}
+                      />
+                    ))}
+                  </div>
+                </div>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      </div>
+    </motion.div>
+  );
+
+  const styles = `
+    .wedding-slider {
+      padding: 20px 0;
+    }
+    
+    .wedding-slider .swiper-slide {
+      width: 300px;
+      height: 534px; /* 9:16 ratio */
+    }
+    
+    @media (max-width: 640px) {
+      .wedding-slider .swiper-slide {
+        width: 200px;
+        height: 356px;
+      }
+    }
+  `;
+
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-pink-50 to-purple-50">
@@ -220,48 +393,81 @@ function VenueDetail() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-pink-50 to-purple-50 py-12 px-4">
+    <div className="min-h-screen bg-gradient-to-br from-pink-50 to-purple-50 py-12 px-4 relative">
+      <style>{styles}</style>
       <div className="max-w-7xl mx-auto">
-        {/* Hero Section with Main Image and Gallery */}
+        {/* Video Slider - Moved to top */}
+        {previousWeddings.length > 0 && <VideoGallery />}
+        {/* Hero Section with Main Image */}
         <motion.div 
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          className="bg-white rounded-2xl shadow-xl overflow-hidden mb-8 hover:shadow-2xl transition-shadow duration-300"
+          className="bg-white rounded-2xl shadow-xl overflow-hidden mb-8"
         >
-          <div className="flex flex-col md:flex-row">
-            {/* Main Image */}
-            <div className="md:w-2/3 relative h-[50vh]">
-              <img 
-                src={venue.media[activeImage]} 
-                alt={venue.name}
-                className="w-full h-full object-cover"
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent"></div>
-              <div className="absolute bottom-8 left-8 right-8">
-                <h1 className="text-4xl font-bold text-white mb-4">{venue.name}</h1>
-                <p className="text-xl text-white/90">{venue.shortAddress}</p>
-              </div>
-            </div>
-
-            {/* Image Gallery */}
-            <div className="md:w-1/3 p-4 bg-gray-900/5">
-              <div className="flex flex-col gap-4 h-[50vh] overflow-y-auto">
-                {venue.media.map((url, index) => (
-                  <img
-                    key={index}
-                    src={url}
-                    alt={`View ${index + 1}`}
-                    className={`h-32 w-full object-cover rounded-lg cursor-pointer transition duration-300
-                      ${activeImage === index ? 'ring-4 ring-pink-500 ring-offset-2' : 'opacity-70 hover:opacity-100'}`}
-                    onClick={() => setActiveImage(index)}
-                  />
-                ))}
+          <div className="relative h-[60vh]">
+            <img 
+              src={venue.media[activeImage]} 
+              alt={venue.name}
+              className="w-full h-full object-cover"
+            />
+            <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent">
+              <div className="absolute bottom-8 left-8 right-8 flex justify-between items-end">
+                <div>
+                  <h1 className="text-4xl font-bold text-white mb-4">{venue.name}</h1>
+                  <p className="text-xl text-white/90">{venue.shortAddress}</p>
+                </div>
+                <button
+                  onClick={() => setShowGallery(true)}
+                  className="px-6 py-3 bg-white/90 text-gray-900 rounded-lg hover:bg-white transition-colors duration-200"
+                >
+                  View All Photos
+                </button>
               </div>
             </div>
           </div>
         </motion.div>
 
-        {/* Content Grid */}
+        {/* Gallery Modal */}
+        <AnimatePresence>
+          {showGallery && (
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              className="fixed inset-0 z-50 bg-black/95 flex items-center"
+              onClick={() => setShowGallery(false)}
+            >
+              <div className="relative w-full">
+                <button 
+                  className="absolute top-4 right-4 text-white p-2 z-50"
+                  onClick={() => setShowGallery(false)}
+                >
+                  <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                  </svg>
+                </button>
+                <div className="max-w-7xl mx-auto p-4">
+                  <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+                    {venue.media.map((url, index) => (
+                      <motion.img
+                        key={index}
+                        src={url}
+                        alt={`Gallery ${index + 1}`}
+                        className="w-full h-80 object-cover rounded-lg cursor-pointer"
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ delay: index * 0.1 }}
+                        onClick={(e) => e.stopPropagation()}
+                      />
+                    ))}
+                  </div>
+                </div>
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
+
+        {/* Rest of the content */}
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           {/* Main Content */}
           <div className="lg:col-span-2 space-y-8">
@@ -402,6 +608,24 @@ function VenueDetail() {
           </motion.div>
         </div>
       </div>
+
+      {/* Previous Weddings Button */}
+      {previousWeddings.length > 0 && (
+        <div className="fixed bottom-8 left-1/2 transform -translate-x-1/2 z-40">
+          <Link
+            to={`/wedding-events/${id}`}
+            className="bg-gradient-to-r from-pink-600 to-purple-600 text-white px-8 py-3 rounded-full shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-200"
+          >
+            View Wedding Stories
+          </Link>
+        </div>
+      )}
+
+      {/* Modals */}
+      <AnimatePresence>
+        {showGallery && <GalleryModal />}
+        {showPreviousWeddings && <PreviousWeddingsModal />}
+      </AnimatePresence>
     </div>
   );
 }

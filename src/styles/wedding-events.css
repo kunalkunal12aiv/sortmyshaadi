@@ -1,0 +1,67 @@
+.wedding-events-container {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 2rem;
+  }
+  
+  .video-gallery {
+    height: calc(100vh - 200px);
+    overflow-y: auto;
+    padding-right: 1rem;
+  }
+      .video-container {
+        width: 225px;
+        height: 400px;
+        margin-bottom: 1rem;
+        position: relative;
+        border-radius: 1rem;
+        overflow: hidden;
+        box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+        flex-shrink: 0;
+      }
+  
+      @media (max-width: 768px) {
+        .video-gallery {
+          height: auto;
+          padding-bottom: 1rem;
+        }
+    
+        .details-panel {
+          height: auto;
+          max-height: calc(100vh - 600px);
+        }
+      }
+  .video-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(225px, 1fr));
+    gap: 1.5rem;
+  }
+  
+  .details-panel {
+ 
+        background: white;
+        border-radius: 1rem;
+        padding: 2rem;
+        box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1);
+        height: fit-content;
+      }
+      
+  
+  
+  .photo-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1rem;
+  }
+  
+  .photo-item {
+    aspect-ratio: 1;
+    object-fit: cover;
+    border-radius: 0.5rem;
+    transition: transform 0.2s;
+  }
+  
+  .photo-item:hover {
+    transform: scale(1.05);
+  }
+  

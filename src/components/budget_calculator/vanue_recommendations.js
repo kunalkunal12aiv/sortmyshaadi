@@ -62,9 +62,9 @@ function VenueRecommendations({ recommendations }) {
               <div className="mt-4 flex justify-end">
                 <Link 
                   to={`/venue/${venue.id}`}
-                  className="bg-green-100 text-green-700 px-4 py-2 rounded-lg hover:bg-green-200 transition-colors"
+                  className="bg-green-100 text-green-700 px-6 py-2 rounded-lg hover:bg-green-200 transition-colors font-medium"
                 >
-                  View Details
+                  Explore Wedding
                 </Link>
               </div>
             </div>
@@ -106,9 +106,9 @@ function VenueRecommendations({ recommendations }) {
               <div className="mt-4 flex justify-end">
                 <Link 
                   to={`/venue/${venue.id}`}
-                  className="bg-gray-100 text-gray-700 px-4 py-2 rounded-lg hover:bg-gray-200 transition-colors"
+                  className="bg-gray-100 text-gray-700 px-6 py-2 rounded-lg hover:bg-gray-200 transition-colors font-medium"
                 >
-                  View Details
+                  Explore Wedding
                 </Link>
               </div>
             </div>

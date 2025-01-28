@@ -4,7 +4,7 @@ import { motion } from 'framer-motion';
 
 function HeroSection() {
   return (
-    <div className="relative min-h-screen bg-gradient-to-br from-red-50 via-pink-50 to-purple-50">
+    <div className="relative min-h-screen bg-gradient-to-br from-red-50 via-pink-50 to-purple-50 flex items-center">
       {/* Decorative elements */}
       <div className="absolute inset-0 overflow-hidden">
         <img 
@@ -19,11 +19,11 @@ function HeroSection() {
         />
       </div>
 
-      <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-20 pb-32">
+      <div className="relative w-full">
         <motion.div 
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          className="text-center"
+          className="text-center px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto"
         >
           <h1 className="text-5xl md:text-7xl font-bold text-gray-900 mb-6">
             Your Perfect 
