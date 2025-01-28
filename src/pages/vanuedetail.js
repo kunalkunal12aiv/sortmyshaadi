@@ -611,16 +611,15 @@ function VenueDetail() {
 
       {/* Previous Weddings Button */}
       {previousWeddings.length > 0 && (
-        <div className="fixed bottom-8 left-1/2 transform -translate-x-1/2 z-40">
+        <div className="fixed bottom-8 left-1/2 transform -translate-x-1/2 z-40 w-full px-4 max-w-sm mx-auto">
           <Link
             to={`/wedding-events/${id}`}
-            className="bg-gradient-to-r from-pink-600 to-purple-600 text-white px-8 py-3 rounded-full shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-200"
+            className="bg-gradient-to-r from-pink-600 to-purple-600 text-white px-8 py-3 rounded-full shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-200 w-full text-center block"
           >
             View Wedding Stories
           </Link>
         </div>
       )}
-
       {/* Modals */}
       <AnimatePresence>
         {showGallery && <GalleryModal />}
