@@ -9,6 +9,7 @@ import 'react-big-calendar/lib/css/react-big-calendar.css';
 import '../styles/calendar-override.css';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useAuth } from '../contexts/AuthContext';
+import { useShortlist } from '../contexts/ShortlistContext';
 import PhoneVerification from '../components/PhoneVerification';
 import { setRedirectUrl } from '../utils/auth';
 import 'swiper/css/effect-coverflow';
@@ -16,6 +17,8 @@ import 'swiper/css/effect-coverflow';
 function VenueDetail() {
   const { id } = useParams();
   const { currentUser, userDetails } = useAuth(); // Change from user to currentUser to match AuthContext
+  const { shortlistedVenues, addToShortlist, removeFromShortlist } = useShortlist();
+  const isShortlisted = shortlistedVenues.some(v => v.id === id);
   const navigate = useNavigate();
   const [venue, setVenue] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -522,7 +525,25 @@ function VenueDetail() {
           >
             
               {/* Menu Section */}
+        <button
+          className={`w-full mt-4 ${
+            isShortlisted
+              ? 'bg-gray-400 cursor-not-allowed'
+              : 'bg-gradient-to-r from-pink-600 to-purple-600 hover:from-pink-700 hover:to-purple-700'
+          } text-white py-4 px-6 rounded-xl text-lg font-semibold transition-all duration-200`}
+          onClick={() => {
+            if (isShortlisted) {
+              removeFromShortlist(id);
+            } else {
+              addToShortlist(venue);
+            }
+          }}
+          disabled={isShortlisted}
+        >
+          {isShortlisted ? 'Added to Shortlist' : 'Add to Shortlist'}
+        </button>
               <motion.div 
+              
                 initial={{ opacity: 0, x: 20 }}
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ delay: 0.3 }}
@@ -609,6 +630,7 @@ function VenueDetail() {
         >
           {hasEnquired ? 'Already Enquired' : 'Enquire Now'}
         </button>
+        
       </div>
 
 

@@ -1,12 +1,16 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { Link } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
+import { useShortlist } from '../contexts/ShortlistContext';
 
 const VenueCard = ({ venue }) => {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [isHovered, setIsHovered] = useState(false);
   const maxImagesToShow = 5;
   const autoSlideInterval = 3000;
+
+  const { shortlistedVenues, addToShortlist, removeFromShortlist } = useShortlist();
+  const isShortlisted = shortlistedVenues.some(v => v.id === venue.id);
 
   // Get first 5 images or all if less than 5
   const displayImages = venue.media.slice(0, maxImagesToShow);
@@ -80,6 +84,32 @@ const VenueCard = ({ venue }) => {
         <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/60 to-transparent p-4">
           <h2 className="text-2xl font-bold text-white">{venue.name}</h2>
           <p className="text-white/90">{venue.shortAddress}</p>
+        </div>
+
+        {/* Shortlist Button */}
+        <div className="absolute top-4 right-4 z-10">
+          <button
+            onClick={() => isShortlisted ? removeFromShortlist(venue.id) : addToShortlist(venue)}
+            className={`p-2 rounded-full ${
+              isShortlisted 
+                ? 'bg-pink-600 text-white' 
+                : 'bg-white/80 hover:bg-white text-gray-700'
+            } transition-all duration-200`}
+          >
+            <svg
+              className="w-6 h-6"
+              fill={isShortlisted ? 'currentColor' : 'none'}
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"
+              />
+            </svg>
+          </button>
         </div>
       </div>
 
