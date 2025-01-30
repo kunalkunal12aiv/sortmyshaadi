@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { getVenues } from '../utils/firebase';
 import VenueFilters from '../components/VenueFilters';
 import VenueCard from '../components/VenueCard'; // Make sure the path is correct
+import { useAuth } from '../contexts/AuthContext';
 
 const VenueList = () => {
   const [venues, setVenues] = useState([]);
@@ -14,6 +15,8 @@ const VenueList = () => {
     capacityRange: { min: 0, max: 2000 },
     selectedTags: []
   });
+
+  const { currentUser } = useAuth();
 
   const parseCapacityRange = (capacityString) => {
     try {
@@ -151,7 +154,10 @@ const VenueList = () => {
             ) : (
               <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                 {filteredVenues.map((venue) => (
-                  <VenueCard key={venue.id} venue={venue} />
+                  <VenueCard 
+                    key={venue.id} 
+                    venue={venue}
+                  />
                 ))}
               </div>
             )}

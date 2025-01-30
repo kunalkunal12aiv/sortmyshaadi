@@ -54,12 +54,6 @@ function VenueDetail() {
 
   useEffect(() => {
     const checkAuth = async () => {
-      if (!currentUser) {
-        setRedirectUrl(window.location.pathname);
-        navigate('/signin');
-        return;
-      }
-
       if (currentUser && userDetails && !userDetails.phoneVerified) {
         setRedirectUrl(window.location.pathname);
         setShowPhoneVerification(true);
@@ -67,7 +61,7 @@ function VenueDetail() {
     };
 
     checkAuth();
-  }, [currentUser, userDetails, navigate]);
+  }, [currentUser, userDetails]);
 
   useEffect(() => {
     const fetchVenue = async () => {
@@ -103,7 +97,13 @@ function VenueDetail() {
   }, [id]);
 
   const handleEnquiry = async () => {
-    if (!currentUser || !userDetails?.phoneVerified) {
+    if (!currentUser) {
+      setRedirectUrl(window.location.pathname);
+      navigate('/signin');
+      return;
+    }
+
+    if (!userDetails?.phoneVerified) {
       setShowPhoneVerification(true);
       return;
     }
@@ -124,6 +124,20 @@ function VenueDetail() {
       alert('Enquiry submitted successfully!');
     } catch (error) {
       console.error('Error submitting enquiry:', error);
+    }
+  };
+
+  const handleShortlist = () => {
+    if (!currentUser) {
+      setRedirectUrl(window.location.pathname);
+      navigate('/signin');
+      return;
+    }
+
+    if (isShortlisted) {
+      removeFromShortlist(id);
+    } else {
+      addToShortlist(venue);
     }
   };
 
@@ -386,15 +400,6 @@ function VenueDetail() {
     return <PhoneVerification onComplete={() => setShowPhoneVerification(false)} />;
   }
 
-  // Add loading state for auth
-  if (!currentUser || !userDetails) {
-    return (
-      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-pink-50 to-purple-50">
-        <div className="animate-spin rounded-full h-16 w-16 border-4 border-pink-500 border-t-transparent shadow-lg"></div>
-      </div>
-    );
-  }
-
   return (
     <div className="min-h-screen bg-gradient-to-br from-pink-50 to-purple-50 py-12 px-4 relative">
       <style>{styles}</style>
@@ -531,16 +536,14 @@ function VenueDetail() {
               ? 'bg-gray-400 cursor-not-allowed'
               : 'bg-gradient-to-r from-pink-600 to-purple-600 hover:from-pink-700 hover:to-purple-700'
           } text-white py-4 px-6 rounded-xl text-lg font-semibold transition-all duration-200`}
-          onClick={() => {
-            if (isShortlisted) {
-              removeFromShortlist(id);
-            } else {
-              addToShortlist(venue);
-            }
-          }}
-          disabled={isShortlisted}
+          onClick={handleShortlist}
         >
-          {isShortlisted ? 'Added to Shortlist' : 'Add to Shortlist'}
+          {!currentUser 
+            ? 'Sign in to Shortlist'
+            : isShortlisted 
+              ? 'Added to Shortlist' 
+              : 'Add to Shortlist'
+          }
         </button>
               <motion.div 
               
@@ -618,7 +621,7 @@ function VenueDetail() {
       </div>
 
       {/* Quick Actions */}
-      <div className="fixed bottom-8 left-1/2 transform -translate-x-1/2 z-40 w-full px-4 max-w-sm mx-auto">
+      <div className="fixed bottom-8 left-1/2 transform -translate-x-1/2 z-40 w-full px-4 max-w-sm mx-auto space-y-4">
         <button 
           className={`w-full ${
             hasEnquired 
@@ -628,8 +631,14 @@ function VenueDetail() {
           onClick={handleEnquiry}
           disabled={hasEnquired}
         >
-          {hasEnquired ? 'Already Enquired' : 'Enquire Now'}
+          {!currentUser 
+            ? 'Sign in to Enquire'
+            : hasEnquired 
+              ? 'Already Enquired' 
+              : 'Enquire Now'
+          }
         </button>
+        
         
       </div>
 

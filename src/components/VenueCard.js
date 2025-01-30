@@ -1,7 +1,9 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useShortlist } from '../contexts/ShortlistContext';
+import { useAuth } from '../contexts/AuthContext';
+import { setRedirectUrl } from '../utils/auth';
 
 const VenueCard = ({ venue }) => {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
@@ -10,6 +12,8 @@ const VenueCard = ({ venue }) => {
   const autoSlideInterval = 3000;
 
   const { shortlistedVenues, addToShortlist, removeFromShortlist } = useShortlist();
+  const { currentUser } = useAuth();
+  const navigate = useNavigate();
   const isShortlisted = shortlistedVenues.some(v => v.id === venue.id);
 
   // Get first 5 images or all if less than 5
@@ -38,6 +42,23 @@ const VenueCard = ({ venue }) => {
       return `${min.toLocaleString('en-IN')} - ${max.toLocaleString('en-IN')} guests`;
     } catch (error) {
       return capacityString;
+    }
+  };
+
+  const handleShortlist = (e) => {
+    e.preventDefault(); // Prevent navigation to venue detail
+    e.stopPropagation(); // Prevent event bubbling
+
+    if (!currentUser) {
+      setRedirectUrl(window.location.pathname);
+      navigate('/signin');
+      return;
+    }
+
+    if (isShortlisted) {
+      removeFromShortlist(venue.id);
+    } else {
+      addToShortlist(venue);
     }
   };
 
@@ -89,7 +110,7 @@ const VenueCard = ({ venue }) => {
         {/* Shortlist Button */}
         <div className="absolute top-4 right-4 z-10">
           <button
-            onClick={() => isShortlisted ? removeFromShortlist(venue.id) : addToShortlist(venue)}
+            onClick={handleShortlist}
             className={`p-2 rounded-full ${
               isShortlisted 
                 ? 'bg-pink-600 text-white' 
