@@ -43,11 +43,11 @@ function Navbar() {
 
   return (
     <>
-      <nav className="navbar bg-white shadow-lg px-6 py-4 flex items-center justify-between">
+      <nav className="navbar bg-[#F6F6F6] shadow-lg px-6 py-4 flex items-center justify-between">
         <div className="flex items-center">
           <Link to="/" className="nav-brand">
-            <h1 className="text-2xl md:text-3xl font-bold">
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-pink-500 to-purple-500">
+            <h1 className="text-2xl md:text-3xl font-bold text-[#1E2742]">
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#1E2742] to-[#9A2143]">
                 Sort My Shaadi
               </span>
             </h1>
@@ -59,7 +59,7 @@ function Navbar() {
 
         {/* Mobile Hamburger */}
         <button 
-          className="md:hidden p-2 rounded-lg hover:bg-gray-100"
+          className="md:hidden p-2 rounded-lg hover:bg-[#E0E0E0]"
           onClick={() => setIsMobileMenuOpen(true)}
         >
           <svg 
@@ -81,11 +81,11 @@ function Navbar() {
         <div className="hidden md:flex items-center space-x-4">
           {!currentUser ? (
             <>
-              <Link to="/signin" className="btn-secondary">Sign In</Link>
-              <Link to="/signup" className="btn-primary">Sign Up</Link>
+              <Link to="/signin" className="btn-secondary text-[#1E2742]">Sign In</Link>
+              <Link to="/signup" className="btn-primary bg-[#9A2143] text-white hover:bg-[#BFA054]">Sign Up</Link>
               <Link 
                 to="/venue-owner/auth" 
-                className="px-4 py-2 border-2 border-pink-600 text-pink-600 rounded-lg hover:bg-pink-50 transition-colors"
+                className="px-4 py-2 border-2 border-[#1E2742] text-[#1E2742] rounded-lg hover:bg-[#EDD498] transition-colors"
               >
                 Register Venue
               </Link>
@@ -101,23 +101,23 @@ function Navbar() {
                   alt="Profile"
                   className="w-8 h-8 rounded-full"
                 />
-                <span className="text-gray-700">{displayName}</span>
+                <span className="text-[#1E2742]">{displayName}</span>
               </button>
 
               {/* Desktop Profile Menu */}
               {showProfileMenu && (
-                <div className="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1">
-                  <Link to="/profile" className="block px-4 py-2 text-gray-700 hover:bg-gray-100">
+                <div className="absolute right-0 mt-2 w-48 bg-[#F6F6F6] rounded-md shadow-lg py-1">
+                  <Link to="/profile" className="block px-4 py-2 text-[#1E2742] hover:bg-[#EDD498]">
                     Profile
                   </Link>
                   {userDetails?.role === 'admin' && (
-                    <Link to="/calendar-manager" className="block px-4 py-2 text-gray-700 hover:bg-gray-100">
+                    <Link to="/calendar-manager" className="block px-4 py-2 text-[#1E2742] hover:bg-[#EDD498]">
                       Calendar Manager
                     </Link>
                   )}
                   <button
                     onClick={handleSignOut}
-                    className="w-full text-left px-4 py-2 text-gray-700 hover:bg-gray-100"
+                    className="w-full text-left px-4 py-2 text-[#1E2742] hover:bg-[#EDD498]"
                   >
                     Sign Out
                   </button>
@@ -147,14 +147,14 @@ function Navbar() {
               animate={{ x: 0 }}
               exit={{ x: '100%' }}
               transition={{ type: 'tween' }}
-              className="fixed right-0 top-0 h-full w-64 bg-white shadow-lg z-50 md:hidden"
+              className="fixed right-0 top-0 h-full w-64 bg-[#F6F6F6] shadow-lg z-50 md:hidden"
             >
               <div className="p-4 flex flex-col h-full">
                 <div className="flex justify-between items-center mb-8">
-                  <h2 className="text-xl font-bold text-pink-600">Menu</h2>
+                  <h2 className="text-xl font-bold text-[#1E2742]">Menu</h2>
                   <button 
                     onClick={() => setIsMobileMenuOpen(false)}
-                    className="p-2 rounded-lg hover:bg-gray-100"
+                    className="p-2 rounded-lg hover:bg-[#EDD498]"
                   >
                     <svg 
                       className="w-6 h-6" 
@@ -174,7 +174,7 @@ function Navbar() {
 
                 {/* Mobile User Profile */}
                 {currentUser && (
-                  <div className="mb-6 p-4 bg-gray-50 rounded-lg">
+                  <div className="mb-6 p-4 bg-[#E0E0E0] rounded-lg">
                     <div className="flex items-center space-x-3">
                       <img
                         src={profilePhoto}
@@ -183,7 +183,7 @@ function Navbar() {
                       />
                       <div>
                         <p className="font-medium">{displayName}</p>
-                        <p className="text-sm text-gray-500">{currentUser.email}</p>
+                        <p className="text-sm text-[#9EA1AB]">{currentUser.email}</p>
                       </div>
                     </div>
                   </div>
@@ -195,27 +195,27 @@ function Navbar() {
                 </div>
 
                 {/* Mobile Auth Buttons */}
-                <div className="mt-auto p-4 border-t">
+                <div className="mt-auto p-4 border-t border-[#9EA1AB]">
                   {!currentUser ? (
                     <div className="space-y-2">
                       <Link 
                         to="/signin" 
                         onClick={() => setIsMobileMenuOpen(false)}
-                        className="block w-full py-2 px-4 text-center bg-pink-600 text-white rounded-lg"
+                        className="block w-full py-2 px-4 text-center bg-[#9A2143] text-white rounded-lg hover:bg-[#BFA054]"
                       >
                         Sign In
                       </Link>
                       <Link 
                         to="/signup"
                         onClick={() => setIsMobileMenuOpen(false)}
-                        className="block w-full py-2 px-4 text-center border border-pink-600 text-pink-600 rounded-lg"
+                        className="block w-full py-2 px-4 text-center border border-[#1E2742] text-[#1E2742] rounded-lg hover:bg-[#EDD498]"
                       >
                         Sign Up
                       </Link>
                       <Link 
                         to="/venue-owner/auth"
                         onClick={() => setIsMobileMenuOpen(false)}
-                        className="block w-full py-2 px-4 text-center bg-gray-100 text-gray-700 rounded-lg"
+                        className="block w-full py-2 px-4 text-center bg-[#EDD498] text-[#1E2742] rounded-lg"
                       >
                         Register Venue
                       </Link>
@@ -223,7 +223,7 @@ function Navbar() {
                   ) : (
                     <button
                       onClick={handleSignOut}
-                      className="w-full py-2 px-4 text-center bg-gray-100 text-gray-700 rounded-lg"
+                      className="w-full py-2 px-4 text-center bg-[#EDD498] text-[#1E2742] rounded-lg"
                     >
                       Sign Out
                     </button>

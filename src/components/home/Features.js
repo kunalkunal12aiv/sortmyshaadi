@@ -6,37 +6,37 @@ const features = [
     icon: "🏰",
     title: "One-Click Venue Booking",
     description: "Instantly book your dream venue with our streamlined booking process",
-    color: "from-pink-500 to-rose-500"
+    color: "from-[#9A2143] to-[#BFA054]"
   },
   {
     icon: "✨",
     title: "Customizable Decor",
     description: "Choose from hundreds of decor options to match your wedding theme",
-    color: "from-purple-500 to-indigo-500"
+    color: "from-[#9A2143] to-[#BFA054]"
   },
   {
     icon: "💰",
     title: "Smart Budget Planning",
     description: "Get personalized venue recommendations based on your budget",
-    color: "from-blue-500 to-cyan-500"
+    color: "from-[#9A2143] to-[#BFA054]"
   },
   {
     icon: "📅",
     title: "Real-time Availability",
     description: "Check venue availability and peak season pricing instantly",
-    color: "from-green-500 to-emerald-500"
+    color: "from-[#9A2143] to-[#BFA054]"
   }
 ];
 
 function Features() {
   return (
-    <div className="py-20 bg-white">
+    <div className="py-20 bg-[#F6F6F6]">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-16">
-          <h2 className="text-4xl font-bold text-gray-900">
+          <h2 className="text-4xl font-bold text-[#1E2742]">
             Plan Your Wedding with Ease
           </h2>
-          <p className="mt-4 text-xl text-gray-600">
+          <p className="mt-4 text-xl text-[#9EA1AB]">
             Everything you need to create your perfect wedding day
           </p>
         </div>
@@ -56,10 +56,10 @@ function Features() {
                      background: `linear-gradient(to right, ${feature.color})`
                    }}
               />
-              <div className="relative bg-white p-8 rounded-2xl shadow-lg hover:shadow-xl transition-shadow duration-300">
+              <div className="relative bg-[#FFFFFF] p-8 rounded-2xl shadow-lg hover:shadow-xl transition-shadow duration-300">
                 <div className="text-4xl mb-4">{feature.icon}</div>
-                <h3 className="text-xl font-semibold mb-4">{feature.title}</h3>
-                <p className="text-gray-600">{feature.description}</p>
+                <h3 className="text-xl font-semibold mb-4 text-[#1E2742]">{feature.title}</h3>
+                <p className="text-[#9EA1AB]">{feature.description}</p>
               </div>
             </motion.div>
           ))}

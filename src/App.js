@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { GoogleOAuthProvider } from '@react-oauth/google';
 import { AuthProvider } from './contexts/AuthContext';
 import Navbar from './components/navbar';
+import Footer from './components/footer'; // Import the Footer component
 import ErrorBoundary from './utils/errorBoundary';
 import { LoadingFallback } from './utils/loadingFallback';
 import { CartProvider } from './contexts/CartContext';
@@ -180,6 +181,7 @@ function App() {
                       </Routes>
                       <ShortlistBadge />
                     </Suspense>
+                    <Footer /> {/* Add the Footer component */}
                   </div>
                 </ShortlistProvider>
               </VenueOwnerProvider>

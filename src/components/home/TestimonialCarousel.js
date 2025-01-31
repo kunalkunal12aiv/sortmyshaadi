@@ -23,7 +23,7 @@ const testimonials = [
 
 function TestimonialCarousel() {
   return (
-    <div className="py-20 bg-gradient-to-br from-pink-50 to-purple-50">
+    <div className="py-20 bg-gradient-to-br from-[#F6F6F6] to-[#EDD498]">
       <div className="max-w-7xl mx-auto px-4">
         <motion.div
           initial={{ opacity: 0 }}
@@ -31,10 +31,10 @@ function TestimonialCarousel() {
           viewport={{ once: true }}
           className="text-center mb-16"
         >
-          <h2 className="text-4xl font-bold text-gray-900 mb-4">
+          <h2 className="text-4xl font-bold text-[#1E2742] mb-4">
             Happy Couples
           </h2>
-          <p className="text-xl text-gray-600">
+          <p className="text-xl text-[#9EA1AB]">
             What our couples say about their experience
           </p>
         </motion.div>
@@ -66,7 +66,7 @@ function TestimonialCarousel() {
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 transition={{ delay: index * 0.1 }}
-                className="bg-white p-8 rounded-2xl shadow-lg"
+                className="bg-[#FFFFFF] p-8 rounded-2xl shadow-lg"
               >
                 <div className="flex items-center space-x-4 mb-6">
                   <img
@@ -75,12 +75,12 @@ function TestimonialCarousel() {
                     className="w-16 h-16 rounded-full object-cover"
                   />
                   <div>
-                    <h3 className="text-lg font-semibold text-gray-900">{testimonial.name}</h3>
-                    <p className="text-gray-600">{testimonial.location}</p>
+                    <h3 className="text-lg font-semibold text-[#1E2742]">{testimonial.name}</h3>
+                    <p className="text-[#9EA1AB]">{testimonial.location}</p>
                   </div>
                 </div>
-                <p className="text-gray-600 italic">{testimonial.text}</p>
-                <div className="mt-6 text-yellow-500">★★★★★</div>
+                <p className="text-[#9EA1AB] italic">{testimonial.text}</p>
+                <div className="mt-6 text-[#BFA054]">★★★★★</div>
               </motion.div>
             </SwiperSlide>
           ))}

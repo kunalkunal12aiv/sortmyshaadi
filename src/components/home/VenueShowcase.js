@@ -2,11 +2,12 @@ import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import { Swiper, SwiperSlide } from 'swiper/react';
-import { Autoplay, EffectCoverflow } from 'swiper/modules';
+import { Navigation, Pagination } from 'swiper/modules';
 import { collection, getDocs } from 'firebase/firestore';
 import { db } from '../../firebase';
 import 'swiper/css';
-import 'swiper/css/effect-coverflow';
+import 'swiper/css/navigation';
+import 'swiper/css/pagination';
 
 function VenueShowcase() {
   const [venues, setVenues] = useState([]);
@@ -19,9 +20,12 @@ function VenueShowcase() {
       const venuesData = [];
       
       snapshot.forEach((doc) => {
+        const data = doc.data();
         venuesData.push({
           id: doc.id,
-          ...doc.data()
+          name: data.name,
+          image: data.media[0],
+          location: data.shortAddress
         });
       });
       
@@ -35,13 +39,13 @@ function VenueShowcase() {
   if (loading) {
     return (
       <div className="flex justify-center items-center h-96">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-pink-600"></div>
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#9A2143]"></div>
       </div>
     );
   }
 
   return (
-    <div className="py-20 bg-gradient-to-br from-pink-50 to-purple-50">
+    <div className="py-20 bg-gradient-to-br from-[#F6F6F6] to-[#EDD498]">
       <div className="max-w-7xl mx-auto px-4">
         <motion.div 
           initial={{ opacity: 0 }}
@@ -49,79 +53,54 @@ function VenueShowcase() {
           viewport={{ once: true }}
           className="text-center mb-16"
         >
-          <h2 className="text-4xl font-bold text-gray-900 mb-4">
+          <h2 className="text-4xl font-bold text-[#1E2742] mb-4">
             Featured Wedding Venues
           </h2>
-          <p className="text-xl text-gray-600">
-            Discover our handpicked selection of stunning venues
+          <p className="text-xl text-[#9EA1AB]">
+            Explore our handpicked selection of beautiful wedding venues
           </p>
         </motion.div>
 
         <Swiper
-          effect={'coverflow'}
-          grabCursor={true}
-          centeredSlides={true}
-          slidesPerView={'auto'}
-          coverflowEffect={{
-            rotate: 50,
-            stretch: 0,
-            depth: 100,
-            modifier: 1,
-            slideShadows: true,
+          spaceBetween={30}
+          slidesPerView={1}
+          navigation
+          pagination={{ clickable: true }}
+          breakpoints={{
+            640: {
+              slidesPerView: 2,
+            },
+            1024: {
+              slidesPerView: 3,
+            },
           }}
-          autoplay={{
-            delay: 3000,
-            disableOnInteraction: false,
-          }}
-          modules={[Autoplay, EffectCoverflow]}
-          className="w-full"
+          modules={[Navigation, Pagination]}
         >
           {venues.map((venue) => (
-            <SwiperSlide key={venue.id} className="max-w-lg">
-              <Link to={`/venue/${venue.id}`}>
-                <motion.div 
-                  whileHover={{ y: -10 }}
-                  className="bg-white rounded-2xl shadow-lg overflow-hidden"
-                >
+            <SwiperSlide key={venue.id}>
+              <motion.div 
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.1 }}
+                className="bg-[#FFFFFF] rounded-xl shadow-lg overflow-hidden"
+              >
+                <Link to={`/venue/${venue.id}`}>
                   <div className="relative h-64">
                     <img 
-                      src={venue.media?.[0]}
+                      src={venue.image}
                       alt={venue.name}
                       className="w-full h-full object-cover"
-                      onError={(e) => {
-                        e.target.src = 'https://via.placeholder.com/400x300?text=Venue+Image';
-                      }}
                     />
-                    <div className="absolute top-4 right-4 bg-white px-3 py-1 rounded-full">
-                      <span className="text-yellow-500">★</span>
-                      <span className="ml-1 text-gray-800">{venue.rating || '4.8'}</span>
+                    <div className="absolute inset-0 bg-gradient-to-t from-[#1E2742]/60 to-transparent p-4">
+                      <h2 className="text-2xl font-bold text-white">{venue.name}</h2>
+                      <p className="text-white/90">{venue.location}</p>
                     </div>
                   </div>
-                  <div className="p-6">
-                    <h3 className="text-xl font-bold text-gray-900">{venue.name}</h3>
-                    <div className="flex justify-between items-center mt-4">
-                      <span className="text-pink-600 font-semibold">
-                        From ₹{venue.pricePerPlate?.toLocaleString()}/plate
-                      </span>
-                      <span className="text-gray-600">
-                        {venue.capacity} guests
-                      </span>
-                    </div>
-                  </div>
-                </motion.div>
-              </Link>
+                </Link>
+              </motion.div>
             </SwiperSlide>
           ))}
         </Swiper>
-
-        <div className="text-center mt-12">
-          <Link
-            to="/venues"
-            className="inline-block px-8 py-4 bg-gradient-to-r from-pink-500 to-purple-500 text-white rounded-xl hover:from-pink-600 hover:to-purple-600 transform hover:scale-105 transition-all duration-200"
-          >
-            Explore All Venues
-          </Link>
-        </div>
       </div>
     </div>
   );

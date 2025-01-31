@@ -36,7 +36,7 @@ const reasons = [
 
 function WhyChooseUs() {
   return (
-    <div className="py-20 bg-white">
+    <div className="py-20 bg-[#F6F6F6]">
       <div className="max-w-7xl mx-auto px-4">
         <motion.div
           initial={{ opacity: 0 }}
@@ -44,10 +44,10 @@ function WhyChooseUs() {
           viewport={{ once: true }}
           className="text-center mb-16"
         >
-          <h2 className="text-4xl font-bold text-gray-900 mb-4">
+          <h2 className="text-4xl font-bold text-[#1E2742] mb-4">
             Why Choose Sort My Shaadi?
           </h2>
-          <p className="text-xl text-gray-600">
+          <p className="text-xl text-[#9EA1AB]">
             Making your wedding planning journey smooth and memorable
           </p>
         </motion.div>
@@ -60,11 +60,11 @@ function WhyChooseUs() {
               whileInView={{ opacity: 1, y: 0 }}
               transition={{ delay: index * 0.1 }}
               viewport={{ once: true }}
-              className="bg-gradient-to-br from-pink-50 to-purple-50 p-8 rounded-2xl hover:shadow-xl transition-shadow duration-300"
+              className="bg-gradient-to-br from-[#EDD498] to-[#F6F6F6] p-8 rounded-2xl hover:shadow-xl transition-shadow duration-300"
             >
               <div className="text-4xl mb-4">{reason.icon}</div>
-              <h3 className="text-xl font-semibold text-gray-900 mb-4">{reason.title}</h3>
-              <p className="text-gray-600">{reason.description}</p>
+              <h3 className="text-xl font-semibold text-[#1E2742] mb-4">{reason.title}</h3>
+              <p className="text-[#9EA1AB]">{reason.description}</p>
             </motion.div>
           ))}
         </div>

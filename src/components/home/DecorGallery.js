@@ -34,13 +34,13 @@ function DecorGallery() {
   if (loading) {
     return (
       <div className="flex justify-center items-center h-96">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-pink-600"></div>
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#9A2143]"></div>
       </div>
     );
   }
 
   return (
-    <div className="py-20 bg-white">
+    <div className="py-20 bg-[#F6F6F6]">
       <div className="max-w-7xl mx-auto px-4">
         <motion.div
           initial={{ opacity: 0 }}
@@ -48,10 +48,10 @@ function DecorGallery() {
           viewport={{ once: true }}
           className="text-center mb-16"
         >
-          <h2 className="text-4xl font-bold text-gray-900 mb-4">
+          <h2 className="text-4xl font-bold text-[#1E2742] mb-4">
             Wedding Decor Collections
           </h2>
-          <p className="text-xl text-gray-600">
+          <p className="text-xl text-[#9EA1AB]">
             Transform your venue with our stunning decor options
           </p>
         </motion.div>
@@ -74,7 +74,7 @@ function DecorGallery() {
                       className="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-500"
                     />
                   </div>
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent">
+                  <div className="absolute inset-0 bg-gradient-to-t from-[#1E2742]/60 to-transparent">
                     <div className="absolute bottom-6 left-6 right-6">
                       <h3 className="text-xl font-bold text-white mb-2 capitalize">
                         {category.name}
@@ -98,7 +98,7 @@ function DecorGallery() {
         >
           <Link
             to="/decor"
-            className="inline-block px-8 py-4 bg-gradient-to-r from-pink-500 to-purple-500 text-white rounded-xl hover:from-pink-600 hover:to-purple-600 transform hover:scale-105 transition-all duration-200"
+            className="inline-block px-8 py-4 bg-gradient-to-r from-[#9A2143] to-[#BFA054] text-white rounded-xl hover:from-[#BFA054] hover:to-[#EDD498] transform hover:scale-105 transition-all duration-200"
           >
             Explore All Decor Options
           </Link>

@@ -108,52 +108,54 @@ function BudgetForm({ onSubmit }) {
   };
 
   return (
-    <div className="bg-white rounded-xl shadow-lg p-8">
-      <h2 className="text-2xl font-semibold text-gray-900 mb-6">Enter Your Details</h2>
+    <div className="bg-[#FFFFFF] rounded-xl shadow-lg p-6">
+      <h2 className="text-2xl font-semibold text-[#1E2742] mb-4">Enter Your Details</h2>
       
-      <form className="space-y-6">
-        <div>
-          <label className="block text-sm font-medium text-gray-700 mb-2">
-            Total Wedding Budget (₹)
-          </label>
-          <input
-            type="number"
-            value={formData.totalBudget}
-            onChange={(e) => setFormData({...formData, totalBudget: Number(e.target.value)})}
-            className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-pink-500 focus:border-transparent"
-            placeholder="Enter your total budget"
-            required
-          />
-        </div>
+      <form className="space-y-4">
+        <div className="grid grid-cols-2 gap-4">
+          <div>
+            <label className="block text-sm font-medium text-[#1E2742] mb-1">
+              Total Wedding Budget (₹)
+            </label>
+            <input
+              type="number"
+              value={formData.totalBudget}
+              onChange={(e) => setFormData({...formData, totalBudget: Number(e.target.value)})}
+              className="w-full px-3 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-pink-500 focus:border-transparent"
+              placeholder="Enter your total budget"
+              required
+            />
+          </div>
 
-        <div>
-          <label className="block text-sm font-medium text-gray-700 mb-2">
-            Number of Guests
-          </label>
-          <input
-            type="number"
-            value={formData.guestCount}
-            onChange={handleGuestChange}
-            className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-pink-500 focus:border-transparent"
-            placeholder="Enter number of guests"
-            required
-          />
+          <div>
+            <label className="block text-sm font-medium text-[#1E2742] mb-1">
+              Number of Guests
+            </label>
+            <input
+              type="number"
+              value={formData.guestCount}
+              onChange={handleGuestChange}
+              className="w-full px-3 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-pink-500 focus:border-transparent"
+              placeholder="Enter number of guests"
+              required
+            />
+          </div>
         </div>
 
         <div className="grid grid-cols-2 gap-4">
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
+            <label className="block text-sm font-medium text-[#1E2742] mb-1">
               Rooms 
             </label>
-            <div className="flex items-center space-x-4">
+            <div className="flex items-center space-x-2">
               <input
                 type="number"
                 value={formData.doubleRooms || ''}
                 onChange={(e) => handleRoomChange(e.target.value)}
-                className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-pink-500 focus:border-transparent"
+                className="w-full px-3 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-pink-500 focus:border-transparent"
               />
               {formData.guestCount && (
-                <div className="text-sm text-gray-600">
+                <div className="text-xs text-gray-600">
                   Suggested: {calculateAccommodation(formData.guestCount).doubleRooms}
                 </div>
               )}
@@ -161,18 +163,18 @@ function BudgetForm({ onSubmit }) {
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
+            <label className="block text-sm font-medium text-[#1E2742] mb-1">
               Extra Beds
             </label>
-            <div className="flex items-center space-x-4">
+            <div className="flex items-center space-x-2">
               <input
                 type="number"
                 value={formData.adjustedExtraBeds || ''}
                 onChange={(e) => handleExtraBedChange(e.target.value)}
-                className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-pink-500 focus:border-transparent"
+                className="w-full px-3 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-pink-500 focus:border-transparent"
               />
               {formData.guestCount && (
-                <div className="text-sm text-gray-600">
+                <div className="text-xs text-gray-600">
                   Suggested: {calculateAccommodation(formData.guestCount).extraBeds}
                 </div>
               )}
@@ -182,7 +184,7 @@ function BudgetForm({ onSubmit }) {
 
         <div className="grid grid-cols-2 gap-4">
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
+            <label className="block text-sm font-medium text-[#1E2742] mb-1">
               Check-in Date
             </label>
             <input
@@ -190,20 +192,20 @@ function BudgetForm({ onSubmit }) {
               value={formData.checkInDate}
               onChange={handleCheckInChange}
               onInput={handleDateInput}
-              className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-pink-500 focus:border-transparent"
+              className="w-full px-3 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-pink-500 focus:border-transparent"
               min={getCurrentDate()}
               required
             />
           </div>
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
+            <label className="block text-sm font-medium text-[#1E2742] mb-1">
               Check-out Date
             </label>
             <input
               type="date"
               value={formData.checkOutDate}
               onChange={(e) => setFormData({...formData, checkOutDate: e.target.value})}
-              className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-pink-500 focus:border-transparent"
+              className="w-full px-3 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-pink-500 focus:border-transparent"
               min={getMinCheckoutDate()}
               disabled={!formData.checkInDate}
               required
@@ -212,7 +214,7 @@ function BudgetForm({ onSubmit }) {
         </div>
 
         {calculateStayDuration() > 0 && (
-          <div className="text-sm text-gray-600">
+          <div className="text-xs text-gray-600">
             Duration: {calculateStayDuration()} nights
           </div>
         )}
@@ -220,7 +222,7 @@ function BudgetForm({ onSubmit }) {
         <button
           onClick={handleSubmit}
           type="button"
-          className="w-full bg-gradient-to-r from-pink-600 to-purple-600 text-white py-4 px-6 rounded-xl text-lg font-semibold hover:from-pink-700 hover:to-purple-700 transition-all duration-200"
+          className="w-full bg-gradient-to-r from-pink-600 to-purple-600 text-white py-3 px-4 rounded-lg text-lg font-semibold hover:from-pink-700 hover:to-purple-700 transition-all duration-200"
         >
           Sort Hotels
         </button>

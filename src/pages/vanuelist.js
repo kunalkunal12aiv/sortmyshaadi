@@ -15,6 +15,7 @@ const VenueList = () => {
     capacityRange: { min: 0, max: 2000 },
     selectedTags: []
   });
+  const [showFilters, setShowFilters] = useState(false);
 
   const { currentUser } = useAuth();
 
@@ -104,26 +105,26 @@ const VenueList = () => {
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
-        <div className="animate-spin rounded-full h-12 w-12 border-4 border-pink-500 border-t-transparent"></div>
+        <div className="animate-spin rounded-full h-12 w-12 border-4 border-[#9A2143] border-t-transparent"></div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-pink-50 to-purple-50 py-12 px-4">
+    <div className="min-h-screen bg-gradient-to-br from-[#F6F6F6] to-[#EDD498] py-12 px-4">
       <div className="max-w-7xl mx-auto">
         <div className="flex flex-col md:flex-row md:items-center justify-between mb-8">
-          <h1 className="text-4xl font-bold text-gray-900">Wedding Venues</h1>
+          <h1 className="text-4xl font-bold text-[#1E2742]">Wedding Venues</h1>
           <div className="mt-4 md:mt-0 relative">
             <input
               type="text"
               placeholder="Search venues..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              className="w-full md:w-80 px-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-pink-500 focus:border-transparent outline-none"
+              className="w-full md:w-80 px-4 py-2 rounded-lg border border-[#9EA1AB] focus:ring-2 focus:ring-[#9A2143] focus:border-transparent outline-none"
             />
             <svg
-              className="absolute right-3 top-2.5 h-5 w-5 text-gray-400"
+              className="absolute right-3 top-2.5 h-5 w-5 text-[#9EA1AB]"
               fill="none"
               stroke="currentColor"
               viewBox="0 0 24 24"
@@ -138,30 +139,38 @@ const VenueList = () => {
           </div>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
-          <div className="lg:col-span-1">
+        <div className="flex justify-between items-center mb-8">
+          <button
+            onClick={() => setShowFilters(!showFilters)}
+            className="bg-[#9A2143] text-white px-6 py-2 rounded-lg hover:bg-[#BFA054] transition"
+          >
+            {showFilters ? 'Hide Filters' : 'Show Filters'}
+          </button>
+        </div>
+
+        {showFilters && (
+          <div className="mb-8">
             <VenueFilters 
               venues={venues} 
               onFilterChange={setFilters}
             />
           </div>
+        )}
 
-          <div className="lg:col-span-3">
-            {filteredVenues.length === 0 ? (
-              <div className="text-center py-12">
-                <p className="text-gray-600 text-xl">No venues found matching your criteria.</p>
-              </div>
-            ) : (
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                {filteredVenues.map((venue) => (
-                  <VenueCard 
-                    key={venue.id} 
-                    venue={venue}
-                  />
-                ))}
-              </div>
-            )}
-          </div>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          {filteredVenues.length === 0 ? (
+            <div className="text-center py-12">
+              <p className="text-[#1E2742] text-xl">No venues found matching your criteria.</p>
+            </div>
+          ) : (
+            filteredVenues.map((venue) => (
+              <VenueCard 
+                key={venue.id} 
+                venue={venue}
+                className="hover-card" // Add hover effect class
+              />
+            ))
+          )}
         </div>
       </div>
     </div>
