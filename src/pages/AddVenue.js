@@ -40,7 +40,9 @@ function AddVenue() {
     seating: {
       minCapacity: '',
       maxCapacity: ''
-    }
+    },
+    roomPrice: '',
+    extraBedPrice: '',
   };
 
   const [venueData, setVenueData] = useState(initialState);
@@ -243,43 +245,6 @@ https://example.com/decor2.jpg"
             </div>
           </div>
 
-          {/* Room Pricing */}
-          <div className="bg-gray-50 p-6 rounded-xl space-y-6">
-            <h2 className="text-xl font-semibold text-gray-900">Room Pricing</h2>
-            <div className="grid grid-cols-1 gap-6 md:grid-cols-3">
-              <div className="space-y-2">
-                <label className="text-sm font-medium text-gray-700">Single Room Price (₹)</label>
-                <input
-                  type="number"
-                  value={venueData.rooms.singleRoomPrice}
-                  onChange={(e) => setVenueData({...venueData, rooms: {...venueData.rooms, singleRoomPrice: e.target.value}})}
-                  className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-pink-500 focus:border-transparent transition duration-200"
-                  placeholder="3000"
-                />
-              </div>
-              <div className="space-y-2">
-                <label className="text-sm font-medium text-gray-700">Double Room Price (₹)</label>
-                <input
-                  type="number"
-                  value={venueData.rooms.doubleRoomPrice}
-                  onChange={(e) => setVenueData({...venueData, rooms: {...venueData.rooms, doubleRoomPrice: e.target.value}})}
-                  className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-pink-500 focus:border-transparent transition duration-200"
-                  placeholder="5000"
-                />
-              </div>
-              <div className="space-y-2">
-                <label className="text-sm font-medium text-gray-700">Triple Room Price (₹)</label>
-                <input
-                  type="number"
-                  value={venueData.rooms.tripleRoomPrice}
-                  onChange={(e) => setVenueData({...venueData, rooms: {...venueData.rooms, tripleRoomPrice: e.target.value}})}
-                  className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-pink-500 focus:border-transparent transition duration-200"
-                  placeholder="7000"
-                />
-              </div>
-            </div>
-          </div>
-
           {/* About Section */}
           <div className="bg-gray-50 p-6 rounded-xl space-y-4">
             <h2 className="text-xl font-semibold text-gray-900">About Venue</h2>
@@ -462,6 +427,33 @@ https://example.com/decor2.jpg"
                   onChange={(e) => setVenueData({...venueData, seating: {...venueData.seating, maxCapacity: e.target.value}})}
                   className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-pink-500 focus:border-transparent transition duration-200"
                   placeholder="Maximum Capacity"
+                />
+              </div>
+            </div>
+          </div>
+
+          {/* Room Pricing Section */}
+          <div className="bg-gray-50 p-6 rounded-xl space-y-6">
+            <h2 className="text-xl font-semibold text-gray-900">Room Pricing</h2>
+            <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
+              <div className="space-y-2">
+                <label className="text-sm font-medium text-gray-700">Room Price (₹)</label>
+                <input
+                  type="number"
+                  value={venueData.roomPrice}
+                  onChange={(e) => setVenueData({...venueData, roomPrice: e.target.value})}
+                  className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-pink-500 focus:border-transparent transition duration-200"
+                  placeholder="5000"
+                />
+              </div>
+              <div className="space-y-2">
+                <label className="text-sm font-medium text-gray-700">Extra Bed Price (₹)</label>
+                <input
+                  type="number"
+                  value={venueData.extraBedPrice}
+                  onChange={(e) => setVenueData({...venueData, extraBedPrice: e.target.value})}
+                  className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-pink-500 focus:border-transparent transition duration-200"
+                  placeholder="1000"
                 />
               </div>
             </div>
