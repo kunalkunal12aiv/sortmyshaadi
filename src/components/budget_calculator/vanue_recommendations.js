@@ -6,27 +6,7 @@ function VenueRecommendations({ recommendations }) {
 
   return (
     <div className="space-y-8">
-      {/* Budget Analysis Card */}
-      <div className="bg-[#F6F6F6] rounded-xl shadow-lg p-8">
-        <h2 className="text-2xl font-semibold text-[#1E2742] mb-6" style={{ fontFamily: 'DM Serif Display, serif' }}>Budget Analysis</h2>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-          <div className="bg-gradient-to-br from-[#EDD498] to-[#BFA054] p-4 rounded-lg">
-            <p className="text-sm text-[#1E2742]">Accommodation Budget</p>
-            <p className="text-lg font-bold text-[#9A2143]">
-              ₹{Math.floor(budgetBreakdown.minAccommodation).toLocaleString()} - 
-              ₹{Math.floor(budgetBreakdown.maxAccommodation).toLocaleString()}
-            </p>
-          </div>
-          <div className="bg-gradient-to-br from-[#EDD498] to-[#BFA054] p-4 rounded-lg">
-            <p className="text-sm text-[#1E2742]"> Rooms Required</p>
-            <p className="text-lg font-bold text-[#1E2742]">{budgetBreakdown.doubleRooms}</p>
-          </div>
-          <div className="bg-gradient-to-br from-[#EDD498] to-[#BFA054] p-4 rounded-lg">
-            <p className="text-sm text-[#1E2742]">Extra Beds Required</p>
-            <p className="text-lg font-bold text-[#1E2742]">{budgetBreakdown.extraBeds}</p>
-          </div>
-        </div>
-      </div>
+      
 
       {/* Recommended Venues */}
       <div className="bg-[#F6F6F6] rounded-xl shadow-lg p-8">

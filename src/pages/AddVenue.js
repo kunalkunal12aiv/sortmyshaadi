@@ -11,36 +11,39 @@ function AddVenue() {
     pricePerPlate: '',
     guestSpace: '',
     about: '',
-    faqs: [{ question: '', answer: '' }],
     menus: [{ name: '', items: '' }],
     latitude: '',
     longitude: '',
-    doubleRoomPrice: '',
-    extraBedPrice: '',
     decorImages: [''],  // Initialize with empty array containing one empty string
-    singleRoomPrice: '',
-    tripleRoomPrice: '',
-    menu: ''  // Add this field
+    menu: '',  // Add this field
+    facilities: {
+      catering: '', // 'inhouse', 'outside-allowed', 'outside-only'
+      alcohol: '', // 'inhouse', 'outside-allowed', 'outside-only'
+      decoration: '', // 'inhouse', 'outside-allowed', 'outside-only'
+      dj: '', // 'inhouse', 'outside-allowed', 'outside-only'
+    },
+    foodTypes: {
+      vegetarian: false,
+      nonVegetarian: false,
+      vegan: false
+    },
+    amenities: {
+      acEventSpace: false,
+      acDiningHall: false,
+      dressingRoom: false,
+      restaurantCatering: false,
+      electricityBackup: false,
+      barServices: false,
+      lightingSound: false,
+      poolsideSpace: false
+    },
+    seating: {
+      minCapacity: '',
+      maxCapacity: ''
+    }
   };
 
-  const [venueData, setVenueData] = useState({
-    name: '',
-    shortAddress: '',
-    media: [''],  // Initialize with empty array
-    pricePerPlate: '',
-    guestSpace: '',
-    about: '',
-    faqs: [{ question: '', answer: '' }],
-    menus: [{ name: '', items: '' }],
-    latitude: '',
-    longitude: '',
-    doubleRoomPrice: '',
-    extraBedPrice: '',
-    decorImages: [''],  // Initialize with empty array
-    singleRoomPrice: '',
-    tripleRoomPrice: '',
-    menu: ''
-  });
+  const [venueData, setVenueData] = useState(initialState);
 
   useEffect(() => {
     const fetchHotelDetails = async () => {
@@ -248,8 +251,8 @@ https://example.com/decor2.jpg"
                 <label className="text-sm font-medium text-gray-700">Single Room Price (₹)</label>
                 <input
                   type="number"
-                  value={venueData.singleRoomPrice}
-                  onChange={(e) => setVenueData({...venueData, singleRoomPrice: e.target.value})}
+                  value={venueData.rooms.singleRoomPrice}
+                  onChange={(e) => setVenueData({...venueData, rooms: {...venueData.rooms, singleRoomPrice: e.target.value}})}
                   className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-pink-500 focus:border-transparent transition duration-200"
                   placeholder="3000"
                 />
@@ -258,8 +261,8 @@ https://example.com/decor2.jpg"
                 <label className="text-sm font-medium text-gray-700">Double Room Price (₹)</label>
                 <input
                   type="number"
-                  value={venueData.doubleRoomPrice}
-                  onChange={(e) => setVenueData({...venueData, doubleRoomPrice: e.target.value})}
+                  value={venueData.rooms.doubleRoomPrice}
+                  onChange={(e) => setVenueData({...venueData, rooms: {...venueData.rooms, doubleRoomPrice: e.target.value}})}
                   className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-pink-500 focus:border-transparent transition duration-200"
                   placeholder="5000"
                 />
@@ -268,8 +271,8 @@ https://example.com/decor2.jpg"
                 <label className="text-sm font-medium text-gray-700">Triple Room Price (₹)</label>
                 <input
                   type="number"
-                  value={venueData.tripleRoomPrice}
-                  onChange={(e) => setVenueData({...venueData, tripleRoomPrice: e.target.value})}
+                  value={venueData.rooms.tripleRoomPrice}
+                  onChange={(e) => setVenueData({...venueData, rooms: {...venueData.rooms, tripleRoomPrice: e.target.value}})}
                   className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-pink-500 focus:border-transparent transition duration-200"
                   placeholder="7000"
                 />
@@ -289,50 +292,180 @@ https://example.com/decor2.jpg"
             />
           </div>
 
-          {/* FAQs Section */}
-          <div className="bg-gray-50 p-6 rounded-xl space-y-4">
-            <div className="flex justify-between items-center">
-              <h2 className="text-xl font-semibold text-gray-900">FAQs</h2>
-              <button
-                type="button"
-                onClick={() => setVenueData({
-                  ...venueData,
-                  faqs: [...venueData.faqs, { question: '', answer: '' }]
-                })}
-                className="px-4 py-2 bg-pink-100 text-pink-700 rounded-lg hover:bg-pink-200 transition duration-200"
-              >
-                Add FAQ
-              </button>
-            </div>
-            {venueData.faqs.map((faq, index) => (
-              <div key={index} className="space-y-4 p-4 bg-white rounded-lg shadow-sm">
-                <input
-                  type="text"
-                  placeholder="Question"
-                  value={faq.question}
-                  onChange={(e) => {
-                    const newFaqs = [...venueData.faqs];
-                    newFaqs[index].question = e.target.value;
-                    setVenueData({...venueData, faqs: newFaqs});
-                  }}
-                  className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-pink-500 focus:border-transparent"
-                />
-                <input
-                  type="text"
-                  placeholder="Answer"
-                  value={faq.answer}
-                  onChange={(e) => {
-                    const newFaqs = [...venueData.faqs];
-                    newFaqs[index].answer = e.target.value;
-                    setVenueData({...venueData, faqs: newFaqs});
-                  }}
-                  className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-pink-500 focus:border-transparent"
-                />
+          {menuSection}
+
+          {/* Facilities Section */}
+          <div className="bg-gray-50 p-6 rounded-xl space-y-6">
+            <h2 className="text-xl font-semibold text-gray-900">Facilities</h2>
+            
+            <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
+              <div className="space-y-4">
+                <label className="block text-sm font-medium text-gray-700">Catering Policy</label>
+                <div className="space-y-2">
+                  {['inhouse', 'outside-allowed', 'outside-only'].map((option) => (
+                    <label key={option} className="flex items-center space-x-2">
+                      <input
+                        type="radio"
+                        name="catering"
+                        value={option}
+                        checked={venueData.facilities.catering === option}
+                        onChange={(e) => setVenueData({
+                          ...venueData,
+                          facilities: { ...venueData.facilities, catering: e.target.value }
+                        })}
+                        className="text-pink-600"
+                      />
+                      <span>{option === 'inhouse' ? 'In-house Catering Only' : 
+                            option === 'outside-allowed' ? 'Outside Catering Allowed' : 
+                            'Outside Catering Only'}</span>
+                    </label>
+                  ))}
+                </div>
               </div>
-            ))}
+
+              {/* Similar radio groups for alcohol, decoration, and DJ */}
+              <div className="space-y-4">
+                <label className="block text-sm font-medium text-gray-700">Alcohol Policy</label>
+                <div className="space-y-2">
+                  {['inhouse', 'outside-allowed', 'outside-only'].map((option) => (
+                    <label key={option} className="flex items-center space-x-2">
+                      <input
+                        type="radio"
+                        name="alcohol"
+                        value={option}
+                        checked={venueData.facilities.alcohol === option}
+                        onChange={(e) => setVenueData({
+                          ...venueData,
+                          facilities: { ...venueData.facilities, alcohol: e.target.value }
+                        })}
+                        className="text-pink-600"
+                      />
+                      <span>{option === 'inhouse' ? 'In-house Alcohol Only' : 
+                            option === 'outside-allowed' ? 'Outside Alcohol Allowed' : 
+                            'Outside Alcohol Only'}</span>
+                    </label>
+                  ))}
+                </div>
+              </div>
+
+              <div className="space-y-4">
+                <label className="block text-sm font-medium text-gray-700">Decoration Policy</label>
+                <div className="space-y-2">
+                  {['inhouse', 'outside-allowed', 'outside-only'].map((option) => (
+                    <label key={option} className="flex items-center space-x-2">
+                      <input
+                        type="radio"
+                        name="decoration"
+                        value={option}
+                        checked={venueData.facilities.decoration === option}
+                        onChange={(e) => setVenueData({
+                          ...venueData,
+                          facilities: { ...venueData.facilities, decoration: e.target.value }
+                        })}
+                        className="text-pink-600"
+                      />
+                      <span>{option === 'inhouse' ? 'In-house Decoration Only' : 
+                            option === 'outside-allowed' ? 'Outside Decoration Allowed' : 
+                            'Outside Decoration Only'}</span>
+                    </label>
+                  ))}
+                </div>
+              </div>
+
+              <div className="space-y-4">
+                <label className="block text-sm font-medium text-gray-700">DJ Policy</label>
+                <div className="space-y-2">
+                  {['inhouse', 'outside-allowed', 'outside-only'].map((option) => (
+                    <label key={option} className="flex items-center space-x-2">
+                      <input
+                        type="radio"
+                        name="dj"
+                        value={option}
+                        checked={venueData.facilities.dj === option}
+                        onChange={(e) => setVenueData({
+                          ...venueData,
+                          facilities: { ...venueData.facilities, dj: e.target.value }
+                        })}
+                        className="text-pink-600"
+                      />
+                      <span>{option === 'inhouse' ? 'In-house DJ Only' : 
+                            option === 'outside-allowed' ? 'Outside DJ Allowed' : 
+                            'Outside DJ Only'}</span>
+                    </label>
+                  ))}
+                </div>
+              </div>
+            </div>
           </div>
 
-          {menuSection}
+          {/* Food Types Section */}
+          <div className="bg-gray-50 p-6 rounded-xl space-y-6">
+            <h2 className="text-xl font-semibold text-gray-900">Food Types</h2>
+            <div className="flex space-x-6">
+              {Object.entries(venueData.foodTypes).map(([type, checked]) => (
+                <label key={type} className="flex items-center space-x-2">
+                  <input
+                    type="checkbox"
+                    checked={checked}
+                    onChange={(e) => setVenueData({
+                      ...venueData,
+                      foodTypes: { ...venueData.foodTypes, [type]: e.target.checked }
+                    })}
+                    className="text-pink-600"
+                  />
+                  <span className="capitalize">{type}</span>
+                </label>
+              ))}
+            </div>
+          </div>
+
+          {/* Amenities Section */}
+          <div className="bg-gray-50 p-6 rounded-xl space-y-6">
+            <h2 className="text-xl font-semibold text-gray-900">Amenities</h2>
+            <div className="grid grid-cols-2 gap-4">
+              {Object.entries(venueData.amenities).map(([amenity, checked]) => (
+                <label key={amenity} className="flex items-center space-x-2">
+                  <input
+                    type="checkbox"
+                    checked={checked}
+                    onChange={(e) => setVenueData({
+                      ...venueData,
+                      amenities: { ...venueData.amenities, [amenity]: e.target.checked }
+                    })}
+                    className="text-pink-600"
+                  />
+                  <span className="capitalize">{amenity.replace(/([A-Z])/g, ' $1').trim()}</span>
+                </label>
+              ))}
+            </div>
+          </div>
+
+          {/* Seating Section */}
+          <div className="bg-gray-50 p-6 rounded-xl space-y-6">
+            <h2 className="text-xl font-semibold text-gray-900">Seating Capacity</h2>
+            <div className="grid grid-cols-2 gap-6">
+              <div className="space-y-2">
+                <label className="text-sm font-medium text-gray-700">Minimum Capacity</label>
+                <input
+                  type="number"
+                  value={venueData.seating.minCapacity}
+                  onChange={(e) => setVenueData({...venueData, seating: {...venueData.seating, minCapacity: e.target.value}})}
+                  className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-pink-500 focus:border-transparent transition duration-200"
+                  placeholder="Minimum Capacity"
+                />
+              </div>
+              <div className="space-y-2">
+                <label className="text-sm font-medium text-gray-700">Maximum Capacity</label>
+                <input
+                  type="number"
+                  value={venueData.seating.maxCapacity}
+                  onChange={(e) => setVenueData({...venueData, seating: {...venueData.seating, maxCapacity: e.target.value}})}
+                  className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-pink-500 focus:border-transparent transition duration-200"
+                  placeholder="Maximum Capacity"
+                />
+              </div>
+            </div>
+          </div>
 
           {/* Location Section */}
           <div className="bg-gray-50 p-6 rounded-xl space-y-6">
