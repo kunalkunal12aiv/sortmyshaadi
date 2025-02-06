@@ -1,0 +1,20 @@
+:root {
+  /* Primary Colors */
+  --primary-dark: #2C1810;    /* Deep Brown */
+  --primary-main: #D4AF37;    /* Royal Gold */
+  --primary-light: #F5E6CA;   /* Soft Gold */
+  
+  /* Secondary Colors */
+  --accent-1: #8B4513;        /* Burgundy Brown */
+  --accent-2: #E8C39E;        /* Champagne */
+  --accent-3: #FDF7ED;        /* Pearl White */
+  
+  /* Text Colors */
+  --text-primary: #2C1810;
+  --text-secondary: #5C4033;
+  --text-light: #8B7355;
+  
+  /* Background Colors */
+  --bg-gradient-1: linear-gradient(135deg, #FDF7ED 0%, #F5E6CA 100%);
+  --bg-gradient-2: linear-gradient(135deg, #D4AF37 0%, #8B4513 100%);
+}

@@ -3,43 +3,50 @@ import { motion } from 'framer-motion';
 
 const features = [
   {
-    icon: "🏰",
-    title: "One-Click Venue Booking",
-    description: "Instantly book your dream venue with our streamlined booking process",
-    color: "from-[#9A2143] to-[#BFA054]"
-  },
-  {
     icon: "✨",
-    title: "Customizable Decor",
-    description: "Choose from hundreds of decor options to match your wedding theme",
-    color: "from-[#9A2143] to-[#BFA054]"
-  },
-  {
-    icon: "💰",
-    title: "Smart Budget Planning",
-    description: "Get personalized venue recommendations based on your budget",
-    color: "from-[#9A2143] to-[#BFA054]"
+    title: "Curated Venues",
+    description: "Handpicked premium venues with detailed pricing and availability",
+    color: "var(--primary-main)"
   },
   {
     icon: "📅",
-    title: "Real-time Availability",
-    description: "Check venue availability and peak season pricing instantly",
-    color: "from-[#9A2143] to-[#BFA054]"
+    title: "Live Availability",
+    description: "Check real-time venue availability and peak season rates",
+    color: "var(--primary-main)"
+  },
+  {
+    icon: "💎",
+    title: "Price Transparency",
+    description: "Clear pricing with no hidden costs or last-minute surprises",
+    color: "var(--primary-main)"
+  },
+  {
+    icon: "🤝",
+    title: "Dedicated Support",
+    description: "Personal assistance throughout your venue selection journey",
+    color: "var(--primary-main)"
   }
 ];
 
 function Features() {
   return (
-    <div className="py-20 bg-[#F6F6F6]">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="text-center mb-16">
-          <h2 className="text-4xl font-bold text-[#1E2742]">
+    <div className="py-20 relative overflow-hidden">
+      {/* Background with subtle pattern */}
+      <div className="absolute inset-0 bg-[var(--accent-3)] opacity-50" />
+
+      <div className="max-w-7xl mx-auto px-4 relative z-10">
+        <motion.div
+          initial={{ opacity: 0 }}
+          whileInView={{ opacity: 1 }}
+          className="text-center mb-16"
+        >
+          <h2 className="text-4xl font-serif text-[var(--primary-dark)] mb-4">
             Plan Your Wedding with Ease
           </h2>
-          <p className="mt-4 text-xl text-[#9EA1AB]">
+          <p className="text-xl text-[var(--text-secondary)]">
             Everything you need to create your perfect wedding day
           </p>
-        </div>
+        </motion.div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
           {features.map((feature, index) => (
@@ -47,24 +54,23 @@ function Features() {
               key={index}
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
-              transition={{ delay: index * 0.1 }}
-              viewport={{ once: true }}
-              className="relative group"
+              whileHover={{ y: -5 }}
+              transition={{ duration: 0.3, delay: index * 0.1 }}
+              className="bg-white/80 backdrop-blur-sm p-8 rounded-2xl shadow-lg"
             >
-              <div className="absolute inset-0 bg-gradient-to-r w-full h-full blur-xl opacity-20 group-hover:opacity-30 transition-opacity duration-300"
-                   style={{
-                     background: `linear-gradient(to right, ${feature.color})`
-                   }}
-              />
-              <div className="relative bg-[#FFFFFF] p-8 rounded-2xl shadow-lg hover:shadow-xl transition-shadow duration-300">
-                <div className="text-4xl mb-4">{feature.icon}</div>
-                <h3 className="text-xl font-semibold mb-4 text-[#1E2742]">{feature.title}</h3>
-                <p className="text-[#9EA1AB]">{feature.description}</p>
-              </div>
+              <div className="text-4xl mb-4" style={{ color: feature.color }}>{feature.icon}</div>
+              <h3 className="text-xl font-serif text-[var(--primary-dark)] mb-4">
+                {feature.title}
+              </h3>
+              <p className="text-[var(--text-secondary)]">{feature.description}</p>
             </motion.div>
           ))}
         </div>
       </div>
+
+      {/* Decorative Elements */}
+      <div className="absolute top-0 left-0 w-64 h-64 bg-[var(--primary-main)]/10 rounded-full blur-3xl" />
+      <div className="absolute bottom-0 right-0 w-64 h-64 bg-[var(--accent-1)]/10 rounded-full blur-3xl" />
     </div>
   );
 }

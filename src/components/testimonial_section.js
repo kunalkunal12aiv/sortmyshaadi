@@ -14,7 +14,7 @@ function TestimonialSection() {
             </p>
             <div className="flex items-center">
               <img 
-                src="/images/couple1.jpg" 
+                src="/images/hero.jpg" 
                 alt="Happy Couple" 
                 className="w-16 h-16 rounded-full object-cover"
               />

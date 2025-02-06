@@ -7,6 +7,10 @@ import BudgetPlanner from '../components/home/BudgetPlanner';
 import WhyChooseUs from '../components/home/WhyChooseUs';
 import TestimonialCarousel from '../components/home/TestimonialCarousel';
 import VideoShowcase from '../components/home/VideoShowcase'; // Import the new component
+import DestinationTypes from '../components/home/DestinationTypes';
+import HowItWorks from '../components/home/HowItWorks';
+import FAQs from '../components/home/FAQs';
+import VendorCTA from '../components/home/VendorCTA';
 
 function Home() {
   return (
@@ -14,11 +18,15 @@ function Home() {
       <HeroSection />
       <VideoShowcase /> {/* Move the new component to the second position */}
       <Features />
+      <HowItWorks /> {/* Add the new section here */}
+      <DestinationTypes /> {/* Add the DestinationTypes component here */}
       <VenueShowcase />
       <DecorGallery />
       <BudgetPlanner />
       <WhyChooseUs />
       <TestimonialCarousel />
+      <FAQs /> {/* Add FAQs section */}
+      <VendorCTA /> {/* Add Vendor CTA section */}
     </div>
   );
 }

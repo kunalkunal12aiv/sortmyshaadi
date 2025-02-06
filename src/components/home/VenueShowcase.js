@@ -45,18 +45,20 @@ function VenueShowcase() {
   }
 
   return (
-    <div className="py-20 bg-gradient-to-br from-[#F6F6F6] to-[#EDD498]">
-      <div className="max-w-7xl mx-auto px-4">
+    <div className="py-20 relative overflow-hidden">
+      {/* Background with subtle gradient */}
+      <div className="absolute inset-0 bg-gradient-to-br from-[var(--accent-3)] to-[var(--primary-light)] opacity-30" />
+
+      <div className="max-w-7xl mx-auto px-4 relative z-10">
         <motion.div 
           initial={{ opacity: 0 }}
           whileInView={{ opacity: 1 }}
-          viewport={{ once: true }}
           className="text-center mb-16"
         >
-          <h2 className="text-4xl font-bold text-[#1E2742] mb-4">
+          <h2 className="text-4xl font-serif text-[var(--primary-dark)] mb-4">
             Featured Wedding Venues
           </h2>
-          <p className="text-xl text-[#9EA1AB]">
+          <p className="text-xl text-[var(--text-secondary)]">
             Explore our handpicked selection of beautiful wedding venues
           </p>
         </motion.div>
@@ -82,7 +84,7 @@ function VenueShowcase() {
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.1 }}
-                className="bg-[#FFFFFF] rounded-xl shadow-lg overflow-hidden"
+                className="bg-white/80 backdrop-blur-sm rounded-2xl shadow-lg"
               >
                 <Link to={`/venue/${venue.id}`}>
                   <div className="relative h-64">
@@ -91,9 +93,9 @@ function VenueShowcase() {
                       alt={venue.name}
                       className="w-full h-full object-cover"
                     />
-                    <div className="absolute inset-0 bg-gradient-to-t from-[#1E2742]/60 to-transparent p-4">
-                      <h2 className="text-2xl font-bold text-white">{venue.name}</h2>
-                      <p className="text-white/90">{venue.location}</p>
+                    <div className="absolute inset-0 bg-gradient-to-t from-[var(--primary-dark)]/60 via-transparent to-transparent p-4">
+                      <h3 className="text-xl font-serif text-white mb-2">{venue.name}</h3>
+                      <p className="text-white/80">{venue.location}</p>
                     </div>
                   </div>
                 </Link>
@@ -102,6 +104,10 @@ function VenueShowcase() {
           ))}
         </Swiper>
       </div>
+
+      {/* Decorative Elements */}
+      <div className="absolute top-0 left-0 w-64 h-64 bg-[var(--primary-main)]/10 rounded-full blur-3xl" />
+      <div className="absolute bottom-0 right-0 w-64 h-64 bg-[var(--accent-1)]/10 rounded-full blur-3xl" />
     </div>
   );
 }

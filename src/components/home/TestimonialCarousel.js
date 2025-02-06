@@ -1,16 +1,18 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { Swiper, SwiperSlide } from 'swiper/react';
-import { Autoplay, Pagination } from 'swiper/modules';
+import { Autoplay, EffectCoverflow, Navigation } from 'swiper/modules';
 import 'swiper/css';
-import 'swiper/css/pagination';
+import 'swiper/css/effect-coverflow';
 
 const testimonials = [
   {
     name: "Priya & Rahul",
+    date: "February 2024",
+    venue: "The Royal Palace, Mumbai",
     image: "/images/testimonials/couple1.jpg",
-    text: "Sort My Shaadi made our wedding planning so much easier! The venue recommendations were perfect, and the budget calculator helped us stay on track.",
-    location: "Delhi"
+    text: "Sort My Shaadi transformed our wedding planning journey. The AI-powered venue recommendations were spot-on!",
+    rating: 5
   },
   {
     name: "Anita & Vikram",
@@ -23,64 +25,74 @@ const testimonials = [
 
 function TestimonialCarousel() {
   return (
-    <div className="py-20 bg-gradient-to-br from-[#F6F6F6] to-[#EDD498]">
-      <div className="max-w-7xl mx-auto px-4">
-        <motion.div
-          initial={{ opacity: 0 }}
-          whileInView={{ opacity: 1 }}
-          viewport={{ once: true }}
-          className="text-center mb-16"
-        >
-          <h2 className="text-4xl font-bold text-[#1E2742] mb-4">
-            Happy Couples
+    <div className="py-20 relative overflow-hidden">
+      {/* Background Elements */}
+      <div className="absolute inset-0 bg-[var(--bg-gradient-1)]" />
+      <div className="absolute top-0 left-0 w-full h-32 bg-gradient-to-b from-[var(--accent-3)] to-transparent" />
+      
+      <div className="max-w-7xl mx-auto px-4 relative z-10">
+        <motion.div className="text-center mb-16">
+          <h2 className="text-4xl font-serif text-[var(--primary-dark)] mb-4">
+            Love Stories We've Been Part Of
           </h2>
-          <p className="text-xl text-[#9EA1AB]">
-            What our couples say about their experience
+          <p className="text-xl text-[var(--text-secondary)]">
+            Real couples, real celebrations
           </p>
         </motion.div>
 
         <Swiper
-          slidesPerView={1}
-          spaceBetween={30}
+          effect={'coverflow'}
+          grabCursor={true}
+          centeredSlides={true}
+          slidesPerView={'auto'}
+          coverflowEffect={{
+            rotate: 0,
+            stretch: 0,
+            depth: 100,
+            modifier: 2.5,
+          }}
           autoplay={{
-            delay: 5000,
+            delay: 3000,
             disableOnInteraction: false,
           }}
-          pagination={{
-            clickable: true,
-          }}
-          breakpoints={{
-            640: {
-              slidesPerView: 2,
-            },
-            1024: {
-              slidesPerView: 3,
-            },
-          }}
-          modules={[Autoplay, Pagination]}
+          navigation={true}
+          modules={[EffectCoverflow, Autoplay, Navigation]}
           className="testimonial-swiper"
         >
           {testimonials.map((testimonial, index) => (
-            <SwiperSlide key={index}>
+            <SwiperSlide key={index} className="w-[400px]">
               <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                transition={{ delay: index * 0.1 }}
-                className="bg-[#FFFFFF] p-8 rounded-2xl shadow-lg"
+                initial={{ opacity: 0 }}
+                whileInView={{ opacity: 1 }}
+                className="bg-white/80 backdrop-blur-sm p-8 rounded-2xl shadow-lg"
               >
-                <div className="flex items-center space-x-4 mb-6">
+                <div className="relative mb-6">
                   <img
                     src={testimonial.image}
                     alt={testimonial.name}
-                    className="w-16 h-16 rounded-full object-cover"
+                    className="w-full h-48 object-cover rounded-xl"
                   />
-                  <div>
-                    <h3 className="text-lg font-semibold text-[#1E2742]">{testimonial.name}</h3>
-                    <p className="text-[#9EA1AB]">{testimonial.location}</p>
+                  <div className="absolute inset-0 bg-gradient-to-t from-[var(--primary-dark)]/60 to-transparent rounded-xl" />
+                  <div className="absolute bottom-4 left-4">
+                    <h3 className="text-white font-serif text-xl">{testimonial.name}</h3>
+                    <p className="text-white/80 text-sm">{testimonial.venue}</p>
                   </div>
                 </div>
-                <p className="text-[#9EA1AB] italic">{testimonial.text}</p>
-                <div className="mt-6 text-[#BFA054]">★★★★★</div>
+                
+                <p className="text-[var(--text-secondary)] italic mb-4">
+                  "{testimonial.text}"
+                </p>
+                
+                <div className="flex justify-between items-center">
+                  <span className="text-[var(--primary-main)]">
+                    {Array(5).fill('★').map((star, i) => (
+                      <span key={i} className={i < testimonial.rating ? 'text-[var(--primary-main)]' : 'text-gray-300'}>
+                        {star}
+                      </span>
+                    ))}
+                  </span>
+                  <span className="text-[var(--text-light)]">{testimonial.date}</span>
+                </div>
               </motion.div>
             </SwiperSlide>
           ))}

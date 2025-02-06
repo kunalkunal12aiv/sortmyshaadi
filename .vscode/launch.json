@@ -1,0 +1,10 @@
+{
+    "configurations": [
+        {
+            "type": "msedge",
+            "name": "https://sortmyshaadi.com/",
+            "request": "launch",
+            "url": "https://sortmyshaadi.com/"
+        }
+    ]
+}

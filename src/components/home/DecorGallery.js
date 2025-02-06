@@ -40,19 +40,21 @@ function DecorGallery() {
   }
 
   return (
-    <div className="py-20 bg-[#F6F6F6]">
-      <div className="max-w-7xl mx-auto px-4">
-        <motion.div
+    <div className="py-20 relative overflow-hidden">
+      {/* Elegant gradient background */}
+      <div className="absolute inset-0 bg-gradient-to-br from-[var(--accent-3)] to-[var(--primary-light)] opacity-50" />
+      
+      <div className="max-w-7xl mx-auto px-4 relative z-10">
+        <motion.div 
           initial={{ opacity: 0 }}
           whileInView={{ opacity: 1 }}
-          viewport={{ once: true }}
           className="text-center mb-16"
         >
-          <h2 className="text-4xl font-bold text-[#1E2742] mb-4">
-            Wedding Decor Collections
+          <h2 className="text-4xl font-serif text-[var(--primary-dark)] mb-4">
+            Curated Wedding Themes
           </h2>
-          <p className="text-xl text-[#9EA1AB]">
-            Transform your venue with our stunning decor options
+          <p className="text-xl text-[var(--text-secondary)]">
+            Discover our handpicked collection of exquisite decor inspirations
           </p>
         </motion.div>
 
@@ -62,27 +64,26 @@ function DecorGallery() {
               key={category.id}
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
-              transition={{ delay: index * 0.1 }}
-              viewport={{ once: true }}
+              whileHover={{ y: -5 }}
+              transition={{ duration: 0.3, delay: index * 0.1 }}
             >
               <Link to={`/decor/${category.id}`}>
-                <div className="group relative overflow-hidden rounded-2xl">
+                <div className="group relative rounded-2xl overflow-hidden bg-white shadow-lg">
                   <div className="aspect-w-1 aspect-h-1">
                     <img
                       src={category.image}
                       alt={category.name}
-                      className="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-500"
+                      className="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-700"
                     />
+                    <div className="absolute inset-0 bg-gradient-to-t from-[var(--primary-dark)]/80 via-transparent to-transparent" />
                   </div>
-                  <div className="absolute inset-0 bg-gradient-to-t from-[#1E2742]/60 to-transparent">
-                    <div className="absolute bottom-6 left-6 right-6">
-                      <h3 className="text-xl font-bold text-white mb-2 capitalize">
-                        {category.name}
-                      </h3>
-                      <p className="text-white/80">
-                        {category.count}+ options
-                      </p>
-                    </div>
+                  <div className="absolute bottom-0 left-0 right-0 p-6">
+                    <h3 className="text-xl font-serif text-white mb-2 capitalize">
+                      {category.name}
+                    </h3>
+                    <p className="text-white/80 text-sm">
+                      {category.count}+ designs available
+                    </p>
                   </div>
                 </div>
               </Link>
@@ -93,17 +94,22 @@ function DecorGallery() {
         <motion.div 
           initial={{ opacity: 0 }}
           whileInView={{ opacity: 1 }}
-          viewport={{ once: true }}
           className="mt-16 text-center"
         >
           <Link
             to="/decor"
-            className="inline-block px-8 py-4 bg-gradient-to-r from-[#9A2143] to-[#BFA054] text-white rounded-xl hover:from-[#BFA054] hover:to-[#EDD498] transform hover:scale-105 transition-all duration-200"
+            className="inline-block px-8 py-4 bg-[var(--primary-main)] text-[var(--primary-dark)] 
+              rounded-xl font-serif hover:bg-[var(--accent-1)] hover:text-white
+              transform hover:scale-105 transition-all duration-300"
           >
-            Explore All Decor Options
+            Explore All Themes
           </Link>
         </motion.div>
       </div>
+
+      {/* Decorative elements */}
+      <div className="absolute -top-20 -right-20 w-96 h-96 bg-[var(--primary-main)]/10 rounded-full blur-3xl" />
+      <div className="absolute -bottom-20 -left-20 w-96 h-96 bg-[var(--accent-1)]/10 rounded-full blur-3xl" />
     </div>
   );
 }
