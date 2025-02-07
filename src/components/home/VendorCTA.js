@@ -9,7 +9,7 @@ function VendorCTA() {
       <div className="absolute inset-0">
         <div className="absolute inset-0 bg-[var(--primary-dark)]/90 mix-blend-multiply" />
         <img
-          src="/assets/hero.jpg"
+          src="/assets/vendor.jpg"
           alt="Vendor Background"
           className="w-full h-full object-cover"
         />

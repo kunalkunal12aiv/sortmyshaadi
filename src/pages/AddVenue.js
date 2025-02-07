@@ -43,6 +43,8 @@ function AddVenue() {
     },
     roomPrice: '',
     extraBedPrice: '',
+    roomsAvailable: '', // Add this field
+    availableAreas: [] // <-- New field added
   };
 
   const [venueData, setVenueData] = useState(initialState);
@@ -457,6 +459,116 @@ https://example.com/decor2.jpg"
                 />
               </div>
             </div>
+          </div>
+
+          {/* Rooms Available Section */}
+          <div className="space-y-2">
+            <label className="text-sm font-medium text-gray-700">Rooms Available</label>
+            <input 
+              type="text"
+              value={venueData.roomsAvailable}
+              onChange={(e) => setVenueData({ ...venueData, roomsAvailable: e.target.value })}
+              className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-pink-500 focus:border-transparent transition duration-200"
+              placeholder="86 - 171"
+            />
+          </div>
+
+          {/* Available Areas Section */}
+          <div className="bg-gray-50 p-6 rounded-xl space-y-6">
+            <h2 className="text-xl font-semibold text-gray-900">Available Areas</h2>
+            {venueData.availableAreas.map((area, index) => (
+              <div key={index} className="border p-4 rounded-xl space-y-4">
+                <div className="space-y-2">
+                  <label className="text-sm font-medium text-gray-700">Title</label>
+                  <input 
+                    type="text"
+                    value={area.title}
+                    onChange={(e) => {
+                      const newAreas = [...venueData.availableAreas];
+                      newAreas[index].title = e.target.value;
+                      setVenueData({ ...venueData, availableAreas: newAreas });
+                    }}
+                    className="w-full px-4 py-3 rounded-lg border"
+                    placeholder="Area Title"
+                  />
+                </div>
+                <div className="space-y-2">
+                  <label className="text-sm font-medium text-gray-700">Seating</label>
+                  <input 
+                    type="text"
+                    value={area.seating}
+                    onChange={(e) => {
+                      const newAreas = [...venueData.availableAreas];
+                      newAreas[index].seating = e.target.value;
+                      setVenueData({ ...venueData, availableAreas: newAreas });
+                    }}
+                    className="w-full px-4 py-3 rounded-lg border"
+                    placeholder="Seating Capacity"
+                  />
+                </div>
+                <div className="space-y-2">
+                  <label className="text-sm font-medium text-gray-700">Floating</label>
+                  <input 
+                    type="text"
+                    value={area.floating}
+                    onChange={(e) => {
+                      const newAreas = [...venueData.availableAreas];
+                      newAreas[index].floating = e.target.value;
+                      setVenueData({ ...venueData, availableAreas: newAreas });
+                    }}
+                    className="w-full px-4 py-3 rounded-lg border"
+                    placeholder="Floating Amount"
+                  />
+                </div>
+                <div className="space-y-2">
+                  <label className="text-sm font-medium text-gray-700">Type</label>
+                  <div className="flex items-center space-x-4">
+                    <label className="flex items-center space-x-2">
+                      <input 
+                        type="radio"
+                        name={`area-type-${index}`}
+                        value="indoor"
+                        checked={area.type === 'indoor'}
+                        onChange={(e) => {
+                          const newAreas = [...venueData.availableAreas];
+                          newAreas[index].type = e.target.value;
+                          setVenueData({ ...venueData, availableAreas: newAreas });
+                        }}
+                        className="text-pink-600"
+                      />
+                      <span>Indoor</span>
+                    </label>
+                    <label className="flex items-center space-x-2">
+                      <input 
+                        type="radio"
+                        name={`area-type-${index}`}
+                        value="outdoor"
+                        checked={area.type === 'outdoor'}
+                        onChange={(e) => {
+                          const newAreas = [...venueData.availableAreas];
+                          newAreas[index].type = e.target.value;
+                          setVenueData({ ...venueData, availableAreas: newAreas });
+                        }}
+                        className="text-pink-600"
+                      />
+                      <span>Outdoor</span>
+                    </label>
+                  </div>
+                </div>
+              </div>
+            ))}
+            <button
+              type="button"
+              onClick={() =>
+                setVenueData({
+                  ...venueData,
+                  availableAreas: [...venueData.availableAreas, { title: '', seating: '', floating: '', type: '' }]
+                })
+              }
+              className="px-4 py-2 bg-blue-600 text-white rounded-lg"
+            >
+              Add Available Area
+            </button>
           </div>
 
           {/* Location Section */}

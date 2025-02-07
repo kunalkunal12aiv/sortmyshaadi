@@ -10,7 +10,7 @@ const destinations = [
   },
   {
     name: "Palace Weddings",
-    image: "/assets/palace-wedding.jpg",
+    image: "/assets/palace-wedding.jpeg",
     link: "/venues?type=palace"
   },
   {

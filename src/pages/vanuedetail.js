@@ -17,8 +17,9 @@ import AboutSection from '../components/vanue-detail/AboutSection';
 import GalleryModal from '../components/vanue-detail/GalleryModal';
 import VideoGallery from '../components/vanue-detail/VideoGallery';
 import TrustSection from '../components/vanue-detail/TrustSection';
-import AllInclusiveSection from '../components/vanue-detail/AllInclusiveSection';
-
+import ListingDetails from '../components/venue/ListingDetails';
+import FeaturesAndAmenitiesAccordion from '../components/vanue-detail/FeaturesAndAmenitiesAccordion';
+import FacilitiesAndFoodFaq from '../components/vanue-detail/FacilitiesAndFoodFaq';
 function VenueDetail() {
   const { id } = useParams();
   const { currentUser, userDetails } = useAuth();
@@ -186,6 +187,19 @@ function VenueDetail() {
     }
   `;
 
+  // Define motion variants for the hero section
+  const heroVariants = {
+    initial: { opacity: 0, y: 30, scale: 0.95 },
+    animate: { opacity: 1, y: 0, scale: 1 },
+    hover: { scale: 1.02 }
+  };
+
+  // Define motion variant for FAQ answers
+  const faqVariants = {
+    initial: { opacity: 0, x: 20 },
+    animate: { opacity: 1, x: 0 }
+  };
+
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-[#F6F6F6] to-[#EDD498]">
@@ -206,30 +220,42 @@ function VenueDetail() {
         {previousWeddings.length > 0 && <VideoGallery previousWeddings={previousWeddings} venueId={id} />}
         {/* Hero Section with Main Image */}
         <motion.div 
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="bg-[#FFFFFF] rounded-2xl shadow-xl overflow-hidden mb-8"
+          variants={heroVariants}
+          initial="initial"
+          animate="animate"
+          whileHover="hover"
+          transition={{ duration: 0.5, ease: "easeOut" }}
+          className="bg-[var(--primary-light)] rounded-2xl shadow-2xl overflow-hidden mb-8"
         >
           <div className="relative h-[60vh]">
-            <img 
+            <motion.img 
               src={venue.media[activeImage]} 
               alt={venue.name}
               className="w-full h-full object-cover"
+              transition={{ duration: 0.5 }}
             />
-            <div className="absolute inset-0 bg-gradient-to-t from-[#1E2742]/60 via-transparent to-transparent">
-              <div className="absolute bottom-8 left-8 right-8 flex justify-between items-end">
-                <div>
-                  <h1 className="text-4xl font-bold text-white mb-4" style={{ fontFamily: 'DM Serif Display, serif' }}>{venue.name}</h1>
-                  <p className="text-xl text-white/90">{venue.shortAddress}</p>
-                </div>
-                <button
-                  onClick={() => setShowGallery(true)}
-                  className="px-6 py-3 bg-white/90 text-[#1E2742] rounded-lg hover:bg-white transition-colors duration-200"
-                >
-                  View All Photos
-                </button>
+            <div className="absolute inset-0 bg-gradient-to-t from-[var(--primary-dark)]/70 via-transparent to-transparent flex items-end">
+              <div className="p-8">
+                <h1 className="text-4xl font-bold text-white mb-2" style={{ fontFamily: 'DM Serif Display, serif' }}>
+                  {venue.name}
+                </h1>
+                <p className="text-xl text-white/90">{venue.shortAddress}</p>
               </div>
+              {/* Digital overlay effect */}
+              <motion.div 
+                className="absolute top-4 right-4 text-sm text-white font-mono"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ delay: 0.4, duration: 0.5 }}
+              >
+              </motion.div>
             </div>
+            <button
+              onClick={() => setShowGallery(true)}
+              className="absolute bottom-8 right-8 px-6 py-3 bg-white/90 text-[var(--primary-dark)] rounded-lg hover:bg-white transition-colors duration-200 shadow-lg"
+            >
+              View All Photos
+            </button>
           </div>
         </motion.div>
 
@@ -252,7 +278,8 @@ function VenueDetail() {
               transition={{ delay: 0.1 }}
               className="bg-[#F6F6F6] rounded-xl shadow-lg p-8 hover:shadow-2xl transition-all duration-300"
             >
-              <div className="grid grid-cols-2 md:grid-cols-3 gap-6">
+              {/* Updated grid layout for key features */}
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
                 <div className="bg-gradient-to-br from-[#F6F6F6] to-[#EDD498] p-6 rounded-xl text-center">
                   <p className="text-sm font-medium text-[#1E2742] mb-1">Price Per Plate</p>
                   <p className="text-2xl font-bold text-[#9A2143]">₹{venue.pricePerPlate}</p>
@@ -265,7 +292,13 @@ function VenueDetail() {
                   <p className="text-sm font-medium text-[#1E2742] mb-1">Rating</p>
                   <p className="text-2xl font-bold text-[#BFA054]">4.8/5</p>
                 </div>
+                <div className="bg-gradient-to-br from-[#F6F6F6] to-[#EDD498] p-6 rounded-xl text-center">
+                  <p className="text-sm font-medium text-[#1E2742] mb-1">Available Rooms</p>
+                  <p className="text-2xl font-bold text-[#9A2143]">{venue.roomsAvailable || 'N/A'}</p>
+                </div>
               </div>
+
+              
         
               {/* Room Prices */}
               <div className="mt-8 grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -280,8 +313,21 @@ function VenueDetail() {
               </div>
             </motion.div>
 
+
+
+            {/* New Features & Amenities Accordion */}
+            <FeaturesAndAmenitiesAccordion 
+              facilities={venue.facilities} 
+              amenities={venue.amenities} 
+            />
+
+
+          
+
             {/* About Section */}
             <AboutSection about={venue.about} />
+
+            
 
             {/* Booking Calendar */}
             <BookingCalendar 
@@ -290,6 +336,7 @@ function VenueDetail() {
               events={events} 
             />
 
+            
             
           </div>
           {/* Sidebar */}
@@ -358,44 +405,65 @@ function VenueDetail() {
         {/* Trust Section */}
         <div className="mt-8">
           <TrustSection />
-        </div>
-
-        {/* All-Inclusive Section */}
-        <div className="mt-8">
-          <AllInclusiveSection />
+      
         </div>
         {/* Interactive FAQs */}
-        <div className="bg-[#F6F6F6] rounded-xl shadow-lg p-8 mt-8">
-          <h2 className="text-2xl font-semibold text-[#1E2742] mb-6" style={{ fontFamily: 'DM Serif Display, serif' }}>Frequently Asked Questions</h2>
+        <div className="bg-[var(--accent-3)] rounded-xl shadow-lg p-8 mt-8">
+          <h2 className="text-2xl font-semibold text-[var(--primary-dark)] mb-6" style={{ fontFamily: 'DM Serif Display, serif' }}>
+            Frequently Asked Questions
+          </h2>
           <div className="space-y-4">
-            {venue.faqs.map((faq, index) => (
-              <div 
-                key={index} 
-                className="border border-[#9EA1AB] rounded-lg overflow-hidden hover:border-[#9A2143] transition-all duration-300"
+            {(venue.faqs || []).map((faq, index) => (
+              <motion.div
+                key={index}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ delay: index * 0.1 }}
               >
-                <div
-                  className="p-5 bg-gradient-to-r from-[#F6F6F6] to-[#EDD498] cursor-pointer flex justify-between items-center group hover:from-[#9A2143] hover:to-[#BFA054] transition-all duration-300"
+                <button
                   onClick={() => toggleFaq(index)}
+                  className="w-full text-left"
                 >
-                  <h3 className="text-base font-medium text-[#1E2742] group-hover:text-[#9A2143] transition-colors duration-300">{faq.question}</h3>
-                  <svg 
-                    className={`w-6 h-6 transform transition-all duration-300 text-[#1E2742] group-hover:text-[#9A2143] ${activeFaq === index ? 'rotate-180' : ''}`}
-                    fill="none" 
-                    stroke="currentColor" 
-                    viewBox="0 0 24 24"
-                  >
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-                  </svg>
-                </div>
-                {activeFaq === index && (
-                  <div className="p-5 text-sm bg-[#F6F6F6] border-t border-[#9EA1AB]">
-                    <p className="text-[#1E2742] leading-relaxed">{faq.answer}</p>
+                  <div className="bg-white/80 backdrop-blur-sm p-6 rounded-xl shadow-sm hover:shadow-md transition-all duration-300">
+                    <div className="flex justify-between items-center">
+                      <h3 className="text-lg font-serif text-[var(--primary-dark)] pr-8">
+                        {faq.question}
+                      </h3>
+                      <motion.span
+                        animate={{ rotate: activeFaq === index ? 180 : 0 }}
+                        transition={{ duration: 0.3 }}
+                        className="text-[var(--primary-main)]"
+                      >
+                        ▼
+                      </motion.span>
+                    </div>
+                    
+                    <AnimatePresence>
+                      {activeFaq === index && (
+                        <motion.div
+                          initial={{ height: 0, opacity: 0 }}
+                          animate={{ height: "auto", opacity: 1 }}
+                          exit={{ height: 0, opacity: 0 }}
+                          transition={{ duration: 0.3 }}
+                        >
+                          <p className="mt-4 text-[var(--text-secondary)] leading-relaxed">
+                            {faq.answer}
+                          </p>
+                        </motion.div>
+                      )}
+                    </AnimatePresence>
                   </div>
-                )}
-              </div>
+                </button>
+              </motion.div>
             ))}
           </div>
         </div>
+
+        {/* New Facilities & Food Options FAQs */}
+        <FacilitiesAndFoodFaq 
+          facilities={venue.facilities} 
+          foodTypes={venue.foodTypes} 
+        />
       </div>
 
       {/* Quick Actions */}
@@ -422,4 +490,3 @@ function VenueDetail() {
 }
 
 export default VenueDetail;
-

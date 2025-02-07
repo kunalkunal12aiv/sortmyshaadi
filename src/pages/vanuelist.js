@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { getVenues } from '../utils/firebase';
 import VenueFilters from '../components/VenueFilters';
-import VenueCard from '../components/VenueCard'; // Make sure the path is correct
+import VenueCard from '../components/VenueCard';
 import { useAuth } from '../contexts/AuthContext';
 
 const VenueList = () => {
@@ -13,7 +13,8 @@ const VenueList = () => {
     priceRange: { min: 0, max: 10000 },
     roomPriceRange: { min: 0, max: 20000 },
     capacityRange: { min: 0, max: 2000 },
-    selectedTags: []
+    selectedTags: [],
+    selectedCity: '' // Add city filter
   });
   const [showFilters, setShowFilters] = useState(false);
 
@@ -40,9 +41,7 @@ const VenueList = () => {
   }, []);
 
   useEffect(() => {
-    console.log('Current filters:', filters); // Debug log
     const results = venues.filter(venue => {
-      // Convert string values to numbers for comparison
       const venuePricePerPlate = parseInt(venue.pricePerPlate) || 0;
       const venueDoubleRoomPrice = parseInt(venue.doubleRoomPrice) || 0;
 
@@ -56,35 +55,13 @@ const VenueList = () => {
       const matchesRoomPrice = venueDoubleRoomPrice >= Number(filters.roomPriceRange.min) && 
         venueDoubleRoomPrice <= Number(filters.roomPriceRange.max);
 
-      // Parse venue capacity range
       const venueCapacity = parseCapacityRange(venue.guestSpace);
       const requestedMin = Number(filters.capacityRange.min);
       const requestedMax = Number(filters.capacityRange.max);
 
-      // Venue matches if it can accommodate the requested range
-      // Either the venue's minimum capacity is less than or equal to requested minimum
-      // AND the venue's maximum capacity is greater than or equal to requested maximum
       const matchesCapacity = 
         venueCapacity.min <= requestedMax && 
         venueCapacity.max >= requestedMin;
-
-      console.log('Capacity check:', {
-        venueName: venue.name,
-        venueRange: `${venueCapacity.min}-${venueCapacity.max}`,
-        requestedRange: `${requestedMin}-${requestedMax}`,
-        matches: matchesCapacity
-      });
-
-      console.log('Filtering venue:', venue.name, {
-        price: venuePricePerPlate,
-        roomPrice: venueDoubleRoomPrice,
-        matches: {
-          matchesSearch,
-          matchesPrice,
-          matchesRoomPrice,
-          matchesCapacity
-        }
-      });
 
       const matchesTags = filters.selectedTags.length === 0 || 
         filters.selectedTags.some(tag => 
@@ -95,10 +72,12 @@ const VenueList = () => {
           )
         );
 
-      return matchesSearch && matchesPrice && matchesRoomPrice && matchesCapacity && matchesTags;
+      const matchesCity = filters.selectedCity === '' || 
+        venue.shortAddress.toLowerCase().includes(filters.selectedCity.toLowerCase());
+
+      return matchesSearch && matchesPrice && matchesRoomPrice && matchesCapacity && matchesTags && matchesCity;
     });
 
-    console.log('Filtered results:', results.length); // Debug log
     setFilteredVenues(results);
   }, [searchTerm, venues, filters]);
 
@@ -111,20 +90,20 @@ const VenueList = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-[#F6F6F6] to-[#EDD498] py-12 px-4">
+    <div className="min-h-screen bg-gradient-to-br from-[var(--primary-light)] to-[var(--accent-1)] py-12 px-4">
       <div className="max-w-7xl mx-auto">
         <div className="flex flex-col md:flex-row md:items-center justify-between mb-8">
-          <h1 className="text-4xl font-bold text-[#1E2742]">Wedding Venues</h1>
+          <h1 className="text-4xl font-bold text-[var(--primary-dark)]">Wedding Venues</h1>
           <div className="mt-4 md:mt-0 relative">
             <input
               type="text"
               placeholder="Search venues..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              className="w-full md:w-80 px-4 py-2 rounded-lg border border-[#9EA1AB] focus:ring-2 focus:ring-[#9A2143] focus:border-transparent outline-none"
+              className="w-full md:w-80 px-4 py-2 rounded-lg border border-[var(--text-secondary)] focus:ring-2 focus:ring-[var(--primary-main)] focus:border-transparent outline-none"
             />
             <svg
-              className="absolute right-3 top-2.5 h-5 w-5 text-[#9EA1AB]"
+              className="absolute right-3 top-2.5 h-5 w-5 text-[var(--text-secondary)]"
               fill="none"
               stroke="currentColor"
               viewBox="0 0 24 24"
@@ -142,7 +121,7 @@ const VenueList = () => {
         <div className="flex justify-between items-center mb-8">
           <button
             onClick={() => setShowFilters(!showFilters)}
-            className="bg-[#9A2143] text-white px-6 py-2 rounded-lg hover:bg-[#BFA054] transition"
+            className="bg-[var(--primary-main)] text-[var(--primary-dark)] px-6 py-2 rounded-lg hover:bg-[var(--accent-1)] transition"
           >
             {showFilters ? 'Hide Filters' : 'Show Filters'}
           </button>
@@ -167,7 +146,7 @@ const VenueList = () => {
               <VenueCard 
                 key={venue.id} 
                 venue={venue}
-                className="hover-card" // Add hover effect class
+                className="hover-card"
               />
             ))
           )}

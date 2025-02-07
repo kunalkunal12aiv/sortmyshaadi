@@ -1,22 +1,23 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import '../styles/filters.css'; // Import the CSS file from
+import '../styles/filters.css';
 
 function VenueFilters({ venues, onFilterChange }) {
   const [isCollapsed, setIsCollapsed] = useState(false);
   const [availableTags, setAvailableTags] = useState([]);
+  const [availableCities, setAvailableCities] = useState([]); // Add state for available cities
 
   const calculateMaxCapacity = () => {
-    // Find the maximum guest capacity among all venues
     const maxVenueCapacity = Math.max(...venues.map(venue => parseInt(venue.guestSpace) || 0));
-    return Math.min(Math.max(maxVenueCapacity, 2000), 10000); // Cap between 2000 and 10000
+    return Math.min(Math.max(maxVenueCapacity, 2000), 10000);
   };
 
   const initialFilters = {
     priceRange: { min: 0, max: 10000 },
     roomPriceRange: { min: 0, max: 20000 },
     capacityRange: { min: 0, max: calculateMaxCapacity() },
-    selectedTags: []
+    selectedTags: [],
+    selectedCity: '' // Add selected city filter
   };
 
   const [tempFilters, setTempFilters] = useState(initialFilters);
@@ -26,7 +27,8 @@ function VenueFilters({ venues, onFilterChange }) {
       priceRange: tempFilters.priceRange,
       roomPriceRange: tempFilters.roomPriceRange,
       capacityRange: tempFilters.capacityRange,
-      selectedTags: tempFilters.selectedTags
+      selectedTags: tempFilters.selectedTags,
+      selectedCity: tempFilters.selectedCity // Include selected city in filters
     });
   };
 
@@ -36,17 +38,17 @@ function VenueFilters({ venues, onFilterChange }) {
       priceRange: { min: 0, max: 10000 },
       roomPriceRange: { min: 0, max: 20000 },
       capacityRange: { min: 0, max: calculateMaxCapacity() },
-      selectedTags: []
+      selectedTags: [],
+      selectedCity: '' // Reset selected city
     };
     setTempFilters(resetState);
-    onFilterChange(resetState); // Immediately update parent
+    onFilterChange(resetState);
   };
 
-  // Extract tags from venue data
   useEffect(() => {
     const tags = new Set();
+    const cities = new Set(); // Create a set for cities
     venues.forEach(venue => {
-      // Extract specific keywords from about section
       const aboutText = venue.about.toLowerCase();
       const features = [
         'parking',
@@ -71,8 +73,7 @@ function VenueFilters({ venues, onFilterChange }) {
         }
       });
 
-      // Extract from FAQs
-      venue.faqs.forEach(faq => {
+      (venue.faqs || []).forEach(faq => {
         const faqText = `${faq.question} ${faq.answer}`.toLowerCase();
         features.forEach(feature => {
           if (faqText.includes(feature)) {
@@ -80,11 +81,16 @@ function VenueFilters({ venues, onFilterChange }) {
           }
         });
       });
+
+      // Extract city from shortAddress and add to cities set
+      const city = venue.shortAddress.split(',').pop().trim();
+      cities.add(city);
     });
 
     const sortedTags = Array.from(tags).sort();
-    console.log('Available tags:', sortedTags); // Debug log
+    const sortedCities = Array.from(cities).sort(); // Sort cities
     setAvailableTags(sortedTags);
+    setAvailableCities(sortedCities); // Set available cities
   }, [venues]);
 
   const handleTagToggle = (tag) => {
@@ -93,6 +99,13 @@ function VenueFilters({ venues, onFilterChange }) {
       selectedTags: prev.selectedTags.includes(tag) 
         ? prev.selectedTags.filter(t => t !== tag)
         : [...prev.selectedTags, tag]
+    }));
+  };
+
+  const handleCityChange = (e) => {
+    setTempFilters(prev => ({
+      ...prev,
+      selectedCity: e.target.value
     }));
   };
 
@@ -113,25 +126,24 @@ function VenueFilters({ venues, onFilterChange }) {
   const handleCapacityRangeChange = (value, type) => {
     setTempFilters(prev => ({
       ...prev,
-      capacityRange: { ...prev.capacityRange, [type]: parseInt(value) }
+      capacityRange: { ...prev, [type]: parseInt(value) }
     }));
   };
 
   return (
     <div className="bg-white rounded-xl shadow-lg overflow-hidden">
-      {/* Header with collapse button */}
       <div 
-        className="p-4 bg-gradient-to-r from-pink-50 to-purple-50 flex justify-between items-center cursor-pointer"
+        className="p-4 bg-gradient-to-r from-[var(--primary-light)] to-[var(--accent-2)] flex justify-between items-center cursor-pointer"
         onClick={() => setIsCollapsed(!isCollapsed)}
       >
-        <h3 className="text-xl font-semibold text-gray-800">Filters</h3>
+        <h3 className="text-xl font-semibold text-[var(--primary-dark)]">Filters</h3>
         <div className="flex items-center gap-4">
           <button
             onClick={(e) => {
               e.stopPropagation();
               handleReset(e);
             }}
-            className="px-3 py-1 text-sm bg-gray-100 hover:bg-gray-200 text-gray-600 rounded-md transition-colors duration-200"
+            className="px-3 py-1 text-sm bg-[var(--accent-1)]/10 hover:bg-[var(--accent-1)]/20 text-[var(--primary-dark)] rounded-md transition-colors duration-200"
           >
             Reset All
           </button>
@@ -163,13 +175,30 @@ function VenueFilters({ venues, onFilterChange }) {
             className="overflow-hidden"
           >
             <div className="p-6 space-y-6 border-t border-gray-100">
+              {/* City Filter */}
+              <div className="filter-group">
+                <label className="block text-sm font-medium text-[var(--primary-dark)] mb-3">
+                  City
+                </label>
+                <select
+                  value={tempFilters.selectedCity}
+                  onChange={handleCityChange}
+                  className="w-full px-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[var(--primary-main)] focus:border-transparent"
+                >
+                  <option value="">All Cities</option>
+                  {availableCities.map(city => (
+                    <option key={city} value={city}>{city}</option>
+                  ))}
+                </select>
+              </div>
+
               {/* Price per plate range */}
               <div className="filter-group">
-                <label className="block text-sm font-medium text-gray-700 mb-3">
+                <label className="block text-sm font-medium text-[var(--primary-dark)] mb-3">
                   Price per plate
                 </label>
                 <div className="space-y-2">
-                  <div className="flex justify-between text-sm text-gray-600">
+                  <div className="flex justify-between text-sm text-[var(--text-secondary)]">
                     <span>₹{tempFilters.priceRange.min}</span>
                     <span>₹{tempFilters.priceRange.max}</span>
                   </div>
@@ -179,7 +208,7 @@ function VenueFilters({ venues, onFilterChange }) {
                     max="10000"
                     value={tempFilters.priceRange.min}
                     onChange={(e) => handlePriceRangeChange(e.target.value, 'min')}
-                    className="w-full accent-pink-500"
+                    className="w-full accent-[var(--primary-main)]"
                   />
                   <input
                     type="range"
@@ -187,7 +216,7 @@ function VenueFilters({ venues, onFilterChange }) {
                     max="10000"
                     value={tempFilters.priceRange.max}
                     onChange={(e) => handlePriceRangeChange(e.target.value, 'max')}
-                    className="w-full accent-pink-500"
+                    className="w-full accent-[var(--primary-main)]"
                   />
                 </div>
               </div>
@@ -208,7 +237,7 @@ function VenueFilters({ venues, onFilterChange }) {
                     max="20000"
                     value={tempFilters.roomPriceRange.min}
                     onChange={(e) => handleRoomPriceRangeChange(e.target.value, 'min')}
-                    className="w-full accent-pink-500"
+                    className="w-full accent-[var(--primary-main)]"
                   />
                   <input
                     type="range"
@@ -216,7 +245,7 @@ function VenueFilters({ venues, onFilterChange }) {
                     max="20000"
                     value={tempFilters.roomPriceRange.max}
                     onChange={(e) => handleRoomPriceRangeChange(e.target.value, 'max')}
-                    className="w-full accent-pink-500"
+                    className="w-full accent-[var(--primary-main)]"
                   />
                 </div>
               </div>
@@ -237,7 +266,7 @@ function VenueFilters({ venues, onFilterChange }) {
                     max={calculateMaxCapacity()}
                     value={tempFilters.capacityRange.min}
                     onChange={(e) => handleCapacityRangeChange(e.target.value, 'min')}
-                    className="w-full accent-pink-500"
+                    className="w-full accent-[var(--primary-main)]"
                   />
                   <input
                     type="range"
@@ -245,7 +274,7 @@ function VenueFilters({ venues, onFilterChange }) {
                     max={calculateMaxCapacity()}
                     value={tempFilters.capacityRange.max}
                     onChange={(e) => handleCapacityRangeChange(e.target.value, 'max')}
-                    className="w-full accent-pink-500"
+                    className="w-full accent-[var(--primary-main)]"
                   />
                 </div>
               </div>
@@ -276,7 +305,7 @@ function VenueFilters({ venues, onFilterChange }) {
               <div className="flex gap-4 pt-4">
                 <button
                   onClick={applyFilters}
-                  className="flex-1 bg-pink-600 text-white py-2 px-4 rounded-lg hover:bg-pink-700 transition-colors duration-200"
+                  className="flex-1 bg-[var(--primary-main)] text-[var(--primary-dark)] py-2 px-4 rounded-lg hover:bg-[var(--accent-1)] transition-colors duration-200"
                 >
                   Apply Filters
                 </button>

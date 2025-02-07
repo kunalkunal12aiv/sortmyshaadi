@@ -5,6 +5,8 @@ import { getVenues } from '../utils/firebase';
 function VenueList() {
   const [venues, setVenues] = useState([]);
   const [loading, setLoading] = useState(true);
+  // New state for search query
+  const [searchQuery, setSearchQuery] = useState('');
 
   useEffect(() => {
     const fetchVenues = async () => {
@@ -15,6 +17,11 @@ function VenueList() {
     fetchVenues();
   }, []);
 
+  // Filter venues based on searchQuery
+  const filteredVenues = venues.filter(venue =>
+    venue.name.toLowerCase().includes(searchQuery.toLowerCase())
+  );
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-pink-50 to-purple-50 py-12 px-4">
       {loading ? (
@@ -24,7 +31,17 @@ function VenueList() {
       ) : (
         <div className="max-w-7xl mx-auto">
           <div className="flex justify-between items-center mb-8">
-            <h1 className="text-4xl font-bold text-gray-900">Manage Venues</h1>
+            <div>
+              <h1 className="text-4xl font-bold text-gray-900">Manage Venues</h1>
+              {/* Search Input */}
+              <input
+                type="text"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                placeholder="Search venues..."
+                className="mt-4 px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-pink-500"
+              />
+            </div>
             <Link 
               to="/add-venue" 
               className="bg-pink-600 text-white px-6 py-2 rounded-lg hover:bg-pink-700 transition"
@@ -34,7 +51,7 @@ function VenueList() {
           </div>
           
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {venues.map((venue) => (
+            {filteredVenues.map((venue) => (
               <div key={venue.id} className="bg-white rounded-xl shadow-lg overflow-hidden">
                 <div className="relative h-64">
                   <img 

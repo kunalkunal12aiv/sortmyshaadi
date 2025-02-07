@@ -65,7 +65,7 @@ const VenueCard = ({ venue }) => {
   return (
     <Link 
       to={`/venue/${venue.id}`}
-      className="bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition-shadow duration-300"
+      className="bg-white/80 backdrop-blur-md rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition-shadow duration-300"
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >
@@ -102,7 +102,7 @@ const VenueCard = ({ venue }) => {
         </div>
 
         {/* Venue Info Overlay */}
-        <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/60 to-transparent p-4">
+        <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-[var(--primary-dark)]/60 to-transparent p-4">
           <h2 className="text-2xl font-bold text-white">{venue.name}</h2>
           <p className="text-white/90">{venue.shortAddress}</p>
         </div>
@@ -113,8 +113,8 @@ const VenueCard = ({ venue }) => {
             onClick={handleShortlist}
             className={`p-2 rounded-full ${
               isShortlisted 
-                ? 'bg-pink-600 text-white' 
-                : 'bg-white/80 hover:bg-white text-gray-700'
+                ? 'bg-[var(--primary-main)] text-[var(--primary-dark)]' 
+                : 'bg-white/80 hover:bg-white text-[var(--primary-dark)]'
             } transition-all duration-200`}
           >
             <svg
@@ -136,14 +136,14 @@ const VenueCard = ({ venue }) => {
 
       <div className="p-6 space-y-4">
         <div className="flex justify-between items-center">
-          <span className="text-pink-600 font-semibold">
+          <span className="text-[var(--primary-main)] font-semibold">
             ₹{parseInt(venue.pricePerPlate).toLocaleString('en-IN')} per plate
           </span>
-          <span className="text-gray-600">
+          <span className="text-[var(--text-secondary)]">
             {formatCapacityRange(venue.guestSpace)}
           </span>
         </div>
-        <p className="text-gray-600 line-clamp-2">{venue.about}</p>
+        <p className="text-[var(--text-secondary)] line-clamp-2">{venue.about}</p>
       </div>
     </Link>
   );

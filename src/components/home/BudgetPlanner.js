@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom';
 function BudgetPlanner() {
   return (
     <div className="py-20 relative overflow-hidden">
-      <div className="absolute inset-0 bg-gradient-to-br from-[#FDF7ED] to-[#F5E6CA]" />
+      <div className="absolute inset-0 bg-[var(--bg-gradient-1)]" />
       
       <div className="max-w-7xl mx-auto px-4 relative">
         <motion.div 
@@ -18,13 +18,13 @@ function BudgetPlanner() {
             <motion.h2 
               initial={{ opacity: 0 }}
               whileInView={{ opacity: 1 }}
-              className="text-4xl font-serif text-[#2C1810]"
+              className="text-4xl font-serif text-[var(--primary-dark)]"
             >
               Smart Wedding Budget Calculator
             </motion.h2>
             
             <div className="space-y-6">
-              {[
+              {[ 
                 {
                   icon: "✨",
                   title: "AI-Powered Recommendations",
@@ -59,9 +59,7 @@ function BudgetPlanner() {
 
             <Link
               to="/budget-calculator"
-              className="inline-block px-8 py-4 bg-[#D4AF37] text-[#2C1810] rounded-xl
-                hover:bg-[#8B4513] hover:text-white transform hover:scale-105 
-                transition-all duration-300 font-semibold"
+              className="inline-block px-8 py-4 bg-[var(--primary-main)] text-[var(--primary-dark)] rounded-xl hover:bg-[var(--accent-1)] hover:text-white transform hover:scale-105 transition-all duration-300 font-semibold"
             >
               Calculate Your Budget
             </Link>
@@ -75,8 +73,29 @@ function BudgetPlanner() {
           >
             <div className="bg-white rounded-2xl shadow-2xl p-8">
               <div className="space-y-6">
-                {/* Calculator mockup content */}
-                {/* ...add calculator preview UI... */}
+                {/* Calculator preview content with dummy data */}
+                <div className="text-center">
+                  <h3 className="text-2xl font-bold text-[#2C1810] mb-4">Example Budget</h3>
+                  <div className="text-left max-w-xs mx-auto">
+                    <div className="flex justify-between mb-2">
+                      <span>Venue Cost</span>
+                      <span>₹2,50,000</span>
+                    </div>
+                    <div className="flex justify-between mb-2">
+                      <span>Accommodation</span>
+                      <span>₹1,50,000</span>
+                    </div>
+                    <div className="flex justify-between mb-2">
+                      <span>Catering</span>
+                      <span>₹3,00,000</span>
+                    </div>
+                    <div className="flex justify-between font-semibold mt-4 border-t pt-2">
+                      <span>Total</span>
+                      <span>₹7,00,000</span>
+                    </div>
+                  </div>
+                </div>
+                {/* ...existing code... */}
               </div>
             </div>
           </motion.div>
@@ -85,16 +104,9 @@ function BudgetPlanner() {
 
       {/* Decorative Elements */}
       <motion.div
-        animate={{
-          scale: [1, 1.2, 1],
-          opacity: [0.3, 0.5, 0.3]
-        }}
-        transition={{
-          duration: 4,
-          repeat: Infinity,
-          ease: "easeInOut"
-        }}
-        className="absolute top-20 right-20 w-64 h-64 bg-[#D4AF37]/20 rounded-full blur-3xl"
+        animate={{ scale: [1, 1.2, 1], opacity: [0.3, 0.5, 0.3] }}
+        transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
+        className="absolute top-20 right-20 w-64 h-64 bg-[var(--primary-main)]/20 rounded-full blur-3xl"
       />
     </div>
   );

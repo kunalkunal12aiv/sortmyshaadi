@@ -4,12 +4,15 @@ import { FaPaintBrush, FaUtensils, FaCamera, FaMusic } from 'react-icons/fa';
 
 const AllInclusiveSection = ({ onEnquire }) => (
   <motion.div 
-    initial={{ opacity: 0 }}
-    animate={{ opacity: 1 }}
-    transition={{ delay: 0.2 }}
-    className="bg-[#F6F6F6] rounded-xl shadow-lg p-8 hover:shadow-2xl transition-shadow duration-300"
+    initial={{ opacity: 0, scale: 0.9 }}
+    animate={{ opacity: 1, scale: 1 }}
+    transition={{ duration: 0.5 }}
+    className="bg-white rounded-xl shadow-2xl p-8 text-center border border-[var(--primary-light)]"
   >
-    <h2 className="text-2xl font-bold text-[#1E2742] mb-6" style={{ fontFamily: 'DM Serif Display, serif' }}>All-Inclusive Packages</h2>
+    <h2 className="text-2xl font-bold text-[var(--primary-dark)] mb-4">All Inclusive Packages</h2>
+    <p className="text-[var(--text-secondary)]">
+      Experience a complete, stress-free wedding with our comprehensive packages.
+    </p>
     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
       <div className="flex items-center space-x-4">
         <FaPaintBrush className="w-10 h-10 text-[#9A2143]" />

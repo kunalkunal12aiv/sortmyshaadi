@@ -21,16 +21,70 @@ function EditVenue() {
     longitude: '',
     doubleRoomPrice: '',
     extraBedPrice: '',
-    decorImages: [''],  // Add this new field
+    decorImages: [''],
+    menu: '',
+    facilities: {
+      catering: '',
+      alcohol: '',
+      decoration: '',
+      dj: ''
+    },
+    foodTypes: {
+      vegetarian: false,
+      nonVegetarian: false,
+      vegan: false
+    },
+    amenities: {
+      acEventSpace: false,
+      acDiningHall: false,
+      dressingRoom: false,
+      restaurantCatering: false,
+      electricityBackup: false,
+      barServices: false,
+      lightingSound: false,
+      poolsideSpace: false
+    },
+    seating: {
+      minCapacity: '',
+      maxCapacity: ''
+    },
+    roomsAvailable: '',
+    availableAreas: [] // <-- New field added
   }), []);
 
   const [venueData, setVenueData] = useState(initialState);
 
   useEffect(() => {
     const fetchVenue = async () => {
-      const data = await getVenueById(id);
-      setVenueData({ ...initialState, ...data });
-      setLoading(false);
+      try {
+        const data = await getVenueById(id); // Ensure getVenueById is imported and used to fetch data
+        // Merge fetched data with initialState to include new fields
+        setVenueData({
+          ...initialState,
+          ...data,
+          facilities: {
+            ...initialState.facilities,
+            ...data.facilities
+          },
+          foodTypes: {
+            ...initialState.foodTypes,
+            ...data.foodTypes
+          },
+          amenities: {
+            ...initialState.amenities,
+            ...data.amenities
+          },
+          seating: {
+            ...initialState.seating,
+            ...data.seating
+          },
+          availableAreas: data.availableAreas || initialState.availableAreas
+        });
+        setLoading(false);
+      } catch (error) {
+        console.error(error);
+        setLoading(false);
+      }
     };
     fetchVenue();
   }, [id, initialState]);
@@ -44,7 +98,7 @@ function EditVenue() {
         message: 'Venue updated successfully!',
         type: 'success'
       });
-      setTimeout(() => navigate('/venues'), 2000);
+      setTimeout(() => navigate('/manage-venues'), 2000); // updated redirect path
     } catch (error) {
       setNotification({
         show: true,
@@ -242,6 +296,151 @@ function EditVenue() {
             ))}
           </div>
 
+          {/* Menu Details Section */}
+          <div className="space-y-2">
+            <label className="text-sm font-medium text-gray-700">Menu Items and Description</label>
+            <textarea
+              value={venueData.menu}
+              onChange={(e) => setVenueData({ ...venueData, menu: e.target.value })}
+              rows={6}
+              className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-pink-500 focus:border-transparent transition duration-200"
+              placeholder="List your menu items and details here..."
+            />
+          </div>
+
+          {/* Facilities Section */}
+          <div className="space-y-4">
+            <h2 className="text-xl font-semibold text-gray-900">Facilities</h2>
+            {['catering', 'alcohol', 'decoration', 'dj'].map((key) => (
+              <div key={key} className="space-y-2">
+                <label className="block text-sm font-medium text-gray-700">
+                  {key.charAt(0).toUpperCase() + key.slice(1)} Policy
+                </label>
+                <div className="space-y-2">
+                  {['inhouse', 'outside-allowed', 'outside-only'].map((option) => (
+                    <label key={option} className="flex items-center space-x-2">
+                      <input
+                        type="radio"
+                        name={key}
+                        value={option}
+                        checked={venueData.facilities[key] === option}
+                        onChange={(e) =>
+                          setVenueData({
+                            ...venueData,
+                            facilities: { ...venueData.facilities, [key]: e.target.value }
+                          })
+                        }
+                        className="text-pink-600"
+                      />
+                      <span>
+                        {option === 'inhouse'
+                          ? `In-house ${key.charAt(0).toUpperCase() + key.slice(1)} Only`
+                          : option === 'outside-allowed'
+                          ? `Outside ${key.charAt(0).toUpperCase() + key.slice(1)} Allowed`
+                          : `Outside ${key.charAt(0).toUpperCase() + key.slice(1)} Only`}
+                      </span>
+                    </label>
+                  ))}
+                </div>
+              </div>
+            ))}
+          </div>
+
+          {/* Food Types Section */}
+          <div className="space-y-4">
+            <h2 className="text-xl font-semibold text-gray-900">Food Types</h2>
+            <div className="flex space-x-6">
+              {Object.entries(venueData.foodTypes).map(([type, checked]) => (
+                <label key={type} className="flex items-center space-x-2">
+                  <input
+                    type="checkbox"
+                    checked={checked}
+                    onChange={(e) =>
+                      setVenueData({
+                        ...venueData,
+                        foodTypes: { ...venueData.foodTypes, [type]: e.target.checked }
+                      })
+                    }
+                    className="text-pink-600"
+                  />
+                  <span className="capitalize">{type}</span>
+                </label>
+              ))}
+            </div>
+          </div>
+
+          {/* Amenities Section */}
+          <div className="space-y-4">
+            <h2 className="text-xl font-semibold text-gray-900">Amenities</h2>
+            <div className="grid grid-cols-2 gap-4">
+              {Object.entries(venueData.amenities).map(([amenity, checked]) => (
+                <label key={amenity} className="flex items-center space-x-2">
+                  <input
+                    type="checkbox"
+                    checked={checked}
+                    onChange={(e) =>
+                      setVenueData({
+                        ...venueData,
+                        amenities: { ...venueData.amenities, [amenity]: e.target.checked }
+                      })
+                    }
+                    className="text-pink-600"
+                  />
+                  <span className="capitalize">{amenity.replace(/([A-Z])/g, ' $1').trim()}</span>
+                </label>
+              ))}
+            </div>
+          </div>
+
+          {/* Seating Capacity Section */}
+          <div className="space-y-4">
+            <h2 className="text-xl font-semibold text-gray-900">Seating Capacity</h2>
+            <div className="grid grid-cols-2 gap-6">
+              <div className="space-y-2">
+                <label className="text-sm font-medium text-gray-700">Minimum Capacity</label>
+                <input
+                  type="number"
+                  value={venueData.seating.minCapacity}
+                  onChange={(e) =>
+                    setVenueData({
+                      ...venueData,
+                      seating: { ...venueData.seating, minCapacity: e.target.value }
+                    })
+                  }
+                  className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-pink-500 focus:border-transparent transition duration-200"
+                  placeholder="Minimum Capacity"
+                />
+              </div>
+              <div className="space-y-2">
+                <label className="text-sm font-medium text-gray-700">Maximum Capacity</label>
+                <input
+                  type="number"
+                  value={venueData.seating.maxCapacity}
+                  onChange={(e) =>
+                    setVenueData({
+                      ...venueData,
+                      seating: { ...venueData.seating, maxCapacity: e.target.value }
+                    })
+                  }
+                  className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-pink-500 focus:border-transparent transition duration-200"
+                  placeholder="Maximum Capacity"
+                />
+              </div>
+            </div>
+          </div>
+
+          {/* Rooms Available Section */}
+          <div className="space-y-2">
+            <label className="text-sm font-medium text-gray-700">Rooms Available</label>
+            <input 
+              type="text"
+              value={venueData.roomsAvailable}
+              onChange={(e) => setVenueData({ ...venueData, roomsAvailable: e.target.value })}
+              className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-pink-500 focus:border-transparent transition duration-200"
+              placeholder="86 - 171"
+            />
+          </div>
+
           {/* FAQs Section */}
           <div className="bg-gray-50 p-6 rounded-xl space-y-4">
             <div className="flex justify-between items-center">
@@ -322,6 +521,104 @@ function EditVenue() {
                 className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-pink-500 focus:border-transparent"
               />
             </div>
+          </div>
+
+          {/* Available Areas Section */}
+          <div className="bg-gray-50 p-6 rounded-xl space-y-6">
+            <h2 className="text-xl font-semibold text-gray-900">Available Areas</h2>
+            {venueData.availableAreas.map((area, index) => (
+              <div key={index} className="border p-4 rounded-xl space-y-4">
+                <div className="space-y-2">
+                  <label className="text-sm font-medium text-gray-700">Title</label>
+                  <input 
+                    type="text"
+                    value={area.title}
+                    onChange={(e) => {
+                      const newAreas = [...venueData.availableAreas];
+                      newAreas[index].title = e.target.value;
+                      setVenueData({ ...venueData, availableAreas: newAreas });
+                    }}
+                    className="w-full px-4 py-3 rounded-lg border"
+                    placeholder="Area Title"
+                  />
+                </div>
+                <div className="space-y-2">
+                  <label className="text-sm font-medium text-gray-700">Seating</label>
+                  <input 
+                    type="text"
+                    value={area.seating}
+                    onChange={(e) => {
+                      const newAreas = [...venueData.availableAreas];
+                      newAreas[index].seating = e.target.value;
+                      setVenueData({ ...venueData, availableAreas: newAreas });
+                    }}
+                    className="w-full px-4 py-3 rounded-lg border"
+                    placeholder="Seating Capacity"
+                  />
+                </div>
+                <div className="space-y-2">
+                  <label className="text-sm font-medium text-gray-700">Floating</label>
+                  <input 
+                    type="text"
+                    value={area.floating}
+                    onChange={(e) => {
+                      const newAreas = [...venueData.availableAreas];
+                      newAreas[index].floating = e.target.value;
+                      setVenueData({ ...venueData, availableAreas: newAreas });
+                    }}
+                    className="w-full px-4 py-3 rounded-lg border"
+                    placeholder="Floating Amount"
+                  />
+                </div>
+                <div className="space-y-2">
+                  <label className="text-sm font-medium text-gray-700">Type</label>
+                  <div className="flex items-center space-x-4">
+                    <label className="flex items-center space-x-2">
+                      <input 
+                        type="radio"
+                        name={`area-type-${index}`}
+                        value="indoor"
+                        checked={area.type === 'indoor'}
+                        onChange={(e) => {
+                          const newAreas = [...venueData.availableAreas];
+                          newAreas[index].type = e.target.value;
+                          setVenueData({ ...venueData, availableAreas: newAreas });
+                        }}
+                        className="text-pink-600"
+                      />
+                      <span>Indoor</span>
+                    </label>
+                    <label className="flex items-center space-x-2">
+                      <input 
+                        type="radio"
+                        name={`area-type-${index}`}
+                        value="outdoor"
+                        checked={area.type === 'outdoor'}
+                        onChange={(e) => {
+                          const newAreas = [...venueData.availableAreas];
+                          newAreas[index].type = e.target.value;
+                          setVenueData({ ...venueData, availableAreas: newAreas });
+                        }}
+                        className="text-pink-600"
+                      />
+                      <span>Outdoor</span>
+                    </label>
+                  </div>
+                </div>
+              </div>
+            ))}
+            <button
+              type="button"
+              onClick={() =>
+                setVenueData({
+                  ...venueData,
+                  availableAreas: [...venueData.availableAreas, { title: '', seating: '', floating: '', type: '' }]
+                })
+              }
+              className="px-4 py-2 bg-blue-600 text-white rounded-lg"
+            >
+              Add Available Area
+            </button>
           </div>
 
           <button

@@ -6,14 +6,14 @@ const AboutSection = ({ about }) => {
 
   return (
     <motion.div 
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      transition={{ delay: 0.2 }}
-      className="bg-[#F6F6F6] rounded-xl shadow-lg p-8 hover:shadow-2xl transition-shadow duration-300"
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.5 }}
+      className="bg-white rounded-xl shadow-2xl p-8 border border-[var(--primary-light)]"
     >
-      <h2 className="text-2xl font-bold text-[#1E2742] mb-6" style={{ fontFamily: 'DM Serif Display, serif' }}>About this Venue</h2>
+      <h2 className="text-2xl font-bold text-[var(--primary-dark)] mb-4">About</h2>
       <div className="relative">
-        <p className={`text-[#1E2742] leading-relaxed ${!isReadMore ? 'line-clamp-4' : ''}`} style={{ fontFamily: 'Kantumruy, sans-serif' }}>
+        <p className={`text-[var(--text-secondary)] leading-relaxed ${!isReadMore ? 'line-clamp-4' : ''}`} style={{ fontFamily: 'Kantumruy, sans-serif' }}>
           {about}
         </p>
         {about.length > 300 && (
