@@ -1,0 +1,146 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Allow read/write only for authenticated requests; adjust as needed.
+    match /{document=**} {
+      allow read, write: if request.auth != null;
+    }
+    
+    // Helper functions
+    function isAdmin() {
+      return get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'admin';
+    }
+    
+    function isVenueOwner(venueId) {
+      return request.auth != null && 
+        get(/databases/$(database)/documents/venues/$(venueId)).data.ownerId == request.auth.uid;
+    }
+
+    // Users collection rules
+    match /users/{userId} {
+      allow read: if true;
+      allow create: if request.auth != null;
+      allow update: if request.auth != null && (request.auth.uid == userId || isAdmin());
+      allow delete: if isAdmin();
+    }
+    
+    // Venues collection rules
+    match /venues/{venueId} {
+      allow read: if true;
+      allow create: if request.auth != null;
+      allow update, delete: if request.auth != null && (isVenueOwner(venueId) || isAdmin());
+
+      // Allow access to nested collections
+      match /previousWeddings/{weddingId} {
+        allow read: if true;
+        allow write: if request.auth != null && (isVenueOwner(venueId) || isAdmin());
+      }
+    }
+
+    // Chats collection rules
+    match /chats/{chat} {
+      allow read: if request.auth != null && request.auth.uid == resource.data.userId;
+      allow create: if request.auth != null && request.auth.uid == request.resource.data.userId;
+      allow update: if request.auth != null && request.auth.uid == resource.data.userId;
+      allow delete: if request.auth != null && request.auth.uid == resource.data.userId; // Added delete rule
+    }
+
+    // Events collection rules
+    match /events/{eventId} {
+      allow read: if true;
+      allow create: if request.auth != null;
+      allow update, delete: if request.auth != null && (
+        resource.data.userId == request.auth.uid || 
+        isAdmin()
+      );
+    }
+    
+    // Decor collection rules
+    match /decor/{decorId} {
+      allow read: if true;
+      allow create: if request.auth != null;
+      allow update, delete: if request.auth != null && (
+        resource.data.vendorId == request.auth.uid || 
+        isAdmin()
+      );
+    }
+
+    // Enquiries collection rules
+    match /enquiries/{enquiryId} {
+      allow read: if request.auth != null && (
+        resource.data.userId == request.auth.uid || 
+        resource.data.venueOwnerId == request.auth.uid ||
+        isAdmin()
+      );
+      allow create: if request.auth != null;
+      allow update: if request.auth != null && (
+        resource.data.userId == request.auth.uid || 
+        resource.data.venueOwnerId == request.auth.uid ||
+        isAdmin()
+      );
+      allow delete: if isAdmin();
+    }
+
+    // Bookings collection rules
+    match /bookings/{bookingId} {
+      allow read: if request.auth != null && (
+        resource.data.userId == request.auth.uid || 
+        resource.data.venueOwnerId == request.auth.uid ||
+        isAdmin()
+      );
+      allow create: if request.auth != null;
+      allow update: if request.auth != null && (
+        resource.data.userId == request.auth.uid || 
+        resource.data.venueOwnerId == request.auth.uid ||
+        isAdmin()
+      );
+      allow delete: if isAdmin();
+    }
+
+    // Featured Videos collection rules
+    match /featuredVideos/{videoId} {
+      allow read: if true;
+      allow write: if request.auth != null && isAdmin();
+    }
+
+    // Guestbook collection rules
+    match /guestbook/{entryId} {
+      // Allow public reads (if desired)
+      allow read: if true;
+      // Only authenticated users can add new entries
+      allow create: if request.auth != null;
+      // Prevent updates and deletes after creation
+      allow update, delete: if false;
+    }
+
+    // GroupChats collection rules
+    match /groupChats/{messageId} {
+      // Only authenticated users can read and post messages
+      allow read, create: if request.auth != null;
+      // Prevent updates and deletes to preserve chat integrity
+      allow update, delete: if false;
+    }
+
+    // Websites collection rules for couple's website settings/content
+    match /websites/{websiteId} {
+      // Allow public reads of website content
+      allow read: if true;
+      // Only the owner (couple) can create, update, or delete their website settings
+      allow create, update, delete: if request.auth != null && request.auth.uid == websiteId;
+
+      // Nested collections for website components
+      match /sections/{sectionId} {
+        allow read: if true;
+        allow write: if request.auth != null && 
+          get(/databases/$(database)/documents/websites/$(websiteId)).data.userId == request.auth.uid;
+      }
+    }
+
+    match /website-slugs/{slug} {
+      allow read: if true;
+      allow create: if request.auth != null;
+      allow update, delete: if request.auth != null && 
+        resource.data.userId == request.auth.uid;
+    }
+  }
+}

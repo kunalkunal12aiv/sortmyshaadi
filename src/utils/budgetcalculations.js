@@ -1,42 +1,76 @@
-import { getVenues } from './firebase';
-export const calculateVenueRecommendations = async (formData) => {
-  const { totalBudget, guestCount, stayDuration, adjustedExtraBeds, doubleRooms } = formData;
+import { firestore } from '../firebase';
 
-  const minAccommodation = totalBudget * 0.45;
-  const maxAccommodation = totalBudget * 0.55;
+export const calculateVenueRecommendations = async (criteria) => {
+  try {
+    console.log('Processing criteria:', criteria);
+    
+    // First fetch ALL venues without any city filter
+    const snapshot = await firestore.collection('venues').get();
+    console.log('Total venues found:', snapshot.size);
 
-  const allVenues = await getVenues();
-  
-  const processedVenues = allVenues.map(venue => {
-    const doubleRoomPrice = parseFloat(venue.doubleRoomPrice) || 0;
-    const extraBedPrice = parseFloat(venue.extraBedPrice) || 0;
+    // Map all venues
+    let allVenues = snapshot.docs.map(doc => ({
+      id: doc.id,
+      ...doc.data()
+    }));
 
-    const roomCost = doubleRoomPrice * doubleRooms;
-    const extraBedCost = extraBedPrice * adjustedExtraBeds;
-    const totalStayCost = (roomCost + extraBedCost) * stayDuration;
+    // Apply city filter in memory for more flexible matching
+    if (criteria.city && criteria.city !== 'all') {
+      console.log('Filtering by city:', criteria.city);
+      allVenues = allVenues.filter(venue => 
+        venue.shortAddress?.toLowerCase().includes(criteria.city.toLowerCase())
+      );
+      console.log('Venues after city filter:', allVenues.length);
+    }
+
+    // Helper function to parse guest capacity
+    const parseGuestCapacity = (capacity) => {
+      if (typeof capacity === 'number') return capacity;
+      if (typeof capacity === 'string') {
+        // Handle ranges like "50-300" or "25-2200"
+        if (capacity.includes('-')) {
+          const [min, max] = capacity.split('-').map(num => parseInt(num.trim()));
+          return max; // Return the maximum capacity
+        }
+        return parseInt(capacity);
+      }
+      return 0;
+    };
+
+    // Apply additional filters
+    const filteredVenues = allVenues.filter(venue => {
+      const guestSpace = parseGuestCapacity(venue.guestSpace) || parseGuestCapacity(venue.maxGuestCapacity) || 0;
+      const pricePerPlate = parseInt(venue.pricePerPlate) || 0;
+      
+      console.log(`Filtering venue ${venue.name}:`, {
+        address: venue.shortAddress,
+        guestSpace,
+        originalGuestSpace: venue.guestSpace,
+        pricePerPlate,
+        meetsGuestRequirement: guestSpace >= criteria.guestCount,
+        meetsBudgetRequirement: pricePerPlate * criteria.guestCount <= criteria.totalBudget
+      });
+
+      return guestSpace >= criteria.guestCount;
+    });
+
+    console.log('Final filtered venues:', filteredVenues.length);
 
     return {
-      ...venue,
-      doubleRooms,
-      extraBeds: adjustedExtraBeds,
-      roomCost,
-      extraBedCost,
-      totalCost: totalStayCost,
-      isWithinBudget: totalStayCost >= minAccommodation && totalStayCost <= maxAccommodation
+      recommendedVenues: [],
+      alternativeVenues: filteredVenues,
+      totalResults: filteredVenues.length,
+      budgetBreakdown: {
+        venue: Math.max(0, criteria.totalBudget * 0.4),
+        catering: Math.max(0, criteria.totalBudget * 0.3),
+        decoration: Math.max(0, criteria.totalBudget * 0.2),
+        other: Math.max(0, criteria.totalBudget * 0.1),
+        accommodation: Math.max(0, criteria.stayingGuests * 5000 * criteria.stayDuration)
+      }
     };
-  });
 
-  return {
-    recommendedVenues: processedVenues.filter(venue => venue.isWithinBudget),
-    otherVenues: processedVenues.filter(venue => !venue.isWithinBudget),
-    budgetBreakdown: {
-      minAccommodation,
-      maxAccommodation,
-      remainingBudget: totalBudget - maxAccommodation,
-      doubleRooms,
-      extraBeds: adjustedExtraBeds,
-      stayDuration,
-      totalGuests: guestCount
-    }
-  };
+  } catch (error) {
+    console.error('Error in calculateVenueRecommendations:', error);
+    throw error;
+  }
 };

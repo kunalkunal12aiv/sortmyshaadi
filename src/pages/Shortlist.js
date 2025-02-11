@@ -4,12 +4,14 @@ import { useAuth } from '../contexts/AuthContext';
 import { collection, addDoc } from 'firebase/firestore';
 import { db } from '../firebase';
 import { motion } from 'framer-motion';
+import { useNavigate } from 'react-router-dom';
 
 function Shortlist() {
   const { shortlistedVenues, removeFromShortlist, clearShortlist } = useShortlist();
   const { currentUser, userDetails } = useAuth();
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
+  const navigate = useNavigate();
 
   const handleBatchEnquiry = async () => {
     if (!currentUser || !userDetails?.phoneVerified) {

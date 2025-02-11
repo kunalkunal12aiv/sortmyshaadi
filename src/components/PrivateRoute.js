@@ -4,7 +4,7 @@ import { useAuth } from '../contexts/AuthContext';
 
 function AdminRoute({ children }) {
   const { currentUser, userRole, loading } = useAuth();
-
+  
   console.log('Auth state:', { 
     isAuthenticated: !!currentUser, 
     userEmail: currentUser?.email,
@@ -12,17 +12,9 @@ function AdminRoute({ children }) {
     loading: loading
   });
 
-  if (loading) {
-    return <div>Loading...</div>;
-  }
-
-  if (!currentUser) {
-    return <Navigate to="/signin" />;
-  }
-
-  if (userRole !== 'admin') {
-    return <Navigate to="/" />;
-  }
+  if (loading) return <div>Loading...</div>;
+  if (!currentUser) return <Navigate to="/signin" />;
+  if (userRole !== 'admin') return <Navigate to="/unauthorized" />; // Ensure only admin can access
 
   return children;
 }

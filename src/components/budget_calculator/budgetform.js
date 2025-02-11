@@ -1,4 +1,6 @@
 import React, { useState } from 'react';
+import ReactDatePicker from 'react-datepicker'; // <-- New import
+import 'react-datepicker/dist/react-datepicker.css'; // <-- New import
 
 function BudgetForm({ onSubmit }) {
   const [formData, setFormData] = useState({
@@ -187,28 +189,39 @@ function BudgetForm({ onSubmit }) {
             <label className="block text-sm font-medium text-[#1E2742] mb-1">
               Check-in Date
             </label>
-            <input
-              type="date"
-              value={formData.checkInDate}
-              onChange={handleCheckInChange}
-              onInput={handleDateInput}
+            <ReactDatePicker
+              selected={formData.checkInDate ? new Date(formData.checkInDate) : null}
+              onChange={(date) =>
+                setFormData(prev => ({
+                  ...prev,
+                  checkInDate: date.toISOString().split('T')[0],
+                  // Reset check-out date if it is before new check-in date
+                  checkOutDate: prev.checkOutDate && new Date(prev.checkOutDate) <= date ? '' : prev.checkOutDate
+                }))
+              }
+              minDate={new Date()}
+              dateFormat="yyyy-MM-dd"
               className="w-full px-3 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-pink-500 focus:border-transparent"
-              min={getCurrentDate()}
-              required
+              placeholderText="Select check-in date"
             />
           </div>
           <div>
             <label className="block text-sm font-medium text-[#1E2742] mb-1">
               Check-out Date
             </label>
-            <input
-              type="date"
-              value={formData.checkOutDate}
-              onChange={(e) => setFormData({...formData, checkOutDate: e.target.value})}
+            <ReactDatePicker
+              selected={formData.checkOutDate ? new Date(formData.checkOutDate) : null}
+              onChange={(date) =>
+                setFormData(prev => ({
+                  ...prev,
+                  checkOutDate: date.toISOString().split('T')[0]
+                }))
+              }
+              minDate={formData.checkInDate ? new Date(formData.checkInDate) : new Date()}
+              dateFormat="yyyy-MM-dd"
               className="w-full px-3 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-pink-500 focus:border-transparent"
-              min={getMinCheckoutDate()}
+              placeholderText="Select check-out date"
               disabled={!formData.checkInDate}
-              required
             />
           </div>
         </div>

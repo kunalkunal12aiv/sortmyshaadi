@@ -18,6 +18,7 @@ function VenueOwnerAuth() {
     documents: null,
     profileImage: null
   });
+  const [error, setError] = useState(''); // Define setError
   const navigate = useNavigate();
 
   const handleFileUpload = async (file, path) => {

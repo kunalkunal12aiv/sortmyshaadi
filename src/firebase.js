@@ -1,7 +1,9 @@
 import { initializeApp } from "firebase/app";
 import { getAuth, GoogleAuthProvider, signInWithPopup, createUserWithEmailAndPassword } from "firebase/auth";
 import { getFirestore, doc, setDoc, getDoc } from "firebase/firestore";
-import { getStorage } from 'firebase/storage'; // Add this import
+import { getStorage } from 'firebase/storage';
+import firebase from 'firebase/compat/app';
+import 'firebase/compat/firestore';
 
 const firebaseConfig = {
   apiKey: "AIzaSyA8UmW_bh1QHPC3ddPzquZpH0elfCG-xj0",
@@ -13,11 +15,17 @@ const firebaseConfig = {
   measurementId: "G-28C3Z0JC9P"
 };
 
-// Initialize Firebase
+// Initialize both modern and compat Firebase
 const app = initializeApp(firebaseConfig);
+if (!firebase.apps.length) {
+  firebase.initializeApp(firebaseConfig);
+}
+
+// Export all Firebase instances and services
 export const auth = getAuth(app);
 export const db = getFirestore(app);
-export const storage = getStorage(app); // Add this line
+export const storage = getStorage(app);
+export const firestore = firebase.firestore();
 
 const googleProvider = new GoogleAuthProvider();
 
@@ -72,4 +80,5 @@ export const signUpWithEmail = async (email, password) => {
   }
 };
 
+// Export the app as default
 export default app;

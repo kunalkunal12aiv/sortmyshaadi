@@ -1,56 +1,40 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
-import { auth, db } from '../firebase';
-import { doc, getDoc } from 'firebase/firestore';
+import { auth } from '../firebase';
+import { onAuthStateChanged } from 'firebase/auth';
 
 const AuthContext = createContext();
+
+export function useAuth() {
+  return useContext(AuthContext);
+}
 
 export function AuthProvider({ children }) {
   const [currentUser, setCurrentUser] = useState(null);
   const [userRole, setUserRole] = useState(null);
-  const [userDetails, setUserDetails] = useState(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const unsubscribe = auth.onAuthStateChanged(async (user) => {
-      console.log('Auth state changed:', user); // Debug log
-
-      if (user) {
-        setCurrentUser(user);
-        try {
-          const userDoc = await getDoc(doc(db, 'users', user.uid));
-          console.log('User doc:', userDoc.data()); // Debug log
-          
-          if (userDoc.exists()) {
-            const userData = userDoc.data();
-            setUserRole(userData.role);
-            setUserDetails({
-              ...userData,
-              displayName: userData.displayName || user.displayName,
-              photoURL: userData.photoURL || user.photoURL,
-              uid: user.uid,
-            });
-          } else {
-            console.log('No user document found'); // Debug log
-          }
-        } catch (error) {
-          console.error('Error fetching user data:', error);
-        }
-      } else {
-        setCurrentUser(null);
-        setUserRole(null);
-        setUserDetails(null);
-      }
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      setCurrentUser(user);
       setLoading(false);
+      if (user) {
+        user.getIdTokenResult().then(idTokenResult => {
+          setUserRole(idTokenResult.claims.role || null);
+        }).catch(err => {
+          console.error("Failed to retrieve user role:", err);
+          setUserRole(null);
+        });
+      } else {
+        setUserRole(null);
+      }
     });
 
-    return () => unsubscribe();
+    return unsubscribe;
   }, []);
 
   const value = {
     currentUser,
     userRole,
-    userDetails,
-    setUserDetails,
     loading
   };
 
@@ -59,8 +43,4 @@ export function AuthProvider({ children }) {
       {!loading && children}
     </AuthContext.Provider>
   );
-}
-
-export function useAuth() {
-  return useContext(AuthContext);
 }

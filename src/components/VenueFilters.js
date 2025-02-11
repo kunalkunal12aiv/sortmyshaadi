@@ -2,25 +2,24 @@ import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import '../styles/filters.css';
 
-function VenueFilters({ venues, onFilterChange }) {
+function VenueFilters({ venues, initialFilters, onFilterChange }) {
+  const defaultFilters = {
+    priceRange: { min: 0, max: 10000 },
+    roomPriceRange: { min: 0, max: 20000 },
+    capacityRange: { min: 0, max: 2000 },
+    selectedTags: [],
+    selectedCity: ''
+  };
+
   const [isCollapsed, setIsCollapsed] = useState(false);
   const [availableTags, setAvailableTags] = useState([]);
   const [availableCities, setAvailableCities] = useState([]); // Add state for available cities
+  const [tempFilters, setTempFilters] = useState(initialFilters || defaultFilters);
 
   const calculateMaxCapacity = () => {
     const maxVenueCapacity = Math.max(...venues.map(venue => parseInt(venue.guestSpace) || 0));
     return Math.min(Math.max(maxVenueCapacity, 2000), 10000);
   };
-
-  const initialFilters = {
-    priceRange: { min: 0, max: 10000 },
-    roomPriceRange: { min: 0, max: 20000 },
-    capacityRange: { min: 0, max: calculateMaxCapacity() },
-    selectedTags: [],
-    selectedCity: '' // Add selected city filter
-  };
-
-  const [tempFilters, setTempFilters] = useState(initialFilters);
 
   const applyFilters = () => {
     onFilterChange({
@@ -126,9 +125,41 @@ function VenueFilters({ venues, onFilterChange }) {
   const handleCapacityRangeChange = (value, type) => {
     setTempFilters(prev => ({
       ...prev,
-      capacityRange: { ...prev, [type]: parseInt(value) }
+      capacityRange: { ...prev.capacityRange, [type]: parseInt(value) } // fix: spread prev.capacityRange instead of prev
     }));
   };
+
+  useEffect(() => {
+    if (venues.length > 0) {
+      const prices = venues.map(v => v.pricePerPlate).filter(Boolean);
+      const capacities = venues.map(v => v.maxGuestCapacity).filter(Boolean);
+      
+      const newPriceRange = {
+        min: Math.min(...prices) || 0,
+        max: Math.max(...prices) || 10000
+      };
+      const newCapacityRange = {
+        min: Math.min(...capacities) || 0,
+        max: Math.max(...capacities) || 2000
+      };
+
+      // Compare current state ranges with computed ones
+      if (
+        newPriceRange.min !== tempFilters.priceRange.min ||
+        newPriceRange.max !== tempFilters.priceRange.max ||
+        newCapacityRange.min !== tempFilters.capacityRange.min ||
+        newCapacityRange.max !== tempFilters.capacityRange.max
+      ) {
+        const updatedFilters = {
+          ...tempFilters,
+          priceRange: newPriceRange,
+          capacityRange: newCapacityRange
+        };
+        setTempFilters(updatedFilters);
+        onFilterChange(updatedFilters);
+      }
+    }
+  }, [venues, onFilterChange]);
 
   return (
     <div className="bg-white rounded-xl shadow-lg overflow-hidden">

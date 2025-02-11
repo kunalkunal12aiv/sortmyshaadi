@@ -38,6 +38,7 @@ function Navbar() {
       <li><Link to="/budget-calculator" onClick={onClick}>Budget</Link></li>
       <li><Link to="/decor" onClick={onClick}>Decor</Link></li>
       <li><Link to="/add-venue" onClick={onClick}>Add Venue</Link></li>
+      <li><Link to="/dashboard" onClick={onClick}>Dashboard</Link></li>
     </ul>
   );
 
