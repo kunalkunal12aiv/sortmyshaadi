@@ -3,7 +3,6 @@ import { useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import { doc, updateDoc } from 'firebase/firestore';
 import { db } from '../firebase';
-import { getRedirectUrl } from '../utils/auth';
 import { motion } from 'framer-motion';
 
 function PhoneVerification() {

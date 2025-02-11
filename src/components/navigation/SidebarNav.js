@@ -34,8 +34,6 @@ function SidebarNav() {
     { name: 'Profile', icon: FiUser, path: '/profile' },
   ];
 
-  const isActive = (path) => location.pathname === path;
-
   const handleSignOut = async () => {
     try {
       await logout();

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useAuth } from '../../contexts/AuthContext';
 import { db } from '../../firebase';
 import { collection, query, where, getDocs, addDoc, updateDoc, deleteDoc, doc } from 'firebase/firestore';
@@ -11,11 +11,7 @@ function GuestList() {
   const [isAddingGuest, setIsAddingGuest] = useState(false);
   const { currentUser } = useAuth();
 
-  useEffect(() => {
-    loadGuests();
-  }, [currentUser]);
-
-  const loadGuests = async () => {
+  const loadGuests = useCallback(async () => {
     try {
       const guestsRef = collection(db, 'guests');
       const q = query(guestsRef, where('userId', '==', currentUser.uid));
@@ -30,7 +26,13 @@ function GuestList() {
     } catch (error) {
       console.error('Error loading guests:', error);
     }
-  };
+  }, [currentUser]);
+
+  useEffect(() => {
+    if (currentUser) {
+      loadGuests();
+    }
+  }, [currentUser, loadGuests]);
 
   const addGuest = async (guestData) => {
     try {
