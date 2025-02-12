@@ -1,125 +1,125 @@
 import React, { useState } from 'react';
-import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { useAuth } from '../../contexts/AuthContext';
-import { 
-  FiHome, FiUsers, FiCheckSquare, FiShoppingBag, 
-  FiHeart, FiCalendar, FiDollarSign, FiSettings, 
-  FiLogOut, FiUser, FiGlobe, FiEdit 
+import { Link, useLocation } from 'react-router-dom';
+import { motion, AnimatePresence } from 'framer-motion';
+import {
+  FiHome,
+  FiUsers,
+  FiCheckSquare,
+  FiTruck,
+  FiBookmark,
+  FiClock,
+  FiSettings,
+  FiDollarSign,
+  FiUser,
+  FiMenu,
+  FiX
 } from 'react-icons/fi';
 
 function SidebarNav() {
-  const [isHovering, setIsHovering] = useState(false);
-  const [expandedItem, setExpandedItem] = useState(null);
-  const { logout } = useAuth();
+  const [isMobileNavOpen, setIsMobileNavOpen] = useState(false);
   const location = useLocation();
-  const navigate = useNavigate();
 
-  const navigationItems = [
-    { name: 'Dashboard', icon: FiHome, path: '/dashboard' },
-    { name: 'Guest List', icon: FiUsers, path: '/guest-list' },
-    { name: 'Checklist', icon: FiCheckSquare, path: '/checklist' },
-    { name: 'Vendors', icon: FiShoppingBag, path: '/vendors' },
-    { name: 'Saved Items', icon: FiHeart, path: '/saved' },
-    { name: 'Timeline', icon: FiCalendar, path: '/timeline' },
-    { name: 'Budget', icon: FiDollarSign, path: '/budget' },
-    {
-      name: 'Wedding Website',
-      icon: FiGlobe,
-      subItems: [
-        { name: 'Website Builder', icon: FiEdit, path: '/website-builder' },
-        { name: 'Preview Site', icon: FiGlobe, path: '/sites/preview' }
-      ]
-    },
-    { name: 'Settings', icon: FiSettings, path: '/settings' },
-    { name: 'Profile', icon: FiUser, path: '/profile' },
+  const navItems = [
+    { path: '/dashboard', icon: <FiHome />, label: 'Dashboard' },
+    { path: '/guest-list', icon: <FiUsers />, label: 'Guest List' },
+    { path: '/checklist', icon: <FiCheckSquare />, label: 'Checklist' },
+    { path: '/vendors', icon: <FiTruck />, label: 'Vendors' },
+    { path: '/saved', icon: <FiBookmark />, label: 'Saved' },
+    { path: '/timeline', icon: <FiClock />, label: 'Timeline' },
+    { path: '/budget', icon: <FiDollarSign />, label: 'Budget' },
+    { path: '/settings', icon: <FiSettings />, label: 'Settings' },
+    { path: '/profile', icon: <FiUser />, label: 'Profile' }
   ];
 
-  const handleSignOut = async () => {
-    try {
-      await logout();
-      navigate('/');
-    } catch (error) {
-      console.error('Error signing out:', error);
-    }
-  };
+  const isActive = (path) => location.pathname === path;
+
+  // Updated Mobile toggle button with left positioning
+  const MobileToggle = () => (
+    <button
+      onClick={() => setIsMobileNavOpen(!isMobileNavOpen)}
+      className="fixed bottom-4 left-4 z-50 bg-pink-600 text-white p-4 rounded-full shadow-lg md:hidden hover:bg-pink-700 transition-colors"
+    >
+      {isMobileNavOpen ? <FiX size={24} /> : <FiMenu size={24} />}
+    </button>
+  );
 
   return (
-    <div
-      className={`bg-gray-800 text-white h-screen flex flex-col transition-all duration-300 ease-in-out
-        ${isHovering ? 'w-64' : 'w-20'}`}
-      onMouseEnter={() => setIsHovering(true)}
-      onMouseLeave={() => setIsHovering(false)}
-    >
-      <div className="p-4 flex-shrink-0">
-        <Link to="/" className="flex items-center justify-center md:justify-start">
-          
-          {isHovering && <span className="ml-2 text-lg font-semibold">Sort My Shaadi</span>}
-        </Link>
-      </div>
-
-      <div className="flex-1 overflow-y-auto py-6">
-        <nav className="space-y-2">
-          {navigationItems.map((item) => (
-            <div key={item.name}>
-              {item.subItems ? (
-                // Render dropdown for items with subitems
-                <>
-                  <div
-                    onClick={() => setExpandedItem(expandedItem === item.name ? null : item.name)}
-                    className="flex items-center py-2 px-4 space-x-3 rounded-md cursor-pointer text-gray-300 hover:bg-gray-700 hover:text-white"
-                  >
-                    <item.icon className="h-5 w-5" />
-                    {isHovering && (
-                      <>
-                        <span>{item.name}</span>
-                        <span className="ml-auto">▼</span>
-                      </>
-                    )}
-                  </div>
-                  {isHovering && expandedItem === item.name && (
-                    <div className="ml-4 space-y-1">
-                      {item.subItems.map((subItem) => (
-                        <Link
-                          key={subItem.path}
-                          to={subItem.path}
-                          className="flex items-center py-2 px-4 space-x-3 rounded-md text-gray-300 hover:bg-gray-700 hover:text-white"
-                        >
-                          <subItem.icon className="h-4 w-4" />
-                          <span>{subItem.name}</span>
-                        </Link>
-                      ))}
-                    </div>
-                  )}
-                </>
-              ) : (
-                // Render regular menu item
-                <Link
-                  to={item.path}
-                  className={`flex items-center py-2 px-4 space-x-3 rounded-md
-                    ${location.pathname === item.path
-                      ? 'bg-gray-900 text-white'
-                      : 'text-gray-300 hover:bg-gray-700 hover:text-white'
-                    }`}
-                >
-                  <item.icon className="h-5 w-5" />
-                  {isHovering && <span>{item.name}</span>}
-                </Link>
-              )}
-            </div>
+    <>
+      {/* Desktop Sidebar - Always visible on desktop */}
+      <div className="hidden md:flex flex-col w-64 bg-white border-r min-h-screen p-4">
+        <div className="space-y-2">
+          {navItems.map((item) => (
+            <Link
+              key={item.path}
+              to={item.path}
+              className={`flex items-center space-x-3 px-4 py-3 rounded-lg transition-colors ${
+                isActive(item.path)
+                  ? 'bg-pink-100 text-pink-600'
+                  : 'text-gray-600 hover:bg-gray-100'
+              }`}
+            >
+              {item.icon}
+              <span>{item.label}</span>
+            </Link>
           ))}
-        </nav>
+        </div>
       </div>
 
-      <div className="p-4 border-t border-gray-700">
-        <button
-          onClick={handleSignOut}
-          className="flex items-center py-2 px-4 space-x-3 rounded-md text-gray-300 hover:bg-gray-700 hover:text-white"
-        >
-          <FiLogOut className="h-5 w-5" />
-          {isHovering && <span>Sign Out</span>}
-        </button>
-      </div>
-    </div>
+      {/* Mobile Navigation */}
+      <MobileToggle />
+      
+      <AnimatePresence>
+        {isMobileNavOpen && (
+          <>
+            {/* Backdrop */}
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 0.5 }}
+              exit={{ opacity: 0 }}
+              onClick={() => setIsMobileNavOpen(false)}
+              className="fixed inset-0 bg-black z-40 md:hidden"
+            />
+
+            {/* Mobile Sidebar */}
+            <motion.div
+              initial={{ x: '-100%' }}
+              animate={{ x: 0 }}
+              exit={{ x: '-100%' }}
+              transition={{ type: 'tween', duration: 0.3 }}
+              className="fixed top-0 left-0 h-full w-64 bg-white shadow-lg z-50 md:hidden"
+            >
+              <div className="p-4 space-y-2">
+                <div className="flex justify-between items-center mb-6">
+                  <h2 className="text-xl font-bold text-gray-800">Menu</h2>
+                  <button
+                    onClick={() => setIsMobileNavOpen(false)}
+                    className="p-2 hover:bg-gray-100 rounded-lg"
+                  >
+                    <FiX size={24} />
+                  </button>
+                </div>
+
+                {navItems.map((item) => (
+                  <Link
+                    key={item.path}
+                    to={item.path}
+                    onClick={() => setIsMobileNavOpen(false)}
+                    className={`flex items-center space-x-3 px-4 py-3 rounded-lg transition-colors ${
+                      isActive(item.path)
+                        ? 'bg-pink-100 text-pink-600'
+                        : 'text-gray-600 hover:bg-gray-100'
+                    }`}
+                  >
+                    {item.icon}
+                    <span>{item.label}</span>
+                  </Link>
+                ))}
+              </div>
+            </motion.div>
+          </>
+        )}
+      </AnimatePresence>
+    </>
   );
 }
 
