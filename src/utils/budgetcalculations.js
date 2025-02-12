@@ -29,7 +29,7 @@ export const calculateVenueRecommendations = async (criteria) => {
       if (typeof capacity === 'string') {
         // Handle ranges like "50-300" or "25-2200"
         if (capacity.includes('-')) {
-          const [min, max] = capacity.split('-').map(num => parseInt(num.trim()));
+          const [ , max] = capacity.split('-').map(num => parseInt(num.trim()));
           return max; // Return the maximum capacity
         }
         return parseInt(capacity);

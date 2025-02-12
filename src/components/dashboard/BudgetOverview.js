@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { db } from '../../firebase';
 import { collection, query, where, getDocs } from 'firebase/firestore';
 import { useAuth } from '../../contexts/AuthContext';
@@ -12,11 +12,7 @@ function BudgetOverview() {
   });
   const { currentUser } = useAuth();
 
-  useEffect(() => {
-    loadBudget();
-  }, [currentUser]);
-
-  const loadBudget = async () => {
+  const loadBudget = useCallback(async () => {
     try {
       const budgetQuery = query(
         collection(db, 'budgets'),
@@ -35,7 +31,11 @@ function BudgetOverview() {
     } catch (error) {
       console.error('Error loading budget:', error);
     }
-  };
+  }, [currentUser]);
+
+  useEffect(() => {
+    loadBudget();
+  }, [loadBudget]);
 
   const getProgressColor = (percentage) => {
     if (percentage > 90) return 'bg-red-500';

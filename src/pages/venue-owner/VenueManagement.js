@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { collection, query, where, getDocs, doc, updateDoc, deleteDoc } from 'firebase/firestore';
 import { db } from '../../firebase';
 import { useAuth } from '../../contexts/AuthContext';
@@ -9,11 +9,7 @@ function VenueManagement() {
   const [venues, setVenues] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    fetchVenues();
-  }, [currentUser]);
-
-  const fetchVenues = async () => {
+  const fetchVenues = useCallback(async () => {
     if (!currentUser) return;
     
     const venuesRef = collection(db, 'venues');
@@ -27,7 +23,11 @@ function VenueManagement() {
     
     setVenues(venueData);
     setLoading(false);
-  };
+  }, [currentUser]);
+
+  useEffect(() => {
+    fetchVenues();
+  }, [fetchVenues]);
 
   const handleStatusChange = async (venueId, newStatus) => {
     try {

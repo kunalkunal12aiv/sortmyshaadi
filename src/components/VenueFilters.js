@@ -159,7 +159,7 @@ function VenueFilters({ venues, initialFilters, onFilterChange }) {
         onFilterChange(updatedFilters);
       }
     }
-  }, [venues, onFilterChange]);
+  }, [venues, onFilterChange, tempFilters]);
 
   return (
     <div className="bg-white rounded-xl shadow-lg overflow-hidden">

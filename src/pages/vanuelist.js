@@ -2,7 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { getVenues } from '../utils/firebase';
 import VenueFilters from '../components/VenueFilters';
 import VenueCard from '../components/VenueCard';
-import { useAuth } from '../contexts/AuthContext';
+// Remove unused import
+// import { useAuth } from '../contexts/AuthContext';
 
 const VenueList = () => {
   const [venues, setVenues] = useState([]);
@@ -18,7 +19,8 @@ const VenueList = () => {
   });
   const [showFilters, setShowFilters] = useState(false);
 
-  const { currentUser } = useAuth();
+  // Remove the empty destructuring
+  // const { } = useAuth();
 
   const parseCapacityRange = (capacityString) => {
     try {

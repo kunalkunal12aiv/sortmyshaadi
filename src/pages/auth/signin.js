@@ -5,7 +5,6 @@ import { GoogleAuthProvider, signInWithPopup } from "firebase/auth";
 import { doc, getDoc, setDoc } from "firebase/firestore";
 import { getRedirectUrl } from "../../utils/auth";
 import { motion } from "framer-motion";
-import { useGoogleLogin } from '@react-oauth/google';
 
 const SignIn = () => {
   const navigate = useNavigate();
@@ -48,17 +47,6 @@ const SignIn = () => {
       setError(error.message);
     }
   };
-
-  const handleGoogleSuccess = async (tokenResponse) => {
-    // Handle the token response here
-  };
-
-  const googleLogin = useGoogleLogin({
-    onSuccess: tokenResponse => handleGoogleSuccess(tokenResponse),
-    onError: error => console.log('Login Failed:', error),
-    flow: 'auth-code',
-    popup: false // Change this to false to use redirect flow instead of popup
-  });
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-pink-50 to-purple-50">

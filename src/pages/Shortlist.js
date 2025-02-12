@@ -10,7 +10,7 @@ function Shortlist() {
   const { shortlistedVenues, removeFromShortlist, clearShortlist } = useShortlist();
   const { currentUser, userDetails } = useAuth();
   const [loading, setLoading] = useState(false);
-  const [success, setSuccess] = useState(false);
+  // const [success, setSuccess] = useState(false);
   const navigate = useNavigate();
 
   const handleBatchEnquiry = async () => {
@@ -37,7 +37,7 @@ function Shortlist() {
         enquiries.map(enquiry => addDoc(collection(db, 'enquiries'), enquiry))
       );
 
-      setSuccess(true);
+      // setSuccess(true);
       clearShortlist();
     } catch (error) {
       console.error('Error submitting batch enquiries:', error);

@@ -1,9 +1,8 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { db } from '../../firebase';
 import { collection, query, where, getDocs } from 'firebase/firestore';
 import { useAuth } from '../../contexts/AuthContext';
 import { useCart } from '../../contexts/CartContext';
-import { Link } from 'react-router-dom';
 
 function SavedItems() {
   const [savedItems, setSavedItems] = useState([]);
@@ -11,11 +10,7 @@ function SavedItems() {
   const { currentUser } = useAuth();
   const { cart } = useCart();
 
-  useEffect(() => {
-    loadSavedItems();
-  }, [currentUser]);
-
-  const loadSavedItems = async () => {
+  const loadSavedItems = useCallback(async () => {
     try {
       const savedRef = collection(db, 'savedItems');
       const q = query(savedRef, where('userId', '==', currentUser.uid));
@@ -28,7 +23,11 @@ function SavedItems() {
     } catch (error) {
       console.error('Error loading saved items:', error);
     }
-  };
+  }, [currentUser]);
+
+  useEffect(() => {
+    loadSavedItems();
+  }, [loadSavedItems]);
 
   const renderContent = () => {
     switch(activeTab) {

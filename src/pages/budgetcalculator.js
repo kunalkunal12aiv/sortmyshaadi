@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef, useEffect, useCallback } from 'react';
 import { motion } from 'framer-motion';
 import ReactDatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
@@ -26,7 +26,6 @@ function BudgetCalculator() {
     selectedTags: [],
     selectedCity: ''
   });
-  const [allVenues, setAllVenues] = useState([]);
 
   const questions = [
     {
@@ -142,13 +141,7 @@ function BudgetCalculator() {
     loadInitialData();
   }, [currentUser]);
 
-  useEffect(() => {
-    if (currentUser) {
-      loadChatHistory();
-    }
-  }, [currentUser]);
-
-  const loadChatHistory = async () => {
+  const loadChatHistory = useCallback(async () => {
     try {
       const userChats = await getUserChats(currentUser.uid);
       if (userChats.length > 0) {
@@ -163,7 +156,13 @@ function BudgetCalculator() {
       // Don't throw, just show empty state
       setPreviousChats([]);
     }
-  };
+  }, [currentUser]);
+
+  useEffect(() => {
+    if (currentUser) {
+      loadChatHistory();
+    }
+  }, [currentUser, loadChatHistory]);
 
   const handleChatSubmit = async () => {
     if (!userInput.trim()) return;

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import { db } from '../../firebase';
 import { collection, query, where, getDocs } from 'firebase/firestore';
 import { useAuth } from '../../contexts/AuthContext';
@@ -10,11 +10,7 @@ function GuestStats() {
     confirmedGuests: 0,
   });
 
-  useEffect(() => {
-    loadStats();
-  }, [currentUser]);
-
-  const loadStats = async () => {
+  const loadStats = useCallback(async () => {
     try {
       const guestsQuery = query(
         collection(db, 'guests'),
@@ -30,7 +26,11 @@ function GuestStats() {
     } catch (error) {
       console.error('Error loading guest stats:', error);
     }
-  };
+  }, [currentUser]);
+
+  useEffect(() => {
+    loadStats();
+  }, [currentUser, loadStats]);
 
   return (
     <div className="bg-white rounded-xl shadow-sm p-6 mb-8">

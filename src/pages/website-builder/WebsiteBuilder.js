@@ -137,16 +137,6 @@ function WebsiteBuilder({ slug, content }) {
     handleInputChange('gallery', { images: [...images, ''] });
   };
 
-  const toggleSection = (sectionName) => {
-    setWebsiteData(prev => ({
-      ...prev,
-      sections: {
-        ...(prev.sections || defaultSections),
-        [sectionName]: !(prev.sections?.[sectionName] ?? defaultSections[sectionName])
-      }
-    }));
-  };
-
   const handleEditClick = (event) => {
     setEditingEventId(event.id);
     setEditingEventData({ ...event });

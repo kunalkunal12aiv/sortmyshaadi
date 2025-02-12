@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { db } from '../firebase';
 import { doc, getDoc, updateDoc } from 'firebase/firestore';
 import { useParams } from 'react-router-dom';
@@ -8,11 +8,7 @@ function InvitationPage() {
   const [guest, setGuest] = useState(null);
   const [customMessage, setCustomMessage] = useState('');
 
-  useEffect(() => {
-    loadGuest();
-  }, []);
-
-  const loadGuest = async () => {
+  const loadGuest = useCallback(async () => {
     try {
       const guestRef = doc(db, 'guests', guestId);
       const guestDoc = await getDoc(guestRef);
@@ -24,7 +20,11 @@ function InvitationPage() {
     } catch (error) {
       console.error('Error loading guest:', error);
     }
-  };
+  }, [guestId]);
+
+  useEffect(() => {
+    loadGuest();
+  }, [loadGuest]);
 
   const handleSave = async () => {
     try {

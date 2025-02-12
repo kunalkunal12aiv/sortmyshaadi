@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { db } from '../../firebase';
 import { collection, query, where, getDocs } from 'firebase/firestore';
 import { useAuth } from '../../contexts/AuthContext';
@@ -8,11 +8,7 @@ function UpcomingTasks() {
   const [tasks, setTasks] = useState([]);
   const { currentUser } = useAuth();
 
-  useEffect(() => {
-    loadTasks();
-  }, [currentUser]);
-
-  const loadTasks = async () => {
+  const loadTasks = useCallback(async () => {
     try {
       const tasksQuery = query(
         collection(db, 'checklists'),
@@ -37,7 +33,11 @@ function UpcomingTasks() {
     } catch (error) {
       console.error('Error loading tasks:', error);
     }
-  };
+  }, [currentUser]);
+
+  useEffect(() => {
+    loadTasks();
+  }, [currentUser, loadTasks]);
 
   return (
     <div className="bg-white rounded-xl shadow-sm p-6">

@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { db } from '../../firebase';
-import { collection, query, where, getDocs, addDoc, updateDoc, deleteDoc, doc } from 'firebase/firestore';
+import { collection, query, where, getDocs, addDoc, deleteDoc, doc } from 'firebase/firestore';
 import { useAuth } from '../../contexts/AuthContext';
 import { FiPlus, FiTrash2 } from 'react-icons/fi';
 
@@ -9,11 +9,7 @@ function Timeline() {
   const [newEvent, setNewEvent] = useState({ name: '', date: '' });
   const { currentUser } = useAuth();
 
-  useEffect(() => {
-    loadEvents();
-  }, [currentUser]);
-
-  const loadEvents = async () => {
+  const loadEvents = useCallback(async () => {
     try {
       const eventsRef = collection(db, 'timeline');
       const q = query(eventsRef, where('userId', '==', currentUser.uid));
@@ -28,7 +24,11 @@ function Timeline() {
     } catch (error) {
       console.error('Error loading events:', error);
     }
-  };
+  }, [currentUser]);
+
+  useEffect(() => {
+    loadEvents();
+  }, [loadEvents]);
 
   const addEvent = async () => {
     try {

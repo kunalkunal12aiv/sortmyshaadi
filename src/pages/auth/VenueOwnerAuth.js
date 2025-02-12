@@ -18,7 +18,6 @@ function VenueOwnerAuth() {
     documents: null,
     profileImage: null
   });
-  const [error, setError] = useState(''); // Define setError
   const navigate = useNavigate();
 
   const handleFileUpload = async (file, path) => {
@@ -71,7 +70,6 @@ function VenueOwnerAuth() {
       navigate('/venue-owner/dashboard');
     } catch (error) {
       console.error('Auth error:', error);
-      setError(error.message);
     } finally {
       setLoading(false);
     }

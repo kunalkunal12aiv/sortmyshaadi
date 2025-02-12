@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useAuth } from '../../contexts/AuthContext';
 import { db } from '../../firebase';
 import { doc, getDoc, updateDoc } from 'firebase/firestore';
@@ -13,11 +13,7 @@ function Settings() {
     emailUpdates: true
   });
 
-  useEffect(() => {
-    loadSettings();
-  }, [currentUser]);
-
-  const loadSettings = async () => {
+  const loadSettings = useCallback(async () => {
     try {
       const settingsRef = doc(db, 'userSettings', currentUser.uid);
       const snapshot = await getDoc(settingsRef);
@@ -28,7 +24,11 @@ function Settings() {
     } catch (error) {
       console.error('Error loading settings:', error);
     }
-  };
+  }, [currentUser]);
+
+  useEffect(() => {
+    loadSettings();
+  }, [loadSettings]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();

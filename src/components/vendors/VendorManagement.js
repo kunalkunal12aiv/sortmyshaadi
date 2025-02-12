@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { db } from '../../firebase';
 import { collection, query, where, getDocs } from 'firebase/firestore';
 import { useAuth } from '../../contexts/AuthContext';
@@ -24,11 +24,7 @@ function VendorManagement() {
   const [isAddingVendor, setIsAddingVendor] = useState(false);
   const { currentUser } = useAuth();
 
-  useEffect(() => {
-    loadVendors();
-  }, [currentUser]);
-
-  const loadVendors = async () => {
+  const loadVendors = useCallback(async () => {
     try {
       const vendorsRef = collection(db, 'vendors');
       const q = query(vendorsRef, where('userId', '==', currentUser.uid));
@@ -41,7 +37,11 @@ function VendorManagement() {
     } catch (error) {
       console.error('Error loading vendors:', error);
     }
-  };
+  }, [currentUser]);
+
+  useEffect(() => {
+    loadVendors();
+  }, [loadVendors]);
 
   return (
     <div className="max-w-7xl mx-auto px-4 py-8">

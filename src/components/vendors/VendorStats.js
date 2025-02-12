@@ -1,5 +1,5 @@
 import React from 'react';
-import { FiUsers, FiCheckCircle, FiDollarSign, FiClock, FiXCircle } from 'react-icons/fi';
+import { FiUsers, FiCheckCircle, FiClock, FiXCircle } from 'react-icons/fi';
 
 function VendorStats({ vendors }) {
   const stats = {

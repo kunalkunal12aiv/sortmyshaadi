@@ -1,8 +1,8 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { db } from '../../firebase';
-import { collection, query, where, getDocs, addDoc, updateDoc, deleteDoc, doc } from 'firebase/firestore';
+import { collection, query, where, getDocs, addDoc, updateDoc, doc } from 'firebase/firestore';
 import { useAuth } from '../../contexts/AuthContext';
-import { FiCheck, FiPlus, FiTrash2 } from 'react-icons/fi';
+import { FiCheck, FiPlus } from 'react-icons/fi';
 
 const defaultCategories = [
   {
@@ -43,30 +43,7 @@ function WeddingChecklist() {
   const [selectedCategory, setSelectedCategory] = useState('');
   const { currentUser } = useAuth();
 
-  useEffect(() => {
-    loadChecklist();
-  }, [currentUser]);
-
-  const loadChecklist = async () => {
-    try {
-      const checklistRef = collection(db, 'checklists');
-      const q = query(checklistRef, where('userId', '==', currentUser.uid));
-      const snapshot = await getDocs(q);
-
-      if (snapshot.empty) {
-        // Create default checklist for new users
-        const defaultList = await createDefaultChecklist();
-        setCategories(defaultList);
-      } else {
-        const userChecklist = snapshot.docs[0].data().categories;
-        setCategories(userChecklist);
-      }
-    } catch (error) {
-      console.error('Error loading checklist:', error);
-    }
-  };
-
-  const createDefaultChecklist = async () => {
+  const createDefaultChecklist = useCallback(async () => {
     try {
       const checklistRef = collection(db, 'checklists');
       await addDoc(checklistRef, {
@@ -79,7 +56,29 @@ function WeddingChecklist() {
       console.error('Error creating default checklist:', error);
       return [];
     }
-  };
+  }, [currentUser]);
+
+  const loadChecklist = useCallback(async () => {
+    try {
+      const checklistRef = collection(db, 'checklists');
+      const q = query(checklistRef, where('userId', '==', currentUser.uid));
+      const snapshot = await getDocs(q);
+
+      if (snapshot.empty) {
+        const defaultList = await createDefaultChecklist();
+        setCategories(defaultList);
+      } else {
+        const userChecklist = snapshot.docs[0].data().categories;
+        setCategories(userChecklist);
+      }
+    } catch (error) {
+      console.error('Error loading checklist:', error);
+    }
+  }, [currentUser, createDefaultChecklist]);
+
+  useEffect(() => {
+    loadChecklist();
+  }, [currentUser, loadChecklist]);
 
   const updateChecklist = async (newCategories) => {
     try {

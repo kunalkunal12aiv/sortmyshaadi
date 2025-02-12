@@ -31,7 +31,7 @@ const GalleryModal = ({ media, onClose }) => (
           <img 
             key={index} 
             src={image} 
-            alt={`Gallery image ${index + 1}`} 
+            alt="Gallery" 
             className="w-full rounded-lg mb-4 hover:scale-105 transition-transform duration-300"
             onClick={(e) => e.stopPropagation()}
           />

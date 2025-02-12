@@ -1,8 +1,8 @@
-import React, { useState, useEffect, useCallback } from 'react';
-import { useParams, useNavigate, Link } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { useParams, useNavigate } from 'react-router-dom';
 import { getVenueById } from '../utils/firebase';
 import format from 'date-fns/format';
-import { collection, onSnapshot, addDoc, query, where, getDocs, doc, getDoc } from 'firebase/firestore';
+import { collection, onSnapshot, addDoc, doc, getDoc } from 'firebase/firestore';
 import { db } from '../firebase';
 import 'react-big-calendar/lib/css/react-big-calendar.css';
 import '../styles/calendar-override.css';
@@ -17,9 +17,9 @@ import AboutSection from '../components/vanue-detail/AboutSection';
 import GalleryModal from '../components/vanue-detail/GalleryModal';
 import VideoGallery from '../components/vanue-detail/VideoGallery';
 import TrustSection from '../components/vanue-detail/TrustSection';
-import ListingDetails from '../components/venue/ListingDetails';
 import FeaturesAndAmenitiesAccordion from '../components/vanue-detail/FeaturesAndAmenitiesAccordion';
 import FacilitiesAndFoodFaq from '../components/vanue-detail/FacilitiesAndFoodFaq';
+
 function VenueDetail() {
   const { id } = useParams();
   const { currentUser, userDetails } = useAuth();
@@ -28,7 +28,6 @@ function VenueDetail() {
   const navigate = useNavigate();
   const [venue, setVenue] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [activeImage, setActiveImage] = useState(0);
   const [activeFaq, setActiveFaq] = useState(null);
   const [expandedMenu, setExpandedMenu] = useState(null);
   const [selectedDates, setSelectedDates] = useState([]);
@@ -37,23 +36,7 @@ function VenueDetail() {
   const [hasEnquired, setHasEnquired] = useState(false);
   const [showGallery, setShowGallery] = useState(false);
   const [previousWeddings, setPreviousWeddings] = useState([]);
-
-  const checkPreviousEnquiry = useCallback(async () => {
-    if (!currentUser || !venue) return;
-
-    const enquiriesRef = collection(db, 'users', currentUser.uid, 'enquiries');
-    const q = query(
-      enquiriesRef,
-      where('venueId', '==', id)
-    );
-
-    try {
-      const querySnapshot = await getDocs(q);
-      setHasEnquired(!querySnapshot.empty);
-    } catch (error) {
-      console.error('Error checking enquiries:', error);
-    }
-  }, [currentUser, venue, id]);
+  const [activeImage, setActiveImage] = useState(0); // Initialize with 0 instead of null
 
   useEffect(() => {
     const checkAuth = async () => {
@@ -98,6 +81,13 @@ function VenueDetail() {
     };
     fetchPreviousWeddings();
   }, [id]);
+
+  // Add effect to update activeImage when venue changes
+  useEffect(() => {
+    if (venue?.media?.length > 0) {
+      setActiveImage(0); // Set to first image when venue loads
+    }
+  }, [venue]);
 
   const handleEnquiry = async () => {
     if (!currentUser) {
@@ -192,12 +182,6 @@ function VenueDetail() {
     initial: { opacity: 0, y: 30, scale: 0.95 },
     animate: { opacity: 1, y: 0, scale: 1 },
     hover: { scale: 1.02 }
-  };
-
-  // Define motion variant for FAQ answers
-  const faqVariants = {
-    initial: { opacity: 0, x: 20 },
-    animate: { opacity: 1, x: 0 }
   };
 
   if (loading) {

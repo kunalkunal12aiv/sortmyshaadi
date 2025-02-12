@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import { db } from '../../firebase';
 import { collection, query, where, getDocs } from 'firebase/firestore';
 import { useAuth } from '../../contexts/AuthContext';
@@ -14,11 +14,7 @@ function DashboardStats() {
     daysUntilWedding: 0
   });
 
-  useEffect(() => {
-    loadStats();
-  }, [currentUser]);
-
-  const loadStats = async () => {
+  const loadStats = useCallback(async () => {
     try {
       // Load guests stats
       const guestsQuery = query(
@@ -55,7 +51,11 @@ function DashboardStats() {
     } catch (error) {
       console.error('Error loading dashboard stats:', error);
     }
-  };
+  }, [currentUser]);
+  
+  useEffect(() => {
+    loadStats();
+  }, [currentUser, loadStats]);
 
   const calculateDaysUntilWedding = () => {
     // You would get this from user settings or preferences
