@@ -9,7 +9,6 @@ import { LoadingFallback } from './utils/loadingFallback';
 import { CartProvider } from './contexts/CartContext';
 import SidebarNav from './components/navigation/SidebarNav';
 import Unauthorized from './pages/Unauthorized';
-import PhoneVerification from './components/PhoneVerification';
 import { VenueOwnerProvider } from './contexts/VenueOwnerContext';
 import { ShortlistProvider } from './contexts/ShortlistContext';
 import WebsiteDashboard from './pages/website/WebsiteDashboard';
@@ -37,7 +36,6 @@ const CalendarManager = React.lazy(() => import('./pages/CalendarManager'));
 const GoogleSignIn = React.lazy(() => import('./pages/auth/signin'));
 const SignUp = React.lazy(() => import('./pages/auth/signup'));
 const Calendar = React.lazy(() => import('./components/calendar/calendar'));
-const PhoneVerification = React.lazy(() => import('./components/PhoneVerification'));
 const AddPreviousWeddings = React.lazy(() => import('./pages/AddPreviousWeddings'));
 const VenueManagement = React.lazy(() => import('./pages/venue-owner/VenueManagement'));
 const VenueOwnerAuth = React.lazy(() => import('./pages/auth/VenueOwnerAuth'));
@@ -57,6 +55,7 @@ const Budget = React.lazy(() => import('./components/budget/Budget'));
 const Profile = React.lazy(() => import('./components/profile/Profile'));
 const RSVP = React.lazy(() => import('./pages/RSVP'));
 const InvitationPage = React.lazy(() => import('./pages/InvitationPage'));
+const PhoneVerification = React.lazy(() => import('./components/PhoneVerification'));
 
 function AppContent() {
   const location = useLocation();
