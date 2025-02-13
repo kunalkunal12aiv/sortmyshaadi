@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import { auth } from '../firebase';
@@ -10,12 +10,6 @@ function Navbar() {
   const [showProfileMenu, setShowProfileMenu] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const navigate = useNavigate();
-
-  useEffect(() => {
-    // Debug logging
-    console.log('Current user:', currentUser);
-    console.log('User details:', userDetails);
-  }, [currentUser, userDetails]);
 
   const handleSignOut = async () => {
     try {
@@ -32,13 +26,55 @@ function Navbar() {
   const displayName = userDetails?.displayName || currentUser?.displayName || 'User';
 
   const NavLinks = ({ onClick }) => (
-    <ul className="nav-links">
-      <li><Link to="/" onClick={onClick}>Home</Link></li>
-      <li><Link to="/venues" onClick={onClick}>Venues</Link></li>
-      <li><Link to="/budget-calculator" onClick={onClick}>Budget</Link></li>
-      <li><Link to="/decor" onClick={onClick}>Decor</Link></li>
-      <li><Link to="/add-venue" onClick={onClick}>Add Venue</Link></li>
-      <li><Link to="/dashboard" onClick={onClick}>Dashboard</Link></li>
+    <ul className="nav-links flex space-x-8">
+      <li className="relative group">
+        <Link to="/venues" onClick={onClick}>Hotel Deals</Link>
+        <div className="absolute left-0 top-full hidden group-hover:flex bg-white shadow-lg rounded-lg p-4 w-max z-50">
+          <div className="grid grid-cols-1 gap-4">
+            <Link to="/venues" className="block px-4 py-2 text-gray-700 hover:bg-gray-100">Hotel Deals</Link>
+            <Link to="/budget-calculator" className="block px-4 py-2 text-gray-700 hover:bg-gray-100">Budget Calculator</Link>
+          </div>
+        </div>
+      </li>
+      <li className="relative group">
+        <Link to="/dashboard" onClick={onClick}>DIY Tools</Link>
+        <div className="absolute left-0 top-full hidden group-hover:flex bg-white shadow-lg rounded-lg p-4 w-max z-50">
+          <div className="grid grid-cols-2 gap-4">
+            <Link to="/dashboard" className="block px-4 py-2 text-gray-700 hover:bg-gray-100">Dashboard</Link>
+            <Link to="/guest-list" className="block px-4 py-2 text-gray-700 hover:bg-gray-100">Guest List</Link>
+            <Link to="/checklist" className="block px-4 py-2 text-gray-700 hover:bg-gray-100">Checklist</Link>
+            <Link to="/vendors" className="block px-4 py-2 text-gray-700 hover:bg-gray-100">Vendors</Link>
+            <Link to="/saved" className="block px-4 py-2 text-gray-700 hover:bg-gray-100">Saved</Link>
+            <Link to="/timeline" className="block px-4 py-2 text-gray-700 hover:bg-gray-100">Timeline</Link>
+            <Link to="/budget" className="block px-4 py-2 text-gray-700 hover:bg-gray-100">Budget</Link>
+            <Link to="/website-builder" className="block px-4 py-2 text-gray-700 hover:bg-gray-100">Wedding Website</Link>
+          </div>
+        </div>
+      </li>
+      <li className="relative group">
+        <Link to="#" onClick={onClick}>ARTISTS & ACTIVITIES</Link>
+        <div className="absolute left-0 top-full hidden group-hover:flex bg-white shadow-lg rounded-lg p-4 w-max z-50">
+          <div className="grid grid-cols-2 gap-4">
+            <span className="block px-4 py-2 text-gray-700">DJs (Coming Soon)</span>
+            <span className="block px-4 py-2 text-gray-700">Photographers (Coming Soon)</span>
+            <span className="block px-4 py-2 text-gray-700">Makeup Artists (Coming Soon)</span>
+            <span className="block px-4 py-2 text-gray-700">Mehendi Artists (Coming Soon)</span>
+            <span className="block px-4 py-2 text-gray-700">Gifting Vendors (Coming Soon)</span>
+            <span className="block px-4 py-2 text-gray-700">Baaraat (Coming Soon)</span>
+            <span className="block px-4 py-2 text-gray-700">Vintage Cars (Coming Soon)</span>
+            <span className="block px-4 py-2 text-gray-700">Choreographers (Coming Soon)</span>
+            <span className="block px-4 py-2 text-gray-700">Hospitality Teams (Coming Soon)</span>
+          </div>
+        </div>
+      </li>
+      <li className="relative group">
+        <Link to="/decor" onClick={onClick}>Decor Budgeting</Link>
+        <div className="absolute left-0 top-full hidden group-hover:flex bg-white shadow-lg rounded-lg p-4 w-max z-50">
+          <div className="grid grid-cols-1 gap-4">
+            <Link to="/decor" className="block px-4 py-2 text-gray-700 hover:bg-gray-100">Decor Budgeting</Link>
+          </div>
+        </div>
+      </li>
     </ul>
   );
 

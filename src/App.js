@@ -1,14 +1,12 @@
-import React, { Suspense, useEffect } from 'react';
-import { BrowserRouter as Router, Routes, Route, Navigate, useNavigate, useLocation } from 'react-router-dom';
+import React, { Suspense } from 'react';
+import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
 import { GoogleOAuthProvider } from '@react-oauth/google';
-import { AuthProvider, useAuth } from './contexts/AuthContext';
+import { AuthProvider } from './contexts/AuthContext';
 import Navbar from './components/navbar';
 import Footer from './components/footer';
 import ErrorBoundary from './utils/errorBoundary';
 import { LoadingFallback } from './utils/loadingFallback';
 import { CartProvider } from './contexts/CartContext';
-// Remove unused import
-// import DashboardNav from './components/navigation/DashboardNav';
 import SidebarNav from './components/navigation/SidebarNav';
 import Unauthorized from './pages/Unauthorized';
 import { VenueOwnerProvider } from './contexts/VenueOwnerContext';
@@ -60,27 +58,31 @@ const RSVP = React.lazy(() => import('./pages/RSVP'));
 const InvitationPage = React.lazy(() => import('./pages/InvitationPage'));
 
 function AppContent() {
-  const { currentUser } = useAuth();
-  const navigate = useNavigate();
   const location = useLocation();
   const isPublicWebsite = location.pathname.startsWith('/sites/');
-
-  useEffect(() => {
-    // Redirect logged-in users to dashboard if they are on the home page
-    if (currentUser && location.pathname === '/') {
-      navigate('/dashboard', { replace: true });
-    }
-  }, [currentUser, navigate, location.pathname]);
+  const sidebarPaths = [
+    '/dashboard',
+    '/guest-list',
+    '/checklist',
+    '/vendors',
+    '/saved',
+    '/timeline',
+    '/budget',
+    '/website-builder',
+    '/settings',
+    '/profile'
+  ];
+  const showSidebar = sidebarPaths.includes(location.pathname);
 
   return (
     <div className="flex h-screen">
-      {!isPublicWebsite && currentUser && <SidebarNav />}
+      {!isPublicWebsite && showSidebar && <SidebarNav />}
       <div className="flex-1 overflow-auto">
         {!isPublicWebsite && <Navbar />}
         <Suspense fallback={<LoadingFallback />}>
           <Routes>
             {/* Public Routes */}
-            <Route path="/" element={currentUser ? <Navigate to="/dashboard" replace /> : <Home />} />
+            <Route path="/" element={<Home />} />
             <Route path="/venues" element={<VenueList />} />
             <Route path="/venue/:id" element={<VenueDetail />} />
             <Route path="/decor" element={<DecorList />} />
@@ -98,7 +100,7 @@ function AppContent() {
             {/* Auth Routes */}
             <Route path="/phone-verification" element={<PhoneVerification />} />
 
-            {/* Admin Protected Routes removed navigation control */}
+            {/* Admin Protected Routes */}
             <Route path="/calendar" element={<Calendar />} />
             <Route path="/bulk-upload" element={<BulkUpload />} />
             <Route path="/calendar-manager" element={<CalendarManager />} />

@@ -6,7 +6,7 @@ import DecorGallery from '../components/home/DecorGallery';
 import BudgetPlanner from '../components/home/BudgetPlanner';
 import WhyChooseUs from '../components/home/WhyChooseUs';
 import TestimonialCarousel from '../components/home/TestimonialCarousel';
-import VideoShowcase from '../components/home/VideoShowcase'; // Import the new component
+import VideoShowcase from '../components/home/VideoShowcase';
 import DestinationTypes from '../components/home/DestinationTypes';
 import HowItWorks from '../components/home/HowItWorks';
 import FAQs from '../components/home/FAQs';
@@ -16,17 +16,17 @@ function Home() {
   return (
     <div className="overflow-hidden bg-gradient-to-br from-[#F6F6F6] to-[#EDD498] text-theme-color">
       <HeroSection />
-      <VideoShowcase /> {/* Move the new component to the second position */}
+      <VideoShowcase />
       <Features />
-      <HowItWorks /> {/* Add the new section here */}
-      <DestinationTypes /> {/* Add the DestinationTypes component here */}
+      <HowItWorks />
+      <DestinationTypes />
       <VenueShowcase />
       <DecorGallery />
       <BudgetPlanner />
       <WhyChooseUs />
       <TestimonialCarousel />
-      <FAQs /> {/* Add FAQs section */}
-      <VendorCTA /> {/* Add Vendor CTA section */}
+      <FAQs />
+      <VendorCTA />
     </div>
   );
 }

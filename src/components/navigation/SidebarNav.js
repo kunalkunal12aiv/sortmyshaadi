@@ -12,7 +12,8 @@ import {
   FiDollarSign,
   FiUser,
   FiMenu,
-  FiX
+  FiX,
+  FiLayout
 } from 'react-icons/fi';
 
 function SidebarNav() {
@@ -27,13 +28,13 @@ function SidebarNav() {
     { path: '/saved', icon: <FiBookmark />, label: 'Saved' },
     { path: '/timeline', icon: <FiClock />, label: 'Timeline' },
     { path: '/budget', icon: <FiDollarSign />, label: 'Budget' },
+    { path: '/website-builder', icon: <FiLayout />, label: 'Wedding Website' },
     { path: '/settings', icon: <FiSettings />, label: 'Settings' },
     { path: '/profile', icon: <FiUser />, label: 'Profile' }
   ];
 
   const isActive = (path) => location.pathname === path;
 
-  // Updated Mobile toggle button with left positioning
   const MobileToggle = () => (
     <button
       onClick={() => setIsMobileNavOpen(!isMobileNavOpen)}
