@@ -137,6 +137,7 @@ function Navbar() {
                   src={profilePhoto}
                   alt="Profile"
                   className="w-8 h-8 rounded-full"
+                  loading="lazy"
                 />
                 <span className="text-[#1E2742]">{displayName}</span>
               </button>
@@ -217,6 +218,7 @@ function Navbar() {
                         src={profilePhoto}
                         alt="Profile"
                         className="w-10 h-10 rounded-full"
+                        loading="lazy"
                       />
                       <div>
                         <p className="font-medium">{displayName}</p>
