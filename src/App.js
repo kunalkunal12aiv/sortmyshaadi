@@ -1,7 +1,7 @@
 import React, { Suspense } from 'react';
-import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, useLocation, Navigate } from 'react-router-dom';
 import { GoogleOAuthProvider } from '@react-oauth/google';
-import { AuthProvider } from './contexts/AuthContext';
+import { AuthProvider, useAuth } from './contexts/AuthContext';
 import Navbar from './components/navbar';
 import Footer from './components/footer';
 import ErrorBoundary from './utils/errorBoundary';
@@ -9,6 +9,7 @@ import { LoadingFallback } from './utils/loadingFallback';
 import { CartProvider } from './contexts/CartContext';
 import SidebarNav from './components/navigation/SidebarNav';
 import Unauthorized from './pages/Unauthorized';
+import PhoneVerification from './components/PhoneVerification';
 import { VenueOwnerProvider } from './contexts/VenueOwnerContext';
 import { ShortlistProvider } from './contexts/ShortlistContext';
 import WebsiteDashboard from './pages/website/WebsiteDashboard';
@@ -59,6 +60,7 @@ const InvitationPage = React.lazy(() => import('./pages/InvitationPage'));
 
 function AppContent() {
   const location = useLocation();
+  const { currentUser, userDetails } = useAuth();
   const isPublicWebsite = location.pathname.startsWith('/sites/');
   const sidebarPaths = [
     '/dashboard',
@@ -73,6 +75,13 @@ function AppContent() {
     '/profile'
   ];
   const showSidebar = sidebarPaths.includes(location.pathname);
+
+  const AdminRoute = ({ children }) => {
+    if (!currentUser || userDetails?.role !== 'admin') {
+      return <Navigate to="/unauthorized" />;
+    }
+    return children;
+  };
 
   return (
     <div className="flex h-screen">
@@ -101,14 +110,14 @@ function AppContent() {
             <Route path="/phone-verification" element={<PhoneVerification />} />
 
             {/* Admin Protected Routes */}
-            <Route path="/calendar" element={<Calendar />} />
-            <Route path="/bulk-upload" element={<BulkUpload />} />
-            <Route path="/calendar-manager" element={<CalendarManager />} />
-            <Route path="/manage-venues" element={<VenueList2 />} />
-            <Route path="/edit-venue/:id" element={<EditVenue />} />
-            <Route path="/add-venue" element={<AddVenue />} />
-            <Route path="/add-previous-weddings/:venueId" element={<AddPreviousWeddings />} />
-            <Route path="/venue-owner/add-previous-weddings" element={<AddPreviousWeddings />} />
+            <Route path="/calendar" element={<AdminRoute><Calendar /></AdminRoute>} />
+            <Route path="/bulk-upload" element={<AdminRoute><BulkUpload /></AdminRoute>} />
+            <Route path="/calendar-manager" element={<AdminRoute><CalendarManager /></AdminRoute>} />
+            <Route path="/manage-venues" element={<AdminRoute><VenueList2 /></AdminRoute>} />
+            <Route path="/edit-venue/:id" element={<AdminRoute><EditVenue /></AdminRoute>} />
+            <Route path="/add-venue" element={<AdminRoute><AddVenue /></AdminRoute>} />
+            <Route path="/add-previous-weddings/:venueId" element={<AdminRoute><AddPreviousWeddings /></AdminRoute>} />
+            <Route path="/venue-owner/add-previous-weddings" element={<AdminRoute><AddPreviousWeddings /></AdminRoute>} />
 
             {/* Venue Owner Routes */}
             <Route path="/venue-owner/auth" element={<VenueOwnerAuth />} />

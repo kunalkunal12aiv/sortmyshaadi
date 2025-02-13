@@ -52,7 +52,7 @@ function Navbar() {
         </div>
       </li>
       <li className="relative group">
-        <Link to="#" onClick={onClick}>ARTISTS & ACTIVITIES</Link>
+        <Link to="#" onClick={onClick}>Artists & Activities</Link>
         <div className="absolute left-0 top-full hidden group-hover:flex bg-white shadow-lg rounded-lg p-4 w-max z-50">
           <div className="grid grid-cols-2 gap-4">
             <span className="block px-4 py-2 text-gray-700">DJs (Coming Soon)</span>

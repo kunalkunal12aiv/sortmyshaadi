@@ -1,6 +1,6 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
-import { auth } from '../firebase';
-import { onAuthStateChanged } from 'firebase/auth';
+import { useNavigate } from 'react-router-dom';
+import { auth, firestore } from '../firebase';
 
 const AuthContext = createContext();
 
@@ -10,32 +10,33 @@ export function useAuth() {
 
 export function AuthProvider({ children }) {
   const [currentUser, setCurrentUser] = useState(null);
-  const [userRole, setUserRole] = useState(null);
+  const [userDetails, setUserDetails] = useState(null);
   const [loading, setLoading] = useState(true);
+  const navigate = useNavigate();
 
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (user) => {
+    const unsubscribe = auth.onAuthStateChanged(async (user) => {
       setCurrentUser(user);
-      setLoading(false);
       if (user) {
-        user.getIdTokenResult().then(idTokenResult => {
-          setUserRole(idTokenResult.claims.role || null);
-        }).catch(err => {
-          console.error("Failed to retrieve user role:", err);
-          setUserRole(null);
-        });
+        const userDoc = await firestore.collection('users').doc(user.uid).get();
+        const userData = userDoc.data();
+        setUserDetails(userData);
+
+        if (!userData?.phoneNumber) {
+          navigate('/phone-verification', { state: { from: window.location.pathname } });
+        }
       } else {
-        setUserRole(null);
+        setUserDetails(null);
       }
+      setLoading(false);
     });
 
     return unsubscribe;
-  }, []);
+  }, [navigate]);
 
   const value = {
     currentUser,
-    userRole,
-    loading
+    userDetails,
   };
 
   return (
