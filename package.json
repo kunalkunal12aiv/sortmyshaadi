@@ -25,7 +25,8 @@
     "resolve-url-loader": "^5.0.0",
     "svgo": "^3.0.2",
     "swiper": "^11.2.1",
-    "web-vitals": "^4.2.4"
+    "web-vitals": "^4.2.4",
+    "sitemap": "^7.1.1"
   },
   "scripts": {
     "start": "react-app-rewired start",
