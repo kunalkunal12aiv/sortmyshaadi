@@ -6,7 +6,6 @@ import VenueShowcase from '../components/home/VenueShowcase';
 import DecorGallery from '../components/home/DecorGallery';
 import BudgetPlanner from '../components/home/BudgetPlanner';
 import WhyChooseUs from '../components/home/WhyChooseUs';
-import TestimonialCarousel from '../components/home/TestimonialCarousel';
 import VideoShowcase from '../components/home/VideoShowcase';
 import DestinationTypes from '../components/home/DestinationTypes';
 import HowItWorks from '../components/home/HowItWorks';
@@ -31,7 +30,6 @@ function Home() {
         <DecorGallery />
         <BudgetPlanner />
         <WhyChooseUs />
-        <TestimonialCarousel />
         <FAQs />
         <VendorCTA />
       </div>

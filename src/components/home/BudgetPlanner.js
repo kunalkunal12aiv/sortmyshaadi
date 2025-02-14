@@ -11,10 +11,10 @@ function BudgetPlanner() {
         <motion.div 
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
-          className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center"
+          className="flex flex-col items-center space-y-12"
         >
           {/* Left Content */}
-          <div className="space-y-8">
+          <div className="space-y-8 text-center">
             <motion.h2 
               initial={{ opacity: 0 }}
               whileInView={{ opacity: 1 }}
@@ -23,7 +23,7 @@ function BudgetPlanner() {
               Smart Wedding Budget Calculator
             </motion.h2>
             
-            <div className="space-y-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               {[ 
                 {
                   icon: "✨",
@@ -46,7 +46,7 @@ function BudgetPlanner() {
                   initial={{ opacity: 0, x: -20 }}
                   whileInView={{ opacity: 1, x: 0 }}
                   transition={{ delay: index * 0.2 }}
-                  className="flex items-start gap-4 bg-[#fce4ec] p-6 rounded-xl backdrop-blur-sm"
+                  className={`flex items-start gap-4 bg-[#fce4ec] p-6 rounded-xl backdrop-blur-sm ${index === 2 ? 'md:col-span-2' : ''}`}
                 >
                   <span className="text-3xl">{item.icon}</span>
                   <div>
@@ -65,39 +65,7 @@ function BudgetPlanner() {
             </Link>
           </div>
 
-          {/* Right Content - Calculator Preview */}
-          <motion.div
-            initial={{ opacity: 0, scale: 0.8 }}
-            whileInView={{ opacity: 1, scale: 1 }}
-            className="relative"
-          >
-            <div className="bg-[#fce4ec] rounded-2xl shadow-2xl p-8">
-              <div className="space-y-6">
-                {/* Calculator preview content with dummy data */}
-                <div className="text-center">
-                  <h3 className="text-2xl font-bold text-[#1f2937] mb-4">Example Budget</h3>
-                  <div className="text-left max-w-xs mx-auto">
-                    <div className="flex justify-between mb-2">
-                      <span>Venue Cost</span>
-                      <span>₹2,50,000</span>
-                    </div>
-                    <div className="flex justify-between mb-2">
-                      <span>Accommodation</span>
-                      <span>₹1,50,000</span>
-                    </div>
-                    <div className="flex justify-between mb-2">
-                      <span>Catering</span>
-                      <span>₹3,00,000</span>
-                    </div>
-                    <div className="flex justify-between font-semibold mt-4 border-t pt-2">
-                      <span>Total</span>
-                      <span>₹7,00,000</span>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </motion.div>
+          {/* Right Content removed: Example Budget block deleted */}
         </motion.div>
       </div>
 

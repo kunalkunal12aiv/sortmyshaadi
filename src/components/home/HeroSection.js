@@ -67,34 +67,35 @@ function HeroSection() {
         >
           {/* Updated heading with smaller text */}
           <h1 className="text-2xl  md:text-4xl font-playfair text-white mb-4 leading-tight">
-          Let’s find the best hotel deals for you!
+          Let's find the best hotel deals for you!
           </h1>
 
-          {/* Updated search form */}
+          {/* Updated search form with customized grid layout */}
           <div className="bg-white/10 backdrop-blur-md p-6 rounded-2xl shadow-2xl max-w-2xl mx-auto border border-white/20">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-              {/* Total Wedding Budget with formatted value */}
+            {/* Use 2-column grid; full-width inputs get col-span-2 */}
+            <div className="grid grid-cols-2 gap-3">
               <input
-                type="text" // Changed from number to text for formatting display
+                type="text"
                 value={budget}
                 onChange={handleBudgetChange}
                 placeholder="Total Wedding Budget"
-                className="w-full px-4 py-2 bg-white/20 border border-white/30 rounded-xl text-white text-sm focus:outline-none focus:ring-2 focus:ring-[#db2777] transition-all duration-300"
+                className="col-span-2 w-full px-4 py-2 bg-white/20 border border-white/30 rounded-xl text-white placeholder-white text-sm focus:outline-none focus:ring-2 focus:ring-[#db2777] transition-all duration-300"
               />
               <input
                 type="number"
                 value={guests}
-                onChange={handleGuestChange}   // Updated guest input handler
+                onChange={handleGuestChange}
                 placeholder="No. of Guests"
-                className="w-full px-4 py-2 bg-white/20 border border-white/30 rounded-xl text-white text-sm focus:outline-none focus:ring-2 focus:ring-[#db2777] transition-all duration-300"
+                className="col-span-2 w-full px-4 py-2 bg-white/20 border border-white/30 rounded-xl text-white placeholder-white text-sm focus:outline-none focus:ring-2 focus:ring-[#db2777] transition-all duration-300"
               />
               <div>
+                <label className="block text-white text-xs mb-1">Rooms</label>
                 <input
                   type="number"
                   value={rooms}
                   onChange={(e) => setRooms(e.target.value)}
                   placeholder="Rooms"
-                  className="w-full px-4 py-2 bg-white/20 border border-white/30 rounded-xl text-white text-sm focus:outline-none focus:ring-2 focus:ring-[#db2777] transition-all duration-300"
+                  className="w-full px-4 py-2 bg-white/20 border border-white/30 rounded-xl text-white placeholder-white text-sm focus:outline-none focus:ring-2 focus:ring-[#db2777] transition-all duration-300"
                 />
                 {guests && (
                   <div className="text-xs text-white">
@@ -103,12 +104,13 @@ function HeroSection() {
                 )}
               </div>
               <div>
+                <label className="block text-white text-xs mb-1">Extra Beds</label>
                 <input
                   type="number"
                   value={extraBeds}
                   onChange={(e) => setExtraBeds(e.target.value)}
                   placeholder="Extra Beds"
-                  className="w-full px-4 py-2 bg-white/20 border border-white/30 rounded-xl text-white text-sm focus:outline-none focus:ring-2 focus:ring-[#db2777] transition-all duration-300"
+                  className="w-full px-4 py-2 bg-white/20 border border-white/30 rounded-xl text-white placeholder-white text-sm focus:outline-none focus:ring-2 focus:ring-[#db2777] transition-all duration-300"
                 />
                 {guests && (
                   <div className="text-xs text-white">
