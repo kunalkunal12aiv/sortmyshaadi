@@ -66,9 +66,9 @@ function HeroSection() {
           className="text-center space-y-8"
         >
           {/* Updated heading with smaller text */}
-          <h1 className="text-2xl  md:text-4xl font-playfair text-white mb-4 leading-tight">
+          <h2 className="text-2xl  md:text-4xl font-playfair text-white mb-4 leading-tight">
           Let's find the best hotel deals for you!
-          </h1>
+          </h2>
 
           {/* Updated search form with customized grid layout */}
           <div className="bg-white/10 backdrop-blur-md p-6 rounded-2xl shadow-2xl max-w-2xl mx-auto border border-white/20">
