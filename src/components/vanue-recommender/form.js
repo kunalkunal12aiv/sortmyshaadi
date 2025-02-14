@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import ReactDatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 
 function BudgetForm({ onSubmit, initialData }) {
@@ -71,6 +70,21 @@ function BudgetForm({ onSubmit, initialData }) {
     onSubmit({ ...formData, totalBudget: cleanedBudget, stayDuration });
   };
 
+  const formatDateForInput = (date) => {
+    const d = new Date(date);
+    let month = '' + (d.getMonth() + 1);
+    let day = '' + d.getDate();
+    const year = d.getFullYear();
+
+    if (month.length < 2) month = '0' + month;
+    if (day.length < 2) day = '0' + day;
+
+    return [year, month, day].join('-');
+  };
+
+  const today = formatDateForInput(new Date());
+  const tomorrow = formatDateForInput(new Date().setDate(new Date().getDate() + 1));
+
   return (
     <div className="bg-[#FFFFFF] rounded-xl shadow-lg p-4 max-w-md mx-auto text-sm">
       <form className="space-y-3">
@@ -141,40 +155,32 @@ function BudgetForm({ onSubmit, initialData }) {
         <div className="grid grid-cols-2 gap-3">
           <div>
             <label className="block text-sm font-medium text-[#1E2742] mb-1">Check-in Date</label>
-            <ReactDatePicker
-              selected={formData.checkInDate ? new Date(formData.checkInDate) : null}
-              onChange={(date) =>
-                setFormData(prev => ({
-                  ...prev,
-                  checkInDate: date.toISOString().split('T')[0],
-                  checkOutDate: prev.checkOutDate && new Date(prev.checkOutDate) <= date ? '' : prev.checkOutDate
-                }))
-              }
-              minDate={new Date()} // checkin cannot be in the past
-              dateFormat="yyyy-MM-dd"
+            <input
+              type="date"
+              value={formData.checkInDate}
+              onChange={(e) => setFormData(prev => ({
+                ...prev,
+                checkInDate: e.target.value,
+                checkOutDate: prev.checkOutDate && new Date(prev.checkOutDate) <= new Date(e.target.value) ? '' : prev.checkOutDate
+              }))}
+              min={today}
+              onKeyDown={(e) => e.preventDefault()}
               className="w-full px-2 py-1 rounded-lg border border-gray-300 focus:ring-2 focus:ring-pink-500 focus:border-transparent"
-              placeholderText="Check-in"
             />
           </div>
           <div>
             <label className="block text-sm font-medium text-[#1E2742] mb-1">Check-out Date</label>
-            <ReactDatePicker
-              selected={formData.checkOutDate ? new Date(formData.checkOutDate) : null}
-              onChange={(date) =>
-                setFormData(prev => ({
-                  ...prev,
-                  checkOutDate: date.toISOString().split('T')[0]
-                }))
-              }
-              minDate={
-                formData.checkInDate
-                ? new Date(new Date(formData.checkInDate).getTime() + 86400000)
-                : new Date(new Date().getTime() + 86400000)
-              } // checkout must be later than checkin
-              dateFormat="yyyy-MM-dd"
-              className="w-full px-2 py-1 rounded-lg border border-gray-300 focus:ring-2 focus:ring-pink-500 focus:border-transparent"
-              placeholderText="Check-out"
+            <input
+              type="date"
+              value={formData.checkOutDate}
+              onChange={(e) => setFormData(prev => ({
+                ...prev,
+                checkOutDate: e.target.value
+              }))}
+              min={formData.checkInDate || tomorrow}
               disabled={!formData.checkInDate}
+              onKeyDown={(e) => e.preventDefault()}
+              className="w-full px-2 py-1 rounded-lg border border-gray-300 focus:ring-2 focus:ring-pink-500 focus:border-transparent"
             />
           </div>
         </div>

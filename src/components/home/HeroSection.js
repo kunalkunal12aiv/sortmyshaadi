@@ -4,7 +4,6 @@ import { useNavigate } from 'react-router-dom';
 import { FaSearch } from 'react-icons/fa';
 
 function HeroSection() {
-  // Updated state variables for new inputs
   const [budget, setBudget] = useState('');
   const [guests, setGuests] = useState('');
   const [rooms, setRooms] = useState('');
@@ -13,7 +12,6 @@ function HeroSection() {
   const [checkOut, setCheckOut] = useState('');
   const navigate = useNavigate();
 
-  // New helper to calculate suggested rooms and extra beds
   const calculateAccommodation = (guests) => {
     const doubleRooms = Math.ceil(guests / 2.3);
     const capacity = doubleRooms * 2;
@@ -21,7 +19,6 @@ function HeroSection() {
     return { doubleRooms, extraBeds };
   };
 
-  // New onChange for total budget input to format value in Indian number format
   const handleBudgetChange = (e) => {
     const rawVal = e.target.value.replace(/,/g, '');
     if (!isNaN(rawVal)) {
@@ -30,7 +27,6 @@ function HeroSection() {
     }
   };
 
-  // New onChange for guests input to update rooms and extra beds
   const handleGuestChange = (e) => {
     const newGuests = Number(e.target.value);
     setGuests(newGuests);
@@ -40,13 +36,26 @@ function HeroSection() {
   };
 
   const handleSearch = () => {
-    // Updated redirection to use "/venues" route instead of "/vanuelist"
     navigate(`/venues?budget=${budget}&guests=${guests}&rooms=${rooms}&extraBeds=${extraBeds}&checkIn=${checkIn}&checkOut=${checkOut}`);
   };
 
+  const formatDateForInput = (date) => {
+    const d = new Date(date);
+    let month = '' + (d.getMonth() + 1);
+    let day = '' + d.getDate();
+    const year = d.getFullYear();
+
+    if (month.length < 2) month = '0' + month;
+    if (day.length < 2) day = '0' + day;
+
+    return [year, month, day].join('-');
+  };
+
+  const today = formatDateForInput(new Date());
+  const tomorrow = formatDateForInput(new Date().setDate(new Date().getDate() + 1));
+
   return (
     <div className="relative min-h-[60vh] flex items-center justify-center">
-      {/* Background Image with Overlay */}
       <div 
         className="absolute inset-0 z-0"
         style={{
@@ -58,21 +67,17 @@ function HeroSection() {
         <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/50 to-black/60" />
       </div>
 
-      {/* Content */}
       <div className="relative z-10 w-full max-w-3xl mx-auto px-4">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           className="text-center space-y-8"
         >
-          {/* Updated heading with smaller text */}
           <h2 className="text-2xl  md:text-4xl font-playfair text-white mb-4 leading-tight">
           Let's find the best hotel deals for you!
           </h2>
 
-          {/* Updated search form with customized grid layout */}
           <div className="bg-white/10 backdrop-blur-md p-6 rounded-2xl shadow-2xl max-w-2xl mx-auto border border-white/20">
-            {/* Use 2-column grid; full-width inputs get col-span-2 */}
             <div className="grid grid-cols-2 gap-3">
               <input
                 type="text"
@@ -122,20 +127,16 @@ function HeroSection() {
                 type="date"
                 value={checkIn}
                 onChange={(e) => setCheckIn(e.target.value)}
-                placeholder="Check In Date"
-                min={new Date().toISOString().split('T')[0]} // restricts back date from today
+                min={today}
+                onKeyDown={(e) => e.preventDefault()}
                 className="w-full px-4 py-2 bg-white/20 border border-white/30 rounded-xl text-white text-sm focus:outline-none focus:ring-2 focus:ring-[#db2777] transition-all duration-300"
               />
               <input
                 type="date"
                 value={checkOut}
                 onChange={(e) => setCheckOut(e.target.value)}
-                placeholder="Check Out Date"
-                min={
-                  checkIn
-                  ? new Date(new Date(checkIn).getTime() + 86400000).toISOString().split('T')[0]
-                  : new Date(new Date().getTime() + 86400000).toISOString().split('T')[0]
-                } // checkout can't be same or before check-in
+                min={checkIn || tomorrow}
+                onKeyDown={(e) => e.preventDefault()}
                 className="w-full px-4 py-2 bg-white/20 border border-white/30 rounded-xl text-white text-sm focus:outline-none focus:ring-2 focus:ring-[#db2777] transition-all duration-300"
               />
             </div>
@@ -150,7 +151,6 @@ function HeroSection() {
         </motion.div>
       </div>
 
-      {/* Decorative Elements */}
       <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-black/20 to-transparent" />
     </div>
   );

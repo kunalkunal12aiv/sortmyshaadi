@@ -20,18 +20,26 @@ function Home() {
         <meta name="description" content="Discover the best wedding hotel deals with Sort My Shaadi." />
         <link rel="canonical" href={`${window.location.origin}/`} />
       </Helmet>
-      <div className="overflow-hidden bg-gradient-to-br from-[#fce4ec] to-[#db2777] text-theme-color">
-        <HeroSection />
-        <VideoShowcase />
-        <Features />
-        <HowItWorks />
-        <DestinationTypes />
-        <VenueShowcase />
-        <DecorGallery />
-        <BudgetPlanner />
-        <WhyChooseUs />
-        <FAQs />
-        <VendorCTA />
+      <div 
+        className="overflow-y-auto overflow-x-hidden bg-gradient-to-br from-[#fce4ec] to-[#db2777] text-theme-color"
+        style={{ 
+          WebkitOverflowScrolling: 'touch',
+          scrollBehavior: 'smooth'
+        }}
+      >
+        <div className="relative">
+          <HeroSection />
+          <VideoShowcase />
+          <Features />
+          <HowItWorks />
+          <DestinationTypes />
+          <VenueShowcase />
+          <DecorGallery />
+          <BudgetPlanner />
+          <WhyChooseUs />
+          <FAQs />
+          <VendorCTA />
+        </div>
       </div>
     </>
   );
