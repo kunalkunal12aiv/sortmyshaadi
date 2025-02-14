@@ -9,33 +9,6 @@ import 'swiper/css';
 import 'swiper/css/navigation';
 import 'swiper/css/pagination';
 
-const venues = [
-  {
-    name: "Elegant Ballroom",
-    location: "New York, NY",
-    image: "/images/ballroom.jpg",
-    description: "A luxurious ballroom perfect for grand weddings.",
-  },
-  {
-    name: "Beachside Resort",
-    location: "Miami, FL",
-    image: "/images/beachside.jpg",
-    description: "A beautiful resort with stunning ocean views.",
-  },
-  {
-    name: "Rustic Barn",
-    location: "Nashville, TN",
-    image: "/images/barn.jpg",
-    description: "A charming barn for a rustic and intimate wedding.",
-  },
-  {
-    name: "Modern Loft",
-    location: "San Francisco, CA",
-    image: "/images/loft.jpg",
-    description: "A chic loft space for a modern and stylish wedding.",
-  }
-];
-
 function VenueShowcase() {
   const [venues, setVenues] = useState([]);
   const [loading, setLoading] = useState(true);

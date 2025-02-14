@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import React from 'react';
+import { motion } from 'framer-motion';
 
 const faqs = [
   {
@@ -21,7 +21,6 @@ const faqs = [
 ];
 
 function FAQs() {
-  const [openIndex, setOpenIndex] = useState(null);
 
   return (
     <div className="py-20 relative overflow-hidden bg-[#ffffff] text-[#1f2937]">
