@@ -17,6 +17,7 @@ import GuestBook from './pages/website/GuestBook';
 import GroupChat from './pages/website/GroupChat';
 import WebsiteBuilder from './pages/website-builder/WebsiteBuilder';
 import WebsiteTemplate from './components/website-builder/WebsiteTemplate';
+import PrivateRoute from './components/PrivateRoute';
 
 // Lazy load components
 const Cart = React.lazy(() => import('./pages/Cart'));
@@ -128,15 +129,15 @@ function AppContent() {
             <Route path="/wedding-events/:venueId" element={<WeddingEvents />} />
 
             {/* Routes that were wrapped in PrivateRoute */}
-            <Route path="/dashboard" element={<Dashboard />} />
-            <Route path="/guest-list" element={<GuestList />} />
-            <Route path="/checklist" element={<WeddingChecklist />} />
-            <Route path="/vendors" element={<VendorManagement />} />
-            <Route path="/saved" element={<SavedItems />} />
-            <Route path="/timeline" element={<Timeline />} />
-            <Route path="/settings" element={<Settings />} />
-            <Route path="/budget" element={<Budget />} />
-            <Route path="/profile" element={<Profile />} />
+            <Route path="/dashboard" element={<PrivateRoute><Dashboard /></PrivateRoute>} />
+            <Route path="/guest-list" element={<PrivateRoute><GuestList /></PrivateRoute>} />
+            <Route path="/checklist" element={<PrivateRoute><WeddingChecklist /></PrivateRoute>} />
+            <Route path="/vendors" element={<PrivateRoute><VendorManagement /></PrivateRoute>} />
+            <Route path="/saved" element={<PrivateRoute><SavedItems /></PrivateRoute>} />
+            <Route path="/timeline" element={<PrivateRoute><Timeline /></PrivateRoute>} />
+            <Route path="/settings" element={<PrivateRoute><Settings /></PrivateRoute>} />
+            <Route path="/budget" element={<PrivateRoute><Budget /></PrivateRoute>} />
+            <Route path="/profile" element={<PrivateRoute><Profile /></PrivateRoute>} />
             <Route path="/unauthorized" element={<Unauthorized />} />
 
             {/* New Website System Routes */}
@@ -146,7 +147,11 @@ function AppContent() {
             <Route path="/website/chat" element={<GroupChat />} />
 
             {/* Website Builder Routes */}
-            <Route path="/website-builder" element={<WebsiteBuilder />} />
+            <Route path="/website-builder" element={
+              <PrivateRoute>
+                <WebsiteBuilder />
+              </PrivateRoute>
+            }/>
             <Route 
               path="/sites/:slug" 
               element={

@@ -1,5 +1,5 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
+import React, { useEffect } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import { FiUsers, FiCheckSquare, FiShoppingBag, FiHeart, FiCalendar, FiDollarSign } from 'react-icons/fi';
 import DashboardStats from '../components/dashboard/DashboardStats';
@@ -8,7 +8,14 @@ import RecentActivity from '../components/dashboard/RecentActivity';
 import BudgetOverview from '../components/dashboard/BudgetOverview';
 
 function Dashboard() {
-  const { currentUser } = useAuth();
+  const { currentUser, userDetails } = useAuth();
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (!currentUser) {
+      navigate('/signin');
+    }
+  }, [currentUser, navigate]);
 
   const menuItems = [
     {
@@ -60,7 +67,7 @@ function Dashboard() {
       <div className="max-w-7xl mx-auto px-4 py-8">
         <div className="mb-8">
           <h1 className="text-3xl font-bold text-gray-900">
-            Welcome back, {currentUser.displayName || 'there'}!
+            Welcome back, {currentUser?.displayName || userDetails?.displayName || 'there'}!
           </h1>
           <p className="text-gray-600">Manage your wedding planning all in one place.</p>
         </div>

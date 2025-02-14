@@ -9,6 +9,7 @@ function RecentActivity() {
   const { currentUser } = useAuth();
 
   const loadActivities = useCallback(async () => {
+    if (!currentUser) return;
     try {
       const activitiesRef = collection(db, 'activities');
       const q = query(
@@ -18,20 +19,23 @@ function RecentActivity() {
         limit(5)
       );
       const snapshot = await getDocs(q);
-      
-      setActivities(snapshot.docs.map(doc => ({
-        id: doc.id,
-        ...doc.data()
-      })));
+      setActivities(snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() })));
     } catch (error) {
       console.error('Error loading activities:', error);
-      // Ensure you have created the required index in Firestore
     }
-  }, [currentUser.uid]);
+  }, [currentUser]);
 
   useEffect(() => {
     loadActivities();
   }, [loadActivities]);
+
+  if (!currentUser) {
+    return (
+      <div className="bg-white rounded-xl shadow-sm p-6 text-center">
+        <p className="text-gray-500">Please sign in to view recent activity.</p>
+      </div>
+    );
+  }
 
   const getActivityIcon = (type) => {
     switch (type) {
@@ -63,7 +67,6 @@ function RecentActivity() {
         <h2 className="text-xl font-semibold text-gray-900">Recent Activity</h2>
         <FiClock className="text-gray-400" />
       </div>
-
       <div className="space-y-4">
         {activities.length > 0 ? (
           activities.map((activity) => (
