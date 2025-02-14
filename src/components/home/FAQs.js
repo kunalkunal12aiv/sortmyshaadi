@@ -3,83 +3,62 @@ import { motion, AnimatePresence } from 'framer-motion';
 
 const faqs = [
   {
-    question: "How does Sort My Shaadi's venue matching work?",
-    answer: "Our AI-powered system analyzes your preferences, budget, and guest count to suggest perfectly matched venues. We consider factors like location, style, and peak season availability to ensure you find your ideal venue."
+    question: "How do I sign up?",
+    answer: "You can sign up by clicking the 'Sign Up' button on the top right corner of the homepage.",
   },
   {
-    question: "What makes Sort My Shaadi different from traditional wedding planners?",
-    answer: "We combine technology with personalized service. Our platform offers real-time availability, transparent pricing, and instant booking capabilities, while maintaining the personal touch of dedicated support throughout your journey."
+    question: "What packages do you offer?",
+    answer: "We offer a variety of packages to suit different needs and budgets. You can view them on our 'Packages' page.",
   },
-  // ...add more relevant FAQs
+  {
+    question: "Can I customize my package?",
+    answer: "Yes, you can customize your package by adding or removing services as per your requirements.",
+  },
+  {
+    question: "How do I contact customer support?",
+    answer: "You can contact our customer support team by clicking the 'Contact Us' button on the homepage.",
+  }
 ];
 
 function FAQs() {
   const [openIndex, setOpenIndex] = useState(null);
 
   return (
-    <div className="py-20 relative overflow-hidden">
-      <div className="absolute inset-0 bg-[var(--accent-3)]" />
+    <div className="py-20 relative overflow-hidden bg-[#ffffff] text-[#1f2937]">
+      <div className="absolute inset-0 bg-[var(--accent-3)] opacity-20" />
       
-      <div className="max-w-3xl mx-auto px-4 relative z-10">
+      <div className="max-w-7xl mx-auto px-4 relative z-10">
         <motion.div className="text-center mb-16">
-          <h2 className="text-4xl font-serif text-[var(--primary-dark)] mb-4">
-            Common Questions
+          <h2 className="text-4xl font-serif text-[#1f2937] mb-4">
+            Frequently Asked Questions
           </h2>
-          <p className="text-xl text-[var(--text-secondary)]">
-            Everything you need to know about our services
+          <p className="text-xl text-[#6b7280]">
+            Find answers to some of the most common questions
           </p>
         </motion.div>
 
-        <div className="space-y-4">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {faqs.map((faq, index) => (
             <motion.div
               key={index}
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
-              transition={{ delay: index * 0.1 }}
+              whileHover={{ y: -5 }}
+              transition={{ duration: 0.3, delay: index * 0.1 }}
+              className="bg-[#fce4ec] p-8 rounded-2xl shadow-lg"
             >
-              <button
-                onClick={() => setOpenIndex(openIndex === index ? null : index)}
-                className="w-full text-left"
-              >
-                <div className="bg-white/80 backdrop-blur-sm p-6 rounded-xl shadow-sm hover:shadow-md transition-all duration-300">
-                  <div className="flex justify-between items-center">
-                    <h3 className="text-lg font-serif text-[var(--primary-dark)] pr-8">
-                      {faq.question}
-                    </h3>
-                    <motion.span
-                      animate={{ rotate: openIndex === index ? 180 : 0 }}
-                      transition={{ duration: 0.3 }}
-                      className="text-[var(--primary-main)]"
-                    >
-                      ▼
-                    </motion.span>
-                  </div>
-                  
-                  <AnimatePresence>
-                    {openIndex === index && (
-                      <motion.div
-                        initial={{ height: 0, opacity: 0 }}
-                        animate={{ height: "auto", opacity: 1 }}
-                        exit={{ height: 0, opacity: 0 }}
-                        transition={{ duration: 0.3 }}
-                      >
-                        <p className="mt-4 text-[var(--text-secondary)] leading-relaxed">
-                          {faq.answer}
-                        </p>
-                      </motion.div>
-                    )}
-                  </AnimatePresence>
-                </div>
-              </button>
+              <h3 className="text-xl font-serif text-[#1f2937] mb-4">
+                {faq.question}
+              </h3>
+              <p className="text-[#6b7280]">{faq.answer}</p>
             </motion.div>
           ))}
         </div>
       </div>
 
       {/* Decorative Elements */}
-      <div className="absolute -top-40 -right-40 w-96 h-96 bg-[var(--primary-main)]/10 rounded-full blur-3xl" />
-      <div className="absolute -bottom-40 -left-40 w-96 h-96 bg-[var(--accent-1)]/10 rounded-full blur-3xl" />
+      <div className="absolute top-0 left-0 w-64 h-64 bg-[var(--primary-main)]/10 rounded-full blur-3xl" />
+      <div className="absolute bottom-0 right-0 w-64 h-64 bg-[var(--accent-1)]/10 rounded-full blur-3xl" />
     </div>
   );
 }

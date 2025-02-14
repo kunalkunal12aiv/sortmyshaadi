@@ -1,131 +1,155 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
+import React, { useState } from 'react';
 import { motion } from 'framer-motion';
+import { useNavigate } from 'react-router-dom';
+import { FaSearch } from 'react-icons/fa';
 
 function HeroSection() {
+  // Updated state variables for new inputs
+  const [budget, setBudget] = useState('');
+  const [guests, setGuests] = useState('');
+  const [rooms, setRooms] = useState('');
+  const [extraBeds, setExtraBeds] = useState('');
+  const [checkIn, setCheckIn] = useState('');
+  const [checkOut, setCheckOut] = useState('');
+  const navigate = useNavigate();
+
+  // New helper to calculate suggested rooms and extra beds
+  const calculateAccommodation = (guests) => {
+    const doubleRooms = Math.ceil(guests / 2.3);
+    const capacity = doubleRooms * 2;
+    const extraBeds = Math.max(0, guests - capacity);
+    return { doubleRooms, extraBeds };
+  };
+
+  // New onChange for total budget input to format value in Indian number format
+  const handleBudgetChange = (e) => {
+    const rawVal = e.target.value.replace(/,/g, '');
+    if (!isNaN(rawVal)) {
+      const formatted = rawVal ? Number(rawVal).toLocaleString('en-IN') : '';
+      setBudget(formatted);
+    }
+  };
+
+  // New onChange for guests input to update rooms and extra beds
+  const handleGuestChange = (e) => {
+    const newGuests = Number(e.target.value);
+    setGuests(newGuests);
+    const { doubleRooms, extraBeds } = calculateAccommodation(newGuests);
+    setRooms(doubleRooms);
+    setExtraBeds(extraBeds);
+  };
+
+  const handleSearch = () => {
+    // Updated redirection to use "/venues" route instead of "/vanuelist"
+    navigate(`/venues?budget=${budget}&guests=${guests}&rooms=${rooms}&extraBeds=${extraBeds}&checkIn=${checkIn}&checkOut=${checkOut}`);
+  };
+
   return (
-    <div className="relative min-h-screen flex items-center justify-center">
-      {/* Background styling */}
-      <div className="absolute inset-0">
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          className="absolute inset-0 bg-black/40 z-10"
-        />
-        <motion.div
-          className="absolute inset-0"
-          style={{
-            backgroundImage: "url('/assets/hero.jpg')",
-            backgroundPosition: 'center',
-            backgroundSize: 'cover',
-          }}
-        />
+    <div className="relative min-h-[60vh] flex items-center justify-center">
+      {/* Background Image with Overlay */}
+      <div 
+        className="absolute inset-0 z-0"
+        style={{
+          backgroundImage: "url('/assets/hero.jpg')",
+          backgroundSize: 'cover',
+          backgroundPosition: 'center'
+        }}
+      >
+        <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/50 to-black/60" />
       </div>
 
       {/* Content */}
-      <div className="relative z-20 container mx-auto px-4 text-center">
+      <div className="relative z-10 w-full max-w-3xl mx-auto px-4">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8 }}
+          className="text-center space-y-8"
         >
-          <h1 className="text-5xl md:text-7xl font-serif text-white mb-6">
-            Your Dream Wedding
-            <span className="block mt-2 text-primary-main">Perfectly Planned</span>
+          {/* Updated heading with smaller text */}
+          <h1 className="text-2xl  md:text-4xl font-playfair text-white mb-4 leading-tight">
+          Let’s find the best hotel deals for you!
           </h1>
-          
-          <p className="text-xl md:text-2xl text-white/90 mb-12 max-w-3xl mx-auto font-light">
-            Experience personalized venue recommendations, real-time availability, 
-            and transparent pricing for your special day
-          </p>
 
-          {/* Updated CTA Buttons */}
-          <div className="flex flex-col sm:flex-row gap-6 justify-center">
-            <Link 
-              to="/venues" 
-              className="px-8 py-4 text-lg font-medium rounded-xl 
-                bg-white/10 backdrop-blur-md border border-white/20 
-                text-white hover:bg-white/20 
-                transition-all duration-300 shadow-lg"
-            >
-              Explore Venues
-            </Link>
-            
-            <Link 
-              to="/budget-calculator"
-              className="px-8 py-4 text-lg font-medium rounded-xl 
-                bg-black/20 backdrop-blur-md border border-white/10 
-                text-white hover:bg-black/30 
-                transition-all duration-300 shadow-lg"
-            >
-              Calculate Budget
-            </Link>
-          </div>
-
-          {/* Updated Trust Indicators with subtle design and hover animations */}
-          <div className="mt-16 grid grid-cols-3 gap-6 max-w-3xl mx-auto">
-            {[
-              { number: "200+", label: "Premium Venues" },
-              { number: "1000+", label: "Happy Couples" },
-              { number: "4.9/5", label: "Customer Rating" }
-            ].map((stat, index) => (
-              <motion.div
-                key={index}
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.8 + index * 0.1 }}
-                whileHover={{ 
-                  y: -5,
-                  transition: { duration: 0.2 }
-                }}
-                className="bg-white/5 backdrop-blur-sm border border-white/10 
-                  rounded-lg p-4 cursor-pointer
-                  hover:bg-white/10 hover:border-white/20
-                  transition-all duration-300"
-              >
-                <motion.div 
-                  className="text-2xl font-bold text-white"
-                  whileHover={{ scale: 1.1 }}
-                  transition={{ type: "spring", stiffness: 400 }}
-                >
-                  {stat.number}
-                </motion.div>
-                <div className="text-sm text-white/60 hover:text-white/80 transition-colors duration-300">
-                  {stat.label}
-                </div>
-              </motion.div>
-            ))}
-          </div>
-
-          {/* Add subtle floating particles */}
-          <div className="absolute inset-0 pointer-events-none">
-            {[...Array(15)].map((_, i) => (
-              <motion.div
-                key={i}
-                className="absolute w-1 h-1 bg-white/20 rounded-full"
-                style={{
-                  left: `${Math.random() * 100}%`,
-                  top: `${Math.random() * 100}%`
-                }}
-                animate={{
-                  y: [0, -30, 0],
-                  opacity: [0.2, 0.5, 0.2],
-                }}
-                transition={{
-                  duration: 3 + Math.random() * 2,
-                  repeat: Infinity,
-                  delay: Math.random() * 2
-                }}
+          {/* Updated search form */}
+          <div className="bg-white/10 backdrop-blur-md p-6 rounded-2xl shadow-2xl max-w-2xl mx-auto border border-white/20">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+              {/* Total Wedding Budget with formatted value */}
+              <input
+                type="text" // Changed from number to text for formatting display
+                value={budget}
+                onChange={handleBudgetChange}
+                placeholder="Total Wedding Budget"
+                className="w-full px-4 py-2 bg-white/20 border border-white/30 rounded-xl text-white text-sm focus:outline-none focus:ring-2 focus:ring-[#db2777] transition-all duration-300"
               />
-            ))}
+              <input
+                type="number"
+                value={guests}
+                onChange={handleGuestChange}   // Updated guest input handler
+                placeholder="No. of Guests"
+                className="w-full px-4 py-2 bg-white/20 border border-white/30 rounded-xl text-white text-sm focus:outline-none focus:ring-2 focus:ring-[#db2777] transition-all duration-300"
+              />
+              <div>
+                <input
+                  type="number"
+                  value={rooms}
+                  onChange={(e) => setRooms(e.target.value)}
+                  placeholder="Rooms"
+                  className="w-full px-4 py-2 bg-white/20 border border-white/30 rounded-xl text-white text-sm focus:outline-none focus:ring-2 focus:ring-[#db2777] transition-all duration-300"
+                />
+                {guests && (
+                  <div className="text-xs text-white">
+                    Suggested: {calculateAccommodation(guests).doubleRooms}
+                  </div>
+                )}
+              </div>
+              <div>
+                <input
+                  type="number"
+                  value={extraBeds}
+                  onChange={(e) => setExtraBeds(e.target.value)}
+                  placeholder="Extra Beds"
+                  className="w-full px-4 py-2 bg-white/20 border border-white/30 rounded-xl text-white text-sm focus:outline-none focus:ring-2 focus:ring-[#db2777] transition-all duration-300"
+                />
+                {guests && (
+                  <div className="text-xs text-white">
+                    Suggested: {calculateAccommodation(guests).extraBeds}
+                  </div>
+                )}
+              </div>
+              <input
+                type="date"
+                value={checkIn}
+                onChange={(e) => setCheckIn(e.target.value)}
+                placeholder="Check In Date"
+                min={new Date().toISOString().split('T')[0]} // restricts back date from today
+                className="w-full px-4 py-2 bg-white/20 border border-white/30 rounded-xl text-white text-sm focus:outline-none focus:ring-2 focus:ring-[#db2777] transition-all duration-300"
+              />
+              <input
+                type="date"
+                value={checkOut}
+                onChange={(e) => setCheckOut(e.target.value)}
+                placeholder="Check Out Date"
+                min={
+                  checkIn
+                  ? new Date(new Date(checkIn).getTime() + 86400000).toISOString().split('T')[0]
+                  : new Date(new Date().getTime() + 86400000).toISOString().split('T')[0]
+                } // checkout can't be same or before check-in
+                className="w-full px-4 py-2 bg-white/20 border border-white/30 rounded-xl text-white text-sm focus:outline-none focus:ring-2 focus:ring-[#db2777] transition-all duration-300"
+              />
+            </div>
+            <button
+              onClick={handleSearch}
+              className="mt-4 w-full px-6 py-2.5 bg-[#db2777] text-white rounded-xl hover:bg-[#db2777]/90 transition-all duration-300 shadow-lg shadow-[#db2777]/20 hover:shadow-[#db2777]/40 font-medium text-sm flex items-center justify-center gap-2"
+            >
+              <FaSearch className="text-xs" />
+              Search
+            </button>
           </div>
         </motion.div>
       </div>
 
-      {/* Optional: Add floating particles or decorative elements */}
-      <div className="absolute inset-0 pointer-events-none overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-b from-black/0 via-black/5 to-black/20" />
-      </div>
+      {/* Decorative Elements */}
+      <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-black/20 to-transparent" />
     </div>
   );
 }

@@ -103,8 +103,8 @@ const VenueCard = ({ venue }) => {
 
         {/* Venue Info Overlay */}
         <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-[var(--primary-dark)]/60 to-transparent p-4">
-          <h2 className="text-2xl font-bold text-white">{venue.name}</h2>
-          <p className="text-white/90">{venue.shortAddress}</p>
+          <h2 className="text-xl font-bold text-white">{venue.name}</h2>
+          <p className="text-xs text-white/90">{venue.shortAddress}</p>
         </div>
 
         {/* Shortlist Button */}
@@ -136,14 +136,14 @@ const VenueCard = ({ venue }) => {
 
       <div className="p-6 space-y-4">
         <div className="flex justify-between items-center">
-          <span className="text-[var(--primary-main)] font-semibold">
+          <span className="text-sm font-semibold text-[var(--primary-main)]">
             ₹{parseInt(venue.pricePerPlate).toLocaleString('en-IN')} per plate
           </span>
-          <span className="text-[var(--text-secondary)]">
+          <span className="text-sm text-[var(--text-secondary)]">
             {formatCapacityRange(venue.guestSpace)}
           </span>
         </div>
-        <p className="text-[var(--text-secondary)] line-clamp-2">{venue.about}</p>
+        <p className="text-xs text-[var(--text-secondary)] line-clamp-2">{venue.about}</p>
       </div>
     </Link>
   );

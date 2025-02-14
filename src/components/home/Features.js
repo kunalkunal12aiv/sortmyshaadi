@@ -1,38 +1,39 @@
 import React from 'react';
 import { motion } from 'framer-motion';
+import { FaCheckCircle } from 'react-icons/fa';
 
 const features = [
   {
     icon: "✨",
     title: "Curated Venues",
     description: "Handpicked premium venues with detailed pricing and availability",
-    color: "var(--primary-main)"
+    color: "#db2777"
   },
   {
     icon: "📅",
     title: "Live Availability",
     description: "Check real-time venue availability and peak season rates",
-    color: "var(--primary-main)"
+    color: "#db2777"
   },
   {
     icon: "💎",
     title: "Price Transparency",
     description: "Clear pricing with no hidden costs or last-minute surprises",
-    color: "var(--primary-main)"
+    color: "#db2777"
   },
   {
     icon: "🤝",
     title: "Dedicated Support",
     description: "Personal assistance throughout your venue selection journey",
-    color: "var(--primary-main)"
+    color: "#db2777"
   }
 ];
 
 function Features() {
   return (
-    <div className="py-20 relative overflow-hidden">
+    <div className="py-20 relative overflow-hidden bg-[#fce4ec] text-[#1f2937]">
       {/* Background with subtle pattern */}
-      <div className="absolute inset-0 bg-[var(--accent-3)] opacity-50" />
+      <div className="absolute inset-0 bg-[#db2777] opacity-50" />
 
       <div className="max-w-7xl mx-auto px-4 relative z-10">
         <motion.div
@@ -40,10 +41,10 @@ function Features() {
           whileInView={{ opacity: 1 }}
           className="text-center mb-16"
         >
-          <h2 className="text-4xl font-serif text-[var(--primary-dark)] mb-4">
+          <h2 className="text-4xl font-serif text-[#1f2937] mb-4">
             Plan Your Wedding with Ease
           </h2>
-          <p className="text-xl text-[var(--text-secondary)]">
+          <p className="text-xl text-[#6b7280]">
             Everything you need to create your perfect wedding day
           </p>
         </motion.div>
@@ -56,21 +57,21 @@ function Features() {
               whileInView={{ opacity: 1, y: 0 }}
               whileHover={{ y: -5 }}
               transition={{ duration: 0.3, delay: index * 0.1 }}
-              className="bg-white/80 backdrop-blur-sm p-8 rounded-2xl shadow-lg"
+              className="bg-[#ffffff]/80 backdrop-blur-sm p-8 rounded-2xl shadow-lg text-center"
             >
-              <div className="text-4xl mb-4" style={{ color: feature.color }}>{feature.icon}</div>
-              <h3 className="text-xl font-serif text-[var(--primary-dark)] mb-4">
+              <FaCheckCircle className="text-[#db2777] text-4xl mb-4" />
+              <h3 className="text-xl font-serif text-[#1f2937] mb-4">
                 {feature.title}
               </h3>
-              <p className="text-[var(--text-secondary)]">{feature.description}</p>
+              <p className="text-[#6b7280]">{feature.description}</p>
             </motion.div>
           ))}
         </div>
       </div>
 
       {/* Decorative Elements */}
-      <div className="absolute top-0 left-0 w-64 h-64 bg-[var(--primary-main)]/10 rounded-full blur-3xl" />
-      <div className="absolute bottom-0 right-0 w-64 h-64 bg-[var(--accent-1)]/10 rounded-full blur-3xl" />
+      <div className="absolute top-0 left-0 w-64 h-64 bg-[#db2777]/10 rounded-full blur-3xl" />
+      <div className="absolute bottom-0 right-0 w-64 h-64 bg-[#db2777]/10 rounded-full blur-3xl" />
     </div>
   );
 }

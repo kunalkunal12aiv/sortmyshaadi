@@ -9,6 +9,33 @@ import 'swiper/css';
 import 'swiper/css/navigation';
 import 'swiper/css/pagination';
 
+const venues = [
+  {
+    name: "Elegant Ballroom",
+    location: "New York, NY",
+    image: "/images/ballroom.jpg",
+    description: "A luxurious ballroom perfect for grand weddings.",
+  },
+  {
+    name: "Beachside Resort",
+    location: "Miami, FL",
+    image: "/images/beachside.jpg",
+    description: "A beautiful resort with stunning ocean views.",
+  },
+  {
+    name: "Rustic Barn",
+    location: "Nashville, TN",
+    image: "/images/barn.jpg",
+    description: "A charming barn for a rustic and intimate wedding.",
+  },
+  {
+    name: "Modern Loft",
+    location: "San Francisco, CA",
+    image: "/images/loft.jpg",
+    description: "A chic loft space for a modern and stylish wedding.",
+  }
+];
+
 function VenueShowcase() {
   const [venues, setVenues] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -39,27 +66,24 @@ function VenueShowcase() {
   if (loading) {
     return (
       <div className="flex justify-center items-center h-96">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#9A2143]"></div>
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#db2777]"></div>
       </div>
     );
   }
 
   return (
-    <div className="py-20 relative overflow-hidden">
-      {/* Background with subtle gradient */}
-      <div className="absolute inset-0 bg-gradient-to-br from-[var(--accent-3)] to-[var(--primary-light)] opacity-30" />
-
-      <div className="max-w-7xl mx-auto px-4 relative z-10">
+    <div className="py-20 bg-[#ffffff] text-[#000000]">
+      <div className="max-w-7xl mx-auto px-4">
         <motion.div 
           initial={{ opacity: 0 }}
           whileInView={{ opacity: 1 }}
           className="text-center mb-16"
         >
-          <h2 className="text-4xl font-serif text-[var(--primary-dark)] mb-4">
-            Featured Wedding Venues
+          <h2 className="text-4xl font-serif text-[#000000] mb-4">
+            Featured Venues
           </h2>
-          <p className="text-xl text-[var(--text-secondary)]">
-            Explore our handpicked selection of beautiful wedding venues
+          <p className="text-xl text-[#374151]">
+            Discover some of our most popular wedding venues
           </p>
         </motion.div>
 
@@ -84,7 +108,7 @@ function VenueShowcase() {
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.1 }}
-                className="bg-white/80 backdrop-blur-sm rounded-2xl shadow-lg"
+                className="bg-[#fce4ec] backdrop-blur-sm rounded-2xl shadow-lg"
               >
                 <Link to={`/venue/${venue.id}`}>
                   <div className="relative h-64">
@@ -93,7 +117,7 @@ function VenueShowcase() {
                       alt={venue.name}
                       className="w-full h-full object-cover"
                     />
-                    <div className="absolute inset-0 bg-gradient-to-t from-[var(--primary-dark)]/60 via-transparent to-transparent p-4">
+                    <div className="absolute inset-0 bg-gradient-to-t from-[#1f2937]/60 via-transparent to-transparent p-4">
                       <h3 className="text-xl font-serif text-white mb-2">{venue.name}</h3>
                       <p className="text-white/80">{venue.location}</p>
                     </div>
@@ -106,8 +130,8 @@ function VenueShowcase() {
       </div>
 
       {/* Decorative Elements */}
-      <div className="absolute top-0 left-0 w-64 h-64 bg-[var(--primary-main)]/10 rounded-full blur-3xl" />
-      <div className="absolute bottom-0 right-0 w-64 h-64 bg-[var(--accent-1)]/10 rounded-full blur-3xl" />
+      <div className="absolute top-0 left-0 w-64 h-64 bg-[#db2777]/10 rounded-full blur-3xl" />
+      <div className="absolute bottom-0 right-0 w-64 h-64 bg-[#db2777]/10 rounded-full blur-3xl" />
     </div>
   );
 }

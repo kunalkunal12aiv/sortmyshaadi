@@ -4,6 +4,7 @@ import { Swiper, SwiperSlide } from 'swiper/react';
 import { Autoplay, EffectCoverflow, Navigation } from 'swiper/modules';
 import 'swiper/css';
 import 'swiper/css/effect-coverflow';
+import 'swiper/swiper-bundle.css';
 
 const testimonials = [
   {
@@ -25,17 +26,17 @@ const testimonials = [
 
 function TestimonialCarousel() {
   return (
-    <div className="py-20 relative overflow-hidden">
+    <section className="bg-[#ffffff] text-[#1f2937] py-20 relative overflow-hidden">
       {/* Background Elements */}
       <div className="absolute inset-0 bg-[var(--bg-gradient-1)]" />
       <div className="absolute top-0 left-0 w-full h-32 bg-gradient-to-b from-[var(--accent-3)] to-transparent" />
       
       <div className="max-w-7xl mx-auto px-4 relative z-10">
         <motion.div className="text-center mb-16">
-          <h2 className="text-4xl font-serif text-[var(--primary-dark)] mb-4">
+          <h2 className="text-4xl font-serif text-[#1f2937] mb-4">
             Love Stories We've Been Part Of
           </h2>
-          <p className="text-xl text-[var(--text-secondary)]">
+          <p className="text-xl text-[#6b7280]">
             Real couples, real celebrations
           </p>
         </motion.div>
@@ -64,7 +65,7 @@ function TestimonialCarousel() {
               <motion.div
                 initial={{ opacity: 0 }}
                 whileInView={{ opacity: 1 }}
-                className="bg-white/80 backdrop-blur-sm p-8 rounded-2xl shadow-lg"
+                className="bg-[#fce4ec] p-8 rounded-2xl shadow-lg"
               >
                 <div className="relative mb-6">
                   <img
@@ -72,33 +73,33 @@ function TestimonialCarousel() {
                     alt={testimonial.name}
                     className="w-full h-48 object-cover rounded-xl"
                   />
-                  <div className="absolute inset-0 bg-gradient-to-t from-[var(--primary-dark)]/60 to-transparent rounded-xl" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-[#1f2937]/60 to-transparent rounded-xl" />
                   <div className="absolute bottom-4 left-4">
-                    <h3 className="text-white font-serif text-xl">{testimonial.name}</h3>
-                    <p className="text-white/80 text-sm">{testimonial.venue}</p>
+                    <h3 className="text-[#1f2937] font-serif text-xl">{testimonial.name}</h3>
+                    <p className="text-[#1f2937]/80 text-sm">{testimonial.venue}</p>
                   </div>
                 </div>
                 
-                <p className="text-[var(--text-secondary)] italic mb-4">
+                <p className="text-[#1f2937] italic mb-4">
                   "{testimonial.text}"
                 </p>
                 
                 <div className="flex justify-between items-center">
-                  <span className="text-[var(--primary-main)]">
+                  <span className="text-[#1f2937]">
                     {Array(5).fill('★').map((star, i) => (
-                      <span key={i} className={i < testimonial.rating ? 'text-[var(--primary-main)]' : 'text-gray-300'}>
+                      <span key={i} className={i < testimonial.rating ? 'text-[#1f2937]' : 'text-gray-300'}>
                         {star}
                       </span>
                     ))}
                   </span>
-                  <span className="text-[var(--text-light)]">{testimonial.date}</span>
+                  <span className="text-[#1f2937]">{testimonial.date}</span>
                 </div>
               </motion.div>
             </SwiperSlide>
           ))}
         </Swiper>
       </div>
-    </div>
+    </section>
   );
 }
 

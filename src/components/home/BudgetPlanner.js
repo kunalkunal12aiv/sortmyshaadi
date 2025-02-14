@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 
 function BudgetPlanner() {
   return (
-    <div className="py-20 relative overflow-hidden">
+    <div className="py-20 relative overflow-hidden bg-[#ffffff] text-[#1f2937]">
       <div className="absolute inset-0 bg-[var(--bg-gradient-1)]" />
       
       <div className="max-w-7xl mx-auto px-4 relative">
@@ -18,7 +18,7 @@ function BudgetPlanner() {
             <motion.h2 
               initial={{ opacity: 0 }}
               whileInView={{ opacity: 1 }}
-              className="text-4xl font-serif text-[var(--primary-dark)]"
+              className="text-4xl font-serif text-[#1f2937]"
             >
               Smart Wedding Budget Calculator
             </motion.h2>
@@ -46,12 +46,12 @@ function BudgetPlanner() {
                   initial={{ opacity: 0, x: -20 }}
                   whileInView={{ opacity: 1, x: 0 }}
                   transition={{ delay: index * 0.2 }}
-                  className="flex items-start gap-4 bg-white/50 p-6 rounded-xl backdrop-blur-sm"
+                  className="flex items-start gap-4 bg-[#fce4ec] p-6 rounded-xl backdrop-blur-sm"
                 >
                   <span className="text-3xl">{item.icon}</span>
                   <div>
-                    <h3 className="text-xl font-semibold text-[#2C1810] mb-2">{item.title}</h3>
-                    <p className="text-[#5C4033]">{item.desc}</p>
+                    <h3 className="text-xl font-semibold text-[#1f2937] mb-2">{item.title}</h3>
+                    <p className="text-[#6b7280]">{item.desc}</p>
                   </div>
                 </motion.div>
               ))}
@@ -59,7 +59,7 @@ function BudgetPlanner() {
 
             <Link
               to="/budget-calculator"
-              className="inline-block px-8 py-4 bg-[var(--primary-main)] text-[var(--primary-dark)] rounded-xl hover:bg-[var(--accent-1)] hover:text-white transform hover:scale-105 transition-all duration-300 font-semibold"
+              className="inline-block px-8 py-4 bg-[#a855f7] text-white rounded-xl hover:bg-[#9333ea] transform hover:scale-105 transition-all duration-300 font-semibold"
             >
               Calculate Your Budget
             </Link>
@@ -71,11 +71,11 @@ function BudgetPlanner() {
             whileInView={{ opacity: 1, scale: 1 }}
             className="relative"
           >
-            <div className="bg-white rounded-2xl shadow-2xl p-8">
+            <div className="bg-[#fce4ec] rounded-2xl shadow-2xl p-8">
               <div className="space-y-6">
                 {/* Calculator preview content with dummy data */}
                 <div className="text-center">
-                  <h3 className="text-2xl font-bold text-[#2C1810] mb-4">Example Budget</h3>
+                  <h3 className="text-2xl font-bold text-[#1f2937] mb-4">Example Budget</h3>
                   <div className="text-left max-w-xs mx-auto">
                     <div className="flex justify-between mb-2">
                       <span>Venue Cost</span>
@@ -95,7 +95,6 @@ function BudgetPlanner() {
                     </div>
                   </div>
                 </div>
-                {/* ...existing code... */}
               </div>
             </div>
           </motion.div>

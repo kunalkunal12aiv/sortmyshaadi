@@ -11,6 +11,9 @@ module.exports = {
       lineClamp: {
         4: '4',
       },
+      fontFamily: {
+        'playfair': ['"Playfair Display"', 'serif'],
+      },
     },
   },
   plugins: [

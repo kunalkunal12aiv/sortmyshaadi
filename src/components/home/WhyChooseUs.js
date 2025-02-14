@@ -4,29 +4,29 @@ import { motion } from 'framer-motion';
 const reasons = [
   {
     icon: "✨",
-    title: "Curated Experiences",
-    description: "Handpicked venues and experiences for your special day"
+    title: "Expert Planning",
+    description: "Our team of experts will help you plan the perfect wedding."
   },
   {
     icon: "🎯",
-    title: "Perfect Matches",
-    description: "AI-powered recommendations based on your preferences"
+    title: "Exclusive Venues",
+    description: "Access to exclusive venues that you won't find anywhere else."
   },
   {
     icon: "💫",
-    title: "Seamless Planning",
-    description: "End-to-end coordination with dedicated support"
+    title: "Personalized Service",
+    description: "We provide personalized service to make your wedding unique."
   },
   {
     icon: "🌟",
-    title: "Best Value",
-    description: "Transparent pricing with no hidden costs"
+    title: "Affordable Packages",
+    description: "We offer affordable packages to suit every budget."
   }
 ];
 
 function WhyChooseUs() {
   return (
-    <div className="py-20 relative overflow-hidden">
+    <div className="py-20 relative overflow-hidden bg-[#fce4ec] text-[#1f2937]">
       <div className="absolute inset-0 bg-[var(--accent-3)] opacity-50" />
       
       {/* Content */}
@@ -37,11 +37,11 @@ function WhyChooseUs() {
           viewport={{ once: true }}
           className="text-center mb-16"
         >
-          <h2 className="text-4xl font-bold text-[#1E2742] mb-4">
-            Why Choose Sort My Shaadi?
+          <h2 className="text-4xl font-bold text-[#1f2937] mb-4">
+            Why Choose Us
           </h2>
-          <p className="text-xl text-[#9EA1AB]">
-            Making your wedding planning journey smooth and memorable
+          <p className="text-xl text-[#6b7280]">
+            Reasons to choose Sort My Shaadi for your wedding planning
           </p>
         </motion.div>
 
@@ -53,13 +53,13 @@ function WhyChooseUs() {
               whileInView={{ opacity: 1, y: 0 }}
               whileHover={{ y: -5 }}
               transition={{ duration: 0.3, delay: index * 0.1 }}
-              className="bg-white/80 backdrop-blur-sm p-8 rounded-2xl shadow-lg"
+              className="bg-[#ffffff] p-8 rounded-2xl shadow-lg"
             >
               <div className="text-4xl mb-6">{reason.icon}</div>
-              <h3 className="text-xl font-serif text-[var(--primary-dark)] mb-4">
+              <h3 className="text-xl font-serif text-[#1f2937] mb-4">
                 {reason.title}
               </h3>
-              <p className="text-[var(--text-secondary)]">{reason.description}</p>
+              <p className="text-[#6b7280]">{reason.description}</p>
             </motion.div>
           ))}
         </div>

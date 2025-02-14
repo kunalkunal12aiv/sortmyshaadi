@@ -34,63 +34,40 @@ function VideoShowcase() {
 
   if (loading) {
     return (
-      <div className="flex justify-center items-center h-96">
+      <div className="flex justify-center items-center h-60">
         <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#9A2143]"></div>
       </div>
     );
   }
 
   return (
-    <div className="py-20 relative overflow-hidden">
-      {/* Background with subtle gradient */}
-      <div className="absolute inset-0 bg-gradient-to-br from-[var(--accent-3)] to-[var(--primary-light)] opacity-30" />
-
+    <div className="py-10 relative overflow-hidden bg-[#ffffff]">
       <div className="max-w-7xl mx-auto px-4 relative z-10">
-        <motion.div 
-          initial={{ opacity: 0 }}
-          whileInView={{ opacity: 1 }}
-          className="text-center mb-16"
-        >
-          <h2 className="text-4xl font-serif text-[var(--primary-dark)] mb-4">
-            Venue Video Highlights
-          </h2>
-          <p className="text-xl text-[var(--text-secondary)]">
-            Watch highlights from our featured venues
-          </p>
-        </motion.div>
-
-        <div className="flex overflow-x-auto gap-8 pb-4 scrollbar-hide">
+        <div className="flex overflow-x-auto gap-4 pb-4 scrollbar-hide">
           {venues.map((venue) => (
             <motion.div 
               key={venue.id}
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.1 }}
-              className="flex-none w-64 h-96 bg-white/80 backdrop-blur-sm rounded-2xl shadow-lg"
+              className="flex-none w-40 h-72 bg-[#fce4ec] backdrop-blur-sm rounded-3xl shadow-lg"
             >
               <Link to={`/venue/${venue.id}`}>
                 <div className="relative h-full">
                   <video 
                     src={venue.videoUrl}
-                    className="w-full h-full object-cover"
+                    className="w-full h-full object-cover rounded-md"
                     autoPlay
                     muted
                     loop
                     playsInline
                   />
-                  <div className="absolute inset-0 bg-gradient-to-t from-[var(--primary-dark)]/60 via-transparent to-transparent p-4">
-                    <h3 className="text-xl font-serif text-white mb-2">{venue.name}</h3>
-                  </div>
                 </div>
               </Link>
             </motion.div>
           ))}
         </div>
       </div>
-
-      {/* Decorative Elements */}
-      <div className="absolute top-0 left-0 w-64 h-64 bg-[var(--primary-main)]/10 rounded-full blur-3xl" />
-      <div className="absolute bottom-0 right-0 w-64 h-64 bg-[var(--accent-1)]/10 rounded-full blur-3xl" />
     </div>
   );
 }

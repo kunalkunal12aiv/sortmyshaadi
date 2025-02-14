@@ -37,15 +37,14 @@ export const getVenues = async () => {
 };
 
 export const getVenueById = async (id) => {
-  const venueRef = doc(db, 'venues', id);
-  const venueSnap = await getDoc(venueRef);
-  if (venueSnap.exists()) {
-    return {
-      id: venueSnap.id,
-      ...venueSnap.data()
-    };
+  const documentRef = doc(db, 'venues', id);
+  const docSnap = await getDoc(documentRef);
+  if (docSnap.exists()) {
+    return { id: docSnap.id, ...docSnap.data() };
+  } else {
+    console.error("Venue not found:", id);
+    return null;
   }
-  throw new Error('Venue not found');
 };
 
 export const updateVenue = async (id, venueData) => {

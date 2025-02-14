@@ -9,25 +9,25 @@ const destinations = [
     link: "/venues?type=beach"
   },
   {
-    name: "Palace Weddings",
-    image: "/assets/palace-wedding.jpeg",
-    link: "/venues?type=palace"
-  },
-  {
     name: "Garden Weddings",
     image: "/assets/garden-wedding.jpg",
-    link: "/venues?type=garden"
+    link: "/venues?type=mountain"
   },
   {
-    name: "Luxury Resorts",
+    name: "Luxury Weddings",
     image: "/assets/luxury-resort.jpg",
-    link: "/venues?type=resort"
+    link: "/venues?type=city"
+  },
+  {
+    name: "Palace Weddings",
+    image: "/assets/palace-wedding.jpeg",
+    link: "/venues?type=countryside"
   }
 ];
 
 function DestinationTypes() {
   return (
-    <div className="py-20 relative overflow-hidden">
+    <div className="py-20 relative overflow-hidden bg-[#ffffff] text-[#1f2937]">
       {/* Background with subtle texture */}
       <div className="absolute inset-0 bg-[var(--accent-3)] opacity-20" />
 
@@ -37,10 +37,10 @@ function DestinationTypes() {
           whileInView={{ opacity: 1 }}
           className="text-center mb-16"
         >
-          <h2 className="text-4xl font-serif text-[var(--primary-dark)] mb-4">
+          <h2 className="text-4xl font-serif text-[#1f2937] mb-4">
             Explore Wedding Destinations
           </h2>
-          <p className="text-xl text-[var(--text-secondary)]">
+          <p className="text-xl text-[#6b7280]">
             Find the perfect setting for your special day
           </p>
         </motion.div>
@@ -55,7 +55,7 @@ function DestinationTypes() {
               transition={{ duration: 0.3, delay: index * 0.1 }}
             >
               <Link to={destination.link}>
-                <div className="group relative rounded-2xl overflow-hidden shadow-lg">
+                <div className="group relative rounded-2xl overflow-hidden shadow-lg bg-[#fce4ec]">
                   <div className="aspect-w-1 aspect-h-1">
                     <img
                       src={destination.image}
@@ -65,10 +65,10 @@ function DestinationTypes() {
                     <div className="absolute inset-0 bg-gradient-to-t from-[var(--primary-dark)]/80 via-transparent to-transparent" />
                   </div>
                   <div className="absolute bottom-0 left-0 right-0 p-6">
-                    <h3 className="text-xl font-serif text-white mb-2 capitalize">
+                    <h3 className="text-xl font-serif text-[#1f2937] mb-2 capitalize">
                       {destination.name}
                     </h3>
-                    <p className="text-white/80 text-sm">
+                    <p className="text-[#1f2937]/80 text-sm">
                       Discover unique venues
                     </p>
                   </div>

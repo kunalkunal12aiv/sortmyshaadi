@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { getVenues } from '../utils/firebase';
+import { useLocation } from 'react-router-dom'; // <-- New import
 import VenueFilters from '../components/VenueFilters';
 import VenueCard from '../components/VenueCard';
-// Remove unused import
-// import { useAuth } from '../contexts/AuthContext';
+import BudgetForm from '../components/vanue-recommender/form';
+import { calculateVenueRecommendations } from '../components/vanue-recommender/calculations'; // new import
+import { Helmet } from 'react-helmet-async';
 
 const VenueList = () => {
   const [venues, setVenues] = useState([]);
@@ -18,9 +20,8 @@ const VenueList = () => {
     selectedCity: '' // Add city filter
   });
   const [showFilters, setShowFilters] = useState(false);
-
-  // Remove the empty destructuring
-  // const { } = useAuth();
+  const [heroFormData, setHeroFormData] = useState(null);
+  const location = useLocation(); // <-- new
 
   const parseCapacityRange = (capacityString) => {
     try {
@@ -83,6 +84,30 @@ const VenueList = () => {
     setFilteredVenues(results);
   }, [searchTerm, venues, filters]);
 
+  // New handler to process the form entry through calculations.js
+  const handleBudgetFormSubmit = async (formData) => {
+    const result = await calculateVenueRecommendations(formData);
+    // Update the filtered venues with recommended ones based on calculations
+    setFilteredVenues(result.recommendedVenues);
+  };
+
+  // Update: on mount check if hero query params were passed
+  useEffect(() => {
+    const params = new URLSearchParams(location.search);
+    if (params.has('budget')) {
+      const formData = {
+        totalBudget: params.get('budget'),
+        guestCount: params.get('guests'),
+        doubleRooms: params.get('rooms'),
+        adjustedExtraBeds: params.get('extraBeds'),
+        checkInDate: params.get('checkIn'),
+        checkOutDate: params.get('checkOut')
+      };
+      setHeroFormData(formData);
+      handleBudgetFormSubmit(formData);
+    }
+  }, [location.search]);
+
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
@@ -92,69 +117,74 @@ const VenueList = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-[var(--primary-light)] to-[var(--accent-1)] py-12 px-4">
-      <div className="max-w-7xl mx-auto">
-        <div className="flex flex-col md:flex-row md:items-center justify-between mb-8">
-          <h1 className="text-4xl font-bold text-[var(--primary-dark)]">Wedding Venues</h1>
-          <div className="mt-4 md:mt-0 relative">
-            <input
-              type="text"
-              placeholder="Search venues..."
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-              className="w-full md:w-80 px-4 py-2 rounded-lg border border-[var(--text-secondary)] focus:ring-2 focus:ring-[var(--primary-main)] focus:border-transparent outline-none"
-            />
-            <svg
-              className="absolute right-3 top-2.5 h-5 w-5 text-[var(--text-secondary)]"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+    <>
+      <Helmet>
+        <title>Venues - Sort My Shaadi</title>
+        <meta name="description" content="Browse a curated list of venues and find the perfect location for your wedding." />
+        <link rel="canonical" href={`${window.location.origin}/venues`} />
+      </Helmet>
+      <div className="min-h-screen bg-gradient-to-br from-[var(--primary-light)] to-[var(--accent-1)] py-12 px-4">
+        <div className="max-w-7xl mx-auto">
+          {/* Updated sticky search container with show filters button */}
+          <div className="sticky top-0 z-30 bg-white rounded-md shadow-md p-4 mb-4 flex flex-col md:flex-row items-center justify-between">
+            <div className="relative w-full md:w-1/3">
+              <input
+                type="text"
+                placeholder="Search venues..."
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                className="w-full pl-10 pr-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-[var(--primary-main)]"
               />
-            </svg>
-          </div>
-        </div>
-
-        <div className="flex justify-between items-center mb-8">
-          <button
-            onClick={() => setShowFilters(!showFilters)}
-            className="bg-[var(--primary-main)] text-[var(--primary-dark)] px-6 py-2 rounded-lg hover:bg-[var(--accent-1)] transition"
-          >
-            {showFilters ? 'Hide Filters' : 'Show Filters'}
-          </button>
-        </div>
-
-        {showFilters && (
-          <div className="mb-8">
-            <VenueFilters 
-              venues={venues} 
-              onFilterChange={setFilters}
-            />
-          </div>
-        )}
-
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {filteredVenues.length === 0 ? (
-            <div className="text-center py-12">
-              <p className="text-[#1E2742] text-xl">No venues found matching your criteria.</p>
+              <svg
+                className="w-5 h-5 text-gray-400 absolute left-3 top-2.5"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+              </svg>
             </div>
-          ) : (
-            filteredVenues.map((venue) => (
-              <VenueCard 
-                key={venue.id} 
-                venue={venue}
-                className="hover-card"
+            <button
+              onClick={() => setShowFilters(!showFilters)}
+              className="mt-4 md:mt-0 bg-[var(--primary-main)] text-[var(--primary-dark)] px-6 py-2 rounded-lg hover:bg-[var(--accent-1)] transition"
+            >
+              {showFilters ? 'Hide Filters' : 'Show Filters'}
+            </button>
+          </div>
+
+          {/* Non-sticky BudgetForm container */}
+          <div className="bg-white rounded-lg shadow-md p-6 mb-8">
+            <BudgetForm onSubmit={handleBudgetFormSubmit} initialData={heroFormData} />
+          </div>
+
+          {showFilters && (
+            <div className="mb-8">
+              <VenueFilters 
+                venues={venues} 
+                onFilterChange={setFilters}
               />
-            ))
+            </div>
           )}
+
+          {/* Update grid to have four columns on large screens */}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+            {filteredVenues.length === 0 ? (
+              <div className="text-center py-12">
+                <p className="text-[#1E2742] text-xl">No venues found matching your criteria.</p>
+              </div>
+            ) : (
+              filteredVenues.map((venue) => (
+                <VenueCard 
+                  key={venue.id} 
+                  venue={venue}
+                  className="hover-card"
+                />
+              ))
+            )}
+          </div>
         </div>
       </div>
-    </div>
+    </>
   );
 }
 

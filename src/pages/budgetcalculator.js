@@ -8,6 +8,7 @@ import { getCities, saveChat, getUserChats, deleteChat } from '../utils/firebase
 import { useAuth } from '../contexts/AuthContext';
 import { FiEdit2, FiTrash2, FiClock } from 'react-icons/fi';
 import VenueFilters from '../components/VenueFilters';
+import { Helmet } from 'react-helmet-async';
 
 function BudgetCalculator() {
   const { currentUser } = useAuth();
@@ -442,166 +443,173 @@ function BudgetCalculator() {
   );
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-800 to-gray-900 py-12">
-      <div className="container mx-auto px-4 max-w-3xl">
-        {currentUser && renderChatHistory()}
+    <>
+      <Helmet>
+        <title>Budget Calculator - Sort My Shaadi</title>
+        <meta name="description" content="Use our Budget Calculator to plan your wedding expenses and get personalized venue recommendations." />
+        <link rel="canonical" href={`${window.location.origin}/budget-calculator`} />
+      </Helmet>
+      <div className="min-h-screen bg-gradient-to-br from-gray-800 to-gray-900 py-12">
+        <div className="container mx-auto px-4 max-w-3xl">
+          {currentUser && renderChatHistory()}
 
-        <div className="flex justify-between items-center mb-8">
-          <h1 className="text-4xl font-bold text-gray-100" style={{ fontFamily: 'DM Serif Display, serif' }}>
-            {isViewingPreviousChat ? 'Previous Chat' : 'Wedding Venue Finder Chat'}
-          </h1>
-          {isViewingPreviousChat && (
-            <button
-              onClick={startNewChat}
-              className="px-4 py-2 bg-pink-600 text-white rounded-lg hover:bg-pink-700 transition"
-            >
-              Start New Chat
-            </button>
-          )}
-        </div>
+          <div className="flex justify-between items-center mb-8">
+            <h1 className="text-4xl font-bold text-gray-100" style={{ fontFamily: 'DM Serif Display, serif' }}>
+              {isViewingPreviousChat ? 'Previous Chat' : 'Wedding Venue Finder Chat'}
+            </h1>
+            {isViewingPreviousChat && (
+              <button
+                onClick={startNewChat}
+                className="px-4 py-2 bg-pink-600 text-white rounded-lg hover:bg-pink-700 transition"
+              >
+                Start New Chat
+              </button>
+            )}
+          </div>
 
-        <div className="bg-gray-700 rounded-xl shadow-lg p-6 space-y-4 mb-8">
-          {chatMessages.map((msg, i) => (
-            <motion.div 
-              key={i}
-              initial={{ opacity: 0, x: msg.sender === 'ai' ? -20 : 20 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.5 }}
-              className={`relative group ${msg.sender === 'ai' ? "text-left" : "text-right"}`}
-            >
-              <div className={`inline-block px-4 py-2 rounded-lg ${
-                msg.sender === 'ai' ? "bg-gray-600 text-gray-100" : "bg-pink-600 text-white"
-              }`}>
-                {editingMessageId === i ? (
-                  <div className="flex items-center space-x-2">
-                    <input
-                      type="text"
-                      value={editInput}
-                      onChange={(e) => setEditInput(e.target.value)}
-                      className="bg-transparent border-b border-white focus:outline-none"
-                    />
+          <div className="bg-gray-700 rounded-xl shadow-lg p-6 space-y-4 mb-8">
+            {chatMessages.map((msg, i) => (
+              <motion.div 
+                key={i}
+                initial={{ opacity: 0, x: msg.sender === 'ai' ? -20 : 20 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ duration: 0.5 }}
+                className={`relative group ${msg.sender === 'ai' ? "text-left" : "text-right"}`}
+              >
+                <div className={`inline-block px-4 py-2 rounded-lg ${
+                  msg.sender === 'ai' ? "bg-gray-600 text-gray-100" : "bg-pink-600 text-white"
+                }`}>
+                  {editingMessageId === i ? (
+                    <div className="flex items-center space-x-2">
+                      <input
+                        type="text"
+                        value={editInput}
+                        onChange={(e) => setEditInput(e.target.value)}
+                        className="bg-transparent border-b border-white focus:outline-none"
+                      />
+                      <button
+                        onClick={() => handleEditSubmit(i)}
+                        className="text-white hover:text-gray-200"
+                      >
+                        Save
+                      </button>
+                    </div>
+                  ) : (
+                    msg.text
+                  )}
+                </div>
+                {msg.sender === 'user' && !editingMessageId && (
+                  <div className="absolute top-0 -left-8 opacity-0 group-hover:opacity-100 transition-opacity">
                     <button
-                      onClick={() => handleEditSubmit(i)}
-                      className="text-white hover:text-gray-200"
+                      onClick={() => handleEdit(i)}
+                      className="p-1 text-gray-400 hover:text-white"
                     >
-                      Save
+                      <FiEdit2 size={14} />
+                    </button>
+                    <button
+                      onClick={() => handleUndo(i)}
+                      className="p-1 text-gray-400 hover:text-white"
+                    >
+                      <FiTrash2 size={14} />
                     </button>
                   </div>
-                ) : (
-                  msg.text
                 )}
-              </div>
-              {msg.sender === 'user' && !editingMessageId && (
-                <div className="absolute top-0 -left-8 opacity-0 group-hover:opacity-100 transition-opacity">
-                  <button
-                    onClick={() => handleEdit(i)}
-                    className="p-1 text-gray-400 hover:text-white"
-                  >
-                    <FiEdit2 size={14} />
-                  </button>
-                  <button
-                    onClick={() => handleUndo(i)}
-                    className="p-1 text-gray-400 hover:text-white"
-                  >
-                    <FiTrash2 size={14} />
-                  </button>
-                </div>
-              )}
-            </motion.div>
-          ))}
-          {isTyping && (
-            <motion.div 
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              className="flex items-center"
-            >
-              <TypingIndicator />
-            </motion.div>
-          )}
-        </div>
-
-        {!loading && currentStep < questions.length && (
-          <div className="flex space-x-4">
-            {questions[currentStep].type === 'select' ? (
-              <select
-                value={userInput}
-                onChange={(e) => setUserInput(e.target.value)}
-                className="flex-1 px-4 py-2 rounded-lg border border-gray-600 bg-gray-800 text-gray-100 focus:outline-none focus:ring-2 focus:ring-pink-500"
+              </motion.div>
+            ))}
+            {isTyping && (
+              <motion.div 
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                className="flex items-center"
               >
-                <option value="">Select a city</option>
-                {questions[currentStep].options.map(city => (
-                  <option key={city} value={city}>{city}</option>
-                ))}
-              </select>
-            ) : questions[currentStep].key.includes('Date') ? (
-              <ReactDatePicker
-                selected={userInput ? new Date(userInput) : null}
-                onChange={(date) => {
-                  const formattedDate = date.toISOString().split('T')[0];
-                  setUserInput(formattedDate);
-                }}
-                minDate={
-                  questions[currentStep].key === 'checkOutDate' && answers.checkInDate
-                    ? new Date(answers.checkInDate)
-                    : new Date()
-                }
-                dateFormat="yyyy-MM-dd"
-                className="flex-1 px-4 py-2 rounded-lg border border-gray-600 bg-gray-800 text-gray-100 focus:outline-none focus:ring-2 focus:ring-pink-500"
-                placeholderText="Select a date"
-              />
-            ) : (
-              <input
-                type="text"
-                value={userInput}
-                onChange={e => setUserInput(e.target.value)}
-                placeholder={`Type your answer... (${questions[currentStep].key})`}
-                className="flex-1 px-4 py-2 rounded-lg border border-gray-600 bg-gray-800 text-gray-100 focus:outline-none focus:ring-2 focus:ring-pink-500"
-                onKeyPress={e => {
-                  if (e.key === 'Enter') {
-                    e.preventDefault();
-                    handleChatSubmit();
-                  }
-                }}
-              />
+                <TypingIndicator />
+              </motion.div>
             )}
-            <button onClick={handleChatSubmit} className="px-4 py-2 bg-pink-600 text-white rounded-lg hover:bg-pink-700 transition">
-              Send
-            </button>
           </div>
-        )}
 
-        {loading && (
-          <div className="flex justify-center items-center mt-4">
-            <motion.div 
-              initial={{ scale: 0.8, opacity: 0 }}
-              animate={{ scale: [1, 1.2, 1], opacity: 1 }}
-              transition={{ duration: 1, repeat: Infinity, ease: "easeInOut" }}
-              className="w-8 h-8 bg-pink-600 rounded-full"
-            ></motion.div>
-          </div>
-        )}
+          {!loading && currentStep < questions.length && (
+            <div className="flex space-x-4">
+              {questions[currentStep].type === 'select' ? (
+                <select
+                  value={userInput}
+                  onChange={(e) => setUserInput(e.target.value)}
+                  className="flex-1 px-4 py-2 rounded-lg border border-gray-600 bg-gray-800 text-gray-100 focus:outline-none focus:ring-2 focus:ring-pink-500"
+                >
+                  <option value="">Select a city</option>
+                  {questions[currentStep].options.map(city => (
+                    <option key={city} value={city}>{city}</option>
+                  ))}
+                </select>
+              ) : questions[currentStep].key.includes('Date') ? (
+                <ReactDatePicker
+                  selected={userInput ? new Date(userInput) : null}
+                  onChange={(date) => {
+                    const formattedDate = date.toISOString().split('T')[0];
+                    setUserInput(formattedDate);
+                  }}
+                  minDate={
+                    questions[currentStep].key === 'checkOutDate' && answers.checkInDate
+                      ? new Date(answers.checkInDate)
+                      : new Date()
+                  }
+                  dateFormat="yyyy-MM-dd"
+                  className="flex-1 px-4 py-2 rounded-lg border border-gray-600 bg-gray-800 text-gray-100 focus:outline-none focus:ring-2 focus:ring-pink-500"
+                  placeholderText="Select a date"
+                />
+              ) : (
+                <input
+                  type="text"
+                  value={userInput}
+                  onChange={e => setUserInput(e.target.value)}
+                  placeholder={`Type your answer... (${questions[currentStep].key})`}
+                  className="flex-1 px-4 py-2 rounded-lg border border-gray-600 bg-gray-800 text-gray-100 focus:outline-none focus:ring-2 focus:ring-pink-500"
+                  onKeyPress={e => {
+                    if (e.key === 'Enter') {
+                      e.preventDefault();
+                      handleChatSubmit();
+                    }
+                  }}
+                />
+              )}
+              <button onClick={handleChatSubmit} className="px-4 py-2 bg-pink-600 text-white rounded-lg hover:bg-pink-700 transition">
+                Send
+              </button>
+            </div>
+          )}
 
-        {recommendations && (
-          <div className="mt-8 space-y-6">
-            <VenueFilters
-              venues={[
-                ...(recommendations.recommendedVenues || []),
-                ...(recommendations.otherVenues || []),
-                ...(recommendations.alternativeVenues || [])
-              ]}
-              initialFilters={filters}
-              onFilterChange={handleFilterChange}
-            />
-            <VenueRecommendations 
-              recommendations={recommendations}
-              filters={filters}
-            />
-          </div>
-        )}
+          {loading && (
+            <div className="flex justify-center items-center mt-4">
+              <motion.div 
+                initial={{ scale: 0.8, opacity: 0 }}
+                animate={{ scale: [1, 1.2, 1], opacity: 1 }}
+                transition={{ duration: 1, repeat: Infinity, ease: "easeInOut" }}
+                className="w-8 h-8 bg-pink-600 rounded-full"
+              ></motion.div>
+            </div>
+          )}
 
-        <div ref={resultsRef} className="hidden"></div>
+          {recommendations && (
+            <div className="mt-8 space-y-6">
+              <VenueFilters
+                venues={[
+                  ...(recommendations.recommendedVenues || []),
+                  ...(recommendations.otherVenues || []),
+                  ...(recommendations.alternativeVenues || [])
+                ]}
+                initialFilters={filters}
+                onFilterChange={handleFilterChange}
+              />
+              <VenueRecommendations 
+                recommendations={recommendations}
+                filters={filters}
+              />
+            </div>
+          )}
+
+          <div ref={resultsRef} className="hidden"></div>
+        </div>
       </div>
-    </div>
+    </>
   );
 }
 
