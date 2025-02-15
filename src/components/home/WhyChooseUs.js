@@ -55,30 +55,9 @@ function WhyChooseUs() {
               </p>
             </div>
 
-            <p className="text-lg text-gray-600">
-              We believe in delivering exceptional value while keeping our services affordable and accessible to all couples embarking on their journey together.
-            </p>
+            
 
-            {/* Feature highlights */}
-            <div className="grid grid-cols-2 gap-6 pt-6">
-              {[
-                { number: "500+", text: "Happy Couples" },
-                { number: "100+", text: "Premium Venues" },
-                { number: "50+", text: "Expert Planners" },
-                { number: "24/7", text: "Support" }
-              ].map((item, index) => (
-                <motion.div
-                  key={index}
-                  initial={{ opacity: 0, y: 20 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  transition={{ delay: index * 0.1 }}
-                  className="text-center p-4 bg-white/50 rounded-xl backdrop-blur-sm"
-                >
-                  <div className="text-2xl font-bold text-pink-600">{item.number}</div>
-                  <div className="text-sm text-gray-600">{item.text}</div>
-                </motion.div>
-              ))}
-            </div>
+            
           </motion.div>
         </div>
       </div>

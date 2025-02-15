@@ -76,7 +76,7 @@ function HeroSection() {
           <h2 className="text-2xl  md:text-4xl font-playfair text-white mb-4 leading-tight">
           Let's sort the best hotel deals for you!          </h2>
 
-          <div className="bg-white/10 backdrop-blur-md p-6 rounded-2xl shadow-2xl max-w-2xl mx-auto border border-white/20">
+          <div className="bg-white/10 backdrop-blur-md p-6 rounded-2xl shadow-2xl max-w-xl mx-auto border border-white/20">
             <div className="grid grid-cols-2 gap-3">
               <input
                 type="text"

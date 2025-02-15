@@ -62,5 +62,5 @@ code {
 
 /* Replace any direct pattern references with proper paths */
 .pattern-bg {
-  background-image: url('assets/pattern.avif');
+  background-image: url('./assets/pattern.avif');
 }
