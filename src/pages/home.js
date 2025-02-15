@@ -2,13 +2,11 @@ import React from 'react';
 import { Helmet } from 'react-helmet-async';
 import HeroSection from '../components/home/HeroSection';
 import Features from '../components/home/Features';
-import VenueShowcase from '../components/home/VenueShowcase';
 import DecorGallery from '../components/home/DecorGallery';
 import BudgetPlanner from '../components/home/BudgetPlanner';
 import WhyChooseUs from '../components/home/WhyChooseUs';
 import VideoShowcase from '../components/home/VideoShowcase';
 import DestinationTypes from '../components/home/DestinationTypes';
-import HowItWorks from '../components/home/HowItWorks';
 import FAQs from '../components/home/FAQs';
 import VendorCTA from '../components/home/VendorCTA';
 
@@ -31,9 +29,7 @@ function Home() {
           <HeroSection />
           <VideoShowcase />
           <Features />
-          <HowItWorks />
           <DestinationTypes />
-          <VenueShowcase />
           <DecorGallery />
           <BudgetPlanner />
           <WhyChooseUs />

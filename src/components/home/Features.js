@@ -6,25 +6,25 @@ const features = [
   {
     icon: "✨",
     title: "Curated Venues",
-    description: "Handpicked premium venues with detailed pricing and availability",
+    description: "Sort Hotel deals using our FREE AI Deal Negotiator",
     color: "#db2777"
   },
   {
     icon: "📅",
     title: "Live Availability",
-    description: "Check real-time venue availability and peak season rates",
+    description: "Sort your planning by using our FREE DIY Tools",
     color: "#db2777"
   },
   {
     icon: "💎",
     title: "Price Transparency",
-    description: "Clear pricing with no hidden costs or last-minute surprises",
+    description: "Sort Artists & Activities using our FREE Directory",
     color: "#db2777"
   },
   {
     icon: "🤝",
     title: "Dedicated Support",
-    description: "Personal assistance throughout your venue selection journey",
+    description: " Sort Decor Budget using our FREE Decor Directory",
     color: "#db2777"
   }
 ];
@@ -42,11 +42,9 @@ function Features() {
           className="text-center mb-16"
         >
           <h2 className="text-4xl font-serif text-[#1f2937] mb-4">
-            Plan Your Wedding with Ease
+          Sort your wedding with ease
           </h2>
-          <p className="text-xl text-[#6b7280]">
-            Everything you need to create your perfect wedding day
-          </p>
+          
         </motion.div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">

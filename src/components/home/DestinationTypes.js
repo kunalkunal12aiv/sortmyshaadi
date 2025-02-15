@@ -14,7 +14,7 @@ const destinations = [
     link: "/venues?type=mountain"
   },
   {
-    name: "Luxury Weddings",
+    name: "Premium Hotel Weddings",
     image: "/assets/luxury-resort.jpg",
     link: "/venues?type=city"
   },

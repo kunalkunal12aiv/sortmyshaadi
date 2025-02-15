@@ -74,8 +74,7 @@ function HeroSection() {
           className="text-center space-y-8"
         >
           <h2 className="text-2xl  md:text-4xl font-playfair text-white mb-4 leading-tight">
-          Let's find the best hotel deals for you!
-          </h2>
+          Let's sort the best hotel deals for you!          </h2>
 
           <div className="bg-white/10 backdrop-blur-md p-6 rounded-2xl shadow-2xl max-w-2xl mx-auto border border-white/20">
             <div className="grid grid-cols-2 gap-3">
@@ -123,22 +122,28 @@ function HeroSection() {
                   </div>
                 )}
               </div>
-              <input
-                type="date"
-                value={checkIn}
-                onChange={(e) => setCheckIn(e.target.value)}
-                min={today}
-                onKeyDown={(e) => e.preventDefault()}
-                className="w-full px-4 py-2 bg-white/20 border border-white/30 rounded-xl text-white text-sm focus:outline-none focus:ring-2 focus:ring-[#db2777] transition-all duration-300"
-              />
-              <input
-                type="date"
-                value={checkOut}
-                onChange={(e) => setCheckOut(e.target.value)}
-                min={checkIn || tomorrow}
-                onKeyDown={(e) => e.preventDefault()}
-                className="w-full px-4 py-2 bg-white/20 border border-white/30 rounded-xl text-white text-sm focus:outline-none focus:ring-2 focus:ring-[#db2777] transition-all duration-300"
-              />
+              <div>
+                <label className="block text-white text-xs mb-1">Check In Date</label>
+                <input
+                  type="date"
+                  value={checkIn}
+                  onChange={(e) => setCheckIn(e.target.value)}
+                  min={today}
+                  onKeyDown={(e) => e.preventDefault()}
+                  className="w-full px-4 py-2 bg-white/20 border border-white/30 rounded-xl text-white text-sm focus:outline-none focus:ring-2 focus:ring-[#db2777] transition-all duration-300"
+                />
+              </div>
+              <div>
+                <label className="block text-white text-xs mb-1">Check Out Date</label>
+                <input
+                  type="date"
+                  value={checkOut}
+                  onChange={(e) => setCheckOut(e.target.value)}
+                  min={checkIn || tomorrow}
+                  onKeyDown={(e) => e.preventDefault()}
+                  className="w-full px-4 py-2 bg-white/20 border border-white/30 rounded-xl text-white text-sm focus:outline-none focus:ring-2 focus:ring-[#db2777] transition-all duration-300"
+                />
+              </div>
             </div>
             <button
               onClick={handleSearch}

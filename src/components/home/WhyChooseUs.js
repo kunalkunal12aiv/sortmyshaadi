@@ -41,8 +41,7 @@ function WhyChooseUs() {
             Why Choose Us
           </h2>
           <p className="text-xl text-[#6b7280]">
-            Reasons to choose Sort My Shaadi for your wedding planning
-          </p>
+We are not here to make money through commissions, but just to be your AI wedding buddies. Although we do charge a 25,000 sum upon delivering value.          </p>
         </motion.div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
