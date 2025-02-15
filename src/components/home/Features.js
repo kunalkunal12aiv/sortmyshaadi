@@ -5,26 +5,24 @@ import { FaCheckCircle } from 'react-icons/fa';
 const features = [
   {
     icon: "✨",
-    title: "Curated Venues",
-    description: "Sort Hotel deals using our FREE AI Deal Negotiator",
+    title: "Sort Hotel deals using our FREE AI Deal Negotiator",
+   
     color: "#db2777"
   },
   {
     icon: "📅",
-    title: "Live Availability",
-    description: "Sort your planning by using our FREE DIY Tools",
+    title: "Sort your planning by using our FREE DIY Tools",
+    
     color: "#db2777"
   },
   {
     icon: "💎",
-    title: "Price Transparency",
-    description: "Sort Artists & Activities using our FREE Directory",
+    title: "Sort Artists & Activities using our FREE Directory",
     color: "#db2777"
   },
   {
     icon: "🤝",
-    title: "Dedicated Support",
-    description: " Sort Decor Budget using our FREE Decor Directory",
+    title: "Sort Decor Budget using our FREE Decor Directory",
     color: "#db2777"
   }
 ];

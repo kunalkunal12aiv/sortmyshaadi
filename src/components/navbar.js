@@ -35,7 +35,6 @@ function Navbar() {
         <div className="absolute left-0 top-full hidden group-hover:flex bg-[#db2777] shadow-lg rounded-lg p-4 w-max z-50">
           <div className="grid grid-cols-1 gap-4">
             <Link to="/venues" className="block px-4 py-2 text-white hover:bg-[#b91c1c]">Hotel Deals</Link>
-            <Link to="/budget-calculator" className="block px-4 py-2 text-white hover:bg-[#b91c1c]">Budget Calculator</Link>
           </div>
         </div>
       </li>
