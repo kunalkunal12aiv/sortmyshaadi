@@ -125,6 +125,25 @@ function WebsiteBuilder({ slug, content }) {
     }));
   };
 
+  const handleShareWebsite = async () => {
+    const siteUrl = `https://sortmyshaadi.com/sites/${websiteData.slug}`;
+    try {
+      await navigator.share({
+        title: `${websiteData.coupleNames}'s Wedding Website`,
+        text: 'Check out our wedding website!',
+        url: siteUrl
+      });
+    } catch (error) {
+      console.log('Error sharing:', error);
+    }
+  };
+
+  const handleCopyLink = () => {
+    const siteUrl = `https://sortmyshaadi.com/sites/${websiteData.slug}`;
+    navigator.clipboard.writeText(siteUrl);
+    alert('Link copied to clipboard!');
+  };
+
   // New helper functions for gallery inputs
   const updateGalleryImage = (index, newUrl) => {
     const images = websiteData.gallery?.images ?? [];
@@ -206,7 +225,7 @@ function WebsiteBuilder({ slug, content }) {
       <BrandedHeader />
       <main className="py-20">
         <div className="container mx-auto px-4">
-          {/* Website URL remains outside accordion */}
+          {/* Website URL and Share buttons */}
           <div className="bg-white rounded-lg shadow-lg p-6 mb-8">
             <div className="mb-4">
               <label className="block text-sm font-medium text-gray-700">Website URL</label>
@@ -223,9 +242,25 @@ function WebsiteBuilder({ slug, content }) {
                 />
               </div>
             </div>
+            {isPublished && (
+              <div className="flex space-x-4 mt-4">
+                <button
+                  onClick={handleShareWebsite}
+                  className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 transition-colors"
+                >
+                  Share Website
+                </button>
+                <button
+                  onClick={handleCopyLink}
+                  className="bg-gray-500 text-white px-4 py-2 rounded-md hover:bg-gray-600 transition-colors"
+                >
+                  Copy Link
+                </button>
+              </div>
+            )}
           </div>
 
-          {/* Accordion Form for sections */}
+          {/* Rest of the component remains the same */}
           <form onSubmit={handleSubmit} className="bg-white rounded-lg shadow-lg p-6 mb-8">
             {/* Hero Section Accordion */}
             <div className="border-b pb-4">

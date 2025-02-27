@@ -2,7 +2,7 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { db } from '../../firebase';
 import { collection, query, where, getDocs, addDoc, updateDoc, doc } from 'firebase/firestore';
 import { useAuth } from '../../contexts/AuthContext';
-import { FiCheck, FiPlus } from 'react-icons/fi';
+import { FiCheck, FiPlus, FiTrash2 } from 'react-icons/fi';
 
 const defaultCategories = [
   {
@@ -114,6 +114,13 @@ function WeddingChecklist() {
     updateChecklist(newCategories);
   };
 
+  const deleteTask = (categoryIndex, taskIndex) => {
+    const newCategories = [...categories];
+    newCategories[categoryIndex].tasks.splice(taskIndex, 1);
+    setCategories(newCategories);
+    updateChecklist(newCategories);
+  };
+
   const addTask = () => {
     if (!newTask || !selectedCategory) return;
 
@@ -195,6 +202,12 @@ function WeddingChecklist() {
                       {new Date(task.completedAt).toLocaleDateString()}
                     </span>
                   )}
+                  <button
+                    onClick={() => deleteTask(categoryIndex, taskIndex)}
+                    className="text-red-500 hover:text-red-700"
+                  >
+                    <FiTrash2 className="w-5 h-5" />
+                  </button>
                 </div>
               ))}
             </div>

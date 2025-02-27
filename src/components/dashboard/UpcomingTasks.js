@@ -9,26 +9,28 @@ function UpcomingTasks() {
   const { currentUser } = useAuth();
 
   const loadTasks = useCallback(async () => {
+    if (!currentUser) return;
     try {
-      const tasksQuery = query(
-        collection(db, 'checklists'),
+      const activitiesRef = collection(db, 'checklists');
+      const q = query(
+        activitiesRef,
         where('userId', '==', currentUser.uid)
       );
-      const snapshot = await getDocs(tasksQuery);
-      
+      const snapshot = await getDocs(q);
       if (!snapshot.empty) {
         const categories = snapshot.docs[0].data().categories;
         const pendingTasks = categories.reduce((acc, category) => {
           const categoryTasks = category.tasks
-            .filter(task => !task.completed)
+            .filter(task => 
+              typeof task === 'string' || (typeof task === 'object' && !task.completed)
+            )
             .map(task => ({
-              ...task,
+              ...((typeof task === 'object') ? task : { text: task }),
               category: category.name
             }));
           return [...acc, ...categoryTasks];
         }, []);
-        
-        setTasks(pendingTasks.slice(0, 5)); // Show only top 5 pending tasks
+        setTasks(pendingTasks.slice(0, 5));
       }
     } catch (error) {
       console.error('Error loading tasks:', error);

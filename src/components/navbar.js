@@ -32,11 +32,7 @@ function Navbar() {
         <Link to="/venues" onClick={onClick} className="text-white text-sm hover:text-gray-200 py-2">
           Hotel Deals
         </Link>
-        <div className="absolute left-0 top-full hidden group-hover:flex bg-[#db2777] shadow-lg rounded-lg p-4 w-max z-50">
-          <div className="grid grid-cols-1 gap-4">
-            <Link to="/venues" className="block px-4 py-2 text-white hover:bg-[#b91c1c]">Hotel Deals</Link>
-          </div>
-        </div>
+        
       </li>
       <li className="relative group">
         <Link to="/dashboard" onClick={onClick} className="text-white text-sm hover:text-gray-200 py-2">
@@ -77,11 +73,7 @@ function Navbar() {
         <Link to="/decor" onClick={onClick} className="text-white text-sm hover:text-gray-200 py-2">
           Decor Budgeting
         </Link>
-        <div className="absolute left-0 top-full hidden group-hover:flex bg-[#db2777] shadow-lg rounded-lg p-4 w-max z-50">
-          <div className="grid grid-cols-1 gap-4">
-            <Link to="/decor" className="block px-4 py-2 text-white hover:bg-[#b91c1c]">Decor Budgeting</Link>
-          </div>
-        </div>
+        
       </li>
       
     </ul>
