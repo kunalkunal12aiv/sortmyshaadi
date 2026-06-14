@@ -56,6 +56,7 @@ const Budget = React.lazy(() => import('./components/budget/Budget'));
 const Profile = React.lazy(() => import('./components/profile/Profile'));
 const RSVP = React.lazy(() => import('./pages/RSVP'));
 const InvitationPage = React.lazy(() => import('./pages/InvitationPage'));
+const Consultation = React.lazy(() => import('./pages/Consultation'));
 const PhoneVerification = React.lazy(() => import('./components/PhoneVerification'));
 
 function AppContent() {
@@ -105,6 +106,7 @@ function AppContent() {
             <Route path="/compare" element={<ComparePage />} />
             <Route path="/rsvp/:guestId" element={<RSVP />} />
             <Route path="/invitation/:guestId" element={<InvitationPage />} />
+            <Route path="/consultation" element={<Consultation />} />
 
             {/* Auth Routes */}
             <Route path="/phone-verification" element={<PhoneVerification />} />

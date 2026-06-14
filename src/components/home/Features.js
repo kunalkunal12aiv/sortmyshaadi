@@ -1,83 +1,59 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import patternImg from '../../assets/pattern.avif'; // Import pattern image
 
-const features = [
+const benefits = [
   {
-    icon: "✨",
-    title: "Sort Hotel deals using our FREE AI Deal Negotiator",
-    color: "#db2777"
+    title: 'Better Room Rates',
+    description: 'We help secure more competitive room pricing and favorable group rates from hotels and resorts.'
   },
   {
-    icon: "📅",
-    title: "Sort your planning by using our FREE DIY Tools",
-    color: "#db2777"
+    title: 'More Menu, Same Budget',
+    description: 'Negotiate value improvements so your catering package feels richer without increasing your spend.'
   },
   {
-    icon: "💎",
-    title: "Sort Artists & Activities using our FREE Directory",
-    color: "#db2777"
+    title: 'Smarter Bar Costs',
+    description: 'We explore bar options, menu structuring, and softer beverage deals that protect your budget.'
   },
   {
-    icon: "🤝",
-    title: "Sort Decor Budget using our FREE Decor Directory",
-    color: "#db2777"
+    title: 'Extra Perks & Upgrades',
+    description: 'Unlock complimentary upgrades, welcome amenities, early access, and more perks from venues.'
   }
 ];
 
 function Features() {
   return (
-    <div className="py-20 relative overflow-hidden bg-gradient-to-br from-pink-50 to-white">
-      {/* Updated decorative background overlay */}
-      <div className="absolute inset-0" style={{ 
-          backgroundImage: `url(${patternImg})`,
-          opacity: 0.1,
-          backgroundSize: 'cover'
-      }} />
-      
-      <div className="max-w-7xl mx-auto px-4 relative z-10">
-        {/* Section Header */}
-        <motion.div
-          initial={{ opacity: 0 }}
-          whileInView={{ opacity: 1 }}
-          className="text-center mb-16"
-        >
-          <h2 className="text-4xl font-serif text-[#1f2937] mb-4">
-            Sort your wedding with ease
-          </h2>
-          <p className="text-lg text-gray-600">
-            Let our smart recommendations and tools streamline your planning process.
+    <section id="benefits" className="py-24 bg-white text-[#111827]">
+      <div className="max-w-7xl mx-auto px-6">
+        <div className="text-center mb-16">
+          <p className="text-sm uppercase tracking-[0.3em] text-pink-600 font-semibold">What a Better Deal Can Look Like</p>
+          <h2 className="mt-4 text-4xl md:text-5xl font-bold">Your venue package, improved in the right places</h2>
+          <p className="mt-4 max-w-2xl mx-auto text-lg text-slate-600">
+            We focus on the exact parts of your destination wedding proposal that can add more value without asking for a higher headline price.
           </p>
-        </motion.div>
-        
-        {/* Feature Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-          {features.map((feature, index) => (
+        </div>
+
+        <div className="grid gap-6 sm:grid-cols-2 xl:grid-cols-4">
+          {benefits.map((benefit, index) => (
             <motion.div
-              key={index}
+              key={benefit.title}
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
-              whileHover={{ scale: 1.05 }}
+              viewport={{ once: true }}
               transition={{ duration: 0.3, delay: index * 0.1 }}
-              className="bg-white/80 backdrop-blur-sm p-8 rounded-2xl shadow-xl flex flex-col items-center text-center hover:shadow-2xl"
+              className="rounded-3xl border border-slate-200 bg-slate-50 p-8 shadow-sm"
             >
-              <div className="mb-4">
-                <span className="text-5xl">{feature.icon}</span>
+              <div className="mb-5 h-12 w-12 rounded-2xl bg-pink-600 text-white grid place-items-center text-xl font-bold">
+                {index + 1}
               </div>
-              <h3 className="text-xl font-semibold text-[#1f2937] mb-2">
-                {feature.title}
-              </h3>
-              {/* Optionally include a description if needed */}
-              {/* <p className="text-gray-600">{feature.description}</p> */}
+              <h3 className="text-xl font-semibold text-slate-900 mb-3">{benefit.title}</h3>
+              <p className="text-slate-600 leading-relaxed">{benefit.description}</p>
             </motion.div>
           ))}
         </div>
-      </div>
 
-      {/* Additional decorative shapes */}
-      <div className="absolute top-0 left-0 w-64 h-64 bg-pink-200/20 rounded-full blur-3xl" />
-      <div className="absolute bottom-0 right-0 w-64 h-64 bg-purple-200/20 rounded-full blur-3xl" />
-    </div>
+        <p className="mt-10 text-center text-sm text-slate-500">Benefits vary by property and destination.</p>
+      </div>
+    </section>
   );
 }
 

@@ -27,55 +27,27 @@ function Navbar() {
   const displayName = userDetails?.displayName || currentUser?.displayName || 'User';
 
   const NavLinks = ({ onClick }) => (
-    <ul className="nav-links flex items-center space-x-8">
-      <li className="relative group text-white">
-        <Link to="/venues" onClick={onClick} className="text-white text-sm hover:text-gray-200 py-2">
-          Hotel Deals
+    <ul className="nav-links flex flex-col md:flex-row md:items-center md:space-x-8 space-y-3 md:space-y-0 text-white">
+      <li>
+        <Link to="/#how-it-works" onClick={onClick} className="text-white text-sm hover:text-gray-200 py-2">
+          How It Works
         </Link>
-        
       </li>
-      <li className="relative group">
-        <Link to="/dashboard" onClick={onClick} className="text-white text-sm hover:text-gray-200 py-2">
-          DIY Tools
+      <li>
+        <Link to="/#benefits" onClick={onClick} className="text-white text-sm hover:text-gray-200 py-2">
+          Benefits
         </Link>
-        <div className="absolute left-0 top-full hidden group-hover:flex bg-[#db2777] shadow-lg rounded-lg p-4 w-max z-50">
-          <div className="grid grid-cols-2 gap-4">
-            <Link to="/dashboard" className="block px-4 py-2 text-white hover:bg-[#b91c1c]">Dashboard</Link>
-            <Link to="/guest-list" className="block px-4 py-2 text-white hover:bg-[#b91c1c]">Guest List</Link>
-            <Link to="/checklist" className="block px-4 py-2 text-white hover:bg-[#b91c1c]">Checklist</Link>
-            <Link to="/vendors" className="block px-4 py-2 text-white hover:bg-[#b91c1c]">Vendors</Link>
-            <Link to="/saved" className="block px-4 py-2 text-white hover:bg-[#b91c1c]">Saved</Link>
-            <Link to="/timeline" className="block px-4 py-2 text-white hover:bg-[#b91c1c]">Timeline</Link>
-            <Link to="/budget" className="block px-4 py-2 text-white hover:bg-[#b91c1c]">Budget</Link>
-            <Link to="/website-builder" className="block px-4 py-2 text-white hover:bg-[#b91c1c]">Wedding Website</Link>
-          </div>
-        </div>
       </li>
-      <li className="relative group">
-        <Link to="#" onClick={onClick} className="text-white text-sm hover:text-gray-200 py-2">
-          Artists & Activities
+      <li>
+        <Link to="/#faqs" onClick={onClick} className="text-white text-sm hover:text-gray-200 py-2">
+          FAQs
         </Link>
-        <div className="absolute left-0 top-full hidden group-hover:flex bg-[#db2777] shadow-lg rounded-lg p-4 w-max z-50">
-          <div className="grid grid-cols-2 gap-4">
-            <span className="block px-4 py-2 text-white">DJs (Coming Soon)</span>
-            <span className="block px-4 py-2 text-white">Photographers (Coming Soon)</span>
-            <span className="block px-4 py-2 text-white">Makeup Artists (Coming Soon)</span>
-            <span className="block px-4 py-2 text-white">Mehendi Artists (Coming Soon)</span>
-            <span className="block px-4 py-2 text-white">Gifting Vendors (Coming Soon)</span>
-            <span className="block px-4 py-2 text-white">Baaraat (Coming Soon)</span>
-            <span className="block px-4 py-2 text-white">Vintage Cars (Coming Soon)</span>
-            <span className="block px-4 py-2 text-white">Choreographers (Coming Soon)</span>
-            <span className="block px-4 py-2 text-white">Hospitality Teams (Coming Soon)</span>
-          </div>
-        </div>
       </li>
-      <li className="relative group">
-        <Link to="/decor" onClick={onClick} className="text-white text-sm hover:text-gray-200 py-2">
-          Decor Budgeting
+      <li>
+        <Link to="/#for-venues" onClick={onClick} className="text-white text-sm hover:text-gray-200 py-2">
+          For Venues
         </Link>
-        
       </li>
-      
     </ul>
   );
 
@@ -122,15 +94,19 @@ function Navbar() {
 
             {/* Desktop Auth/Profile */}
             <div className="hidden md:flex items-center space-x-4">
+              <Link
+                to="/consultation"
+                className="inline-flex items-center rounded-full bg-white px-5 py-2.5 text-sm font-semibold text-[#db2777] shadow-lg shadow-pink-200/40 hover:bg-slate-100 transition-colors"
+              >
+                Book Free Consultation
+              </Link>
               {!currentUser ? (
                 <>
-                  <Link to="/signin" className="btn-primary text-white border border-white">Sign In</Link>
-                  <Link to="/signup" className="btn-primary bg-white text-[#db2777] hover:bg-gray-200 border border-white">Sign Up</Link>
-                  <Link 
-                    to="/venue-owner/auth" 
-                    className="px-4 py-2 border-2 border-white text-white rounded-lg hover:bg-[#b91c1c] transition-colors"
-                  >
-                    Register Venue
+                  <Link to="/signin" className="text-white text-sm hover:text-gray-200 py-2">
+                    Sign In
+                  </Link>
+                  <Link to="/signup" className="text-white text-sm hover:text-gray-200 py-2">
+                    Sign Up
                   </Link>
                 </>
               ) : (
@@ -148,17 +124,11 @@ function Navbar() {
                     <span className="text-white">{displayName}</span>
                   </button>
 
-                  {/* Desktop Profile Menu */}
                   {showProfileMenu && (
                     <div className="absolute right-0 mt-2 w-48 bg-[#db2777] rounded-md shadow-lg py-1">
                       <Link to="/profile" className="block px-4 py-2 text-white hover:bg-[#b91c1c]">
                         Profile
                       </Link>
-                      {userDetails?.role === 'admin' && (
-                        <Link to="/calendar-manager" className="block px-4 py-2 text-white hover:bg-[#b91c1c]">
-                          Calendar Manager
-                        </Link>
-                      )}
                       <button
                         onClick={handleSignOut}
                         className="w-full text-left px-4 py-2 text-white hover:bg-[#b91c1c]"
@@ -241,35 +211,35 @@ function Navbar() {
                   </div>
 
                   {/* Mobile Auth Buttons */}
-                  <div className="mt-auto p-4 border-t border-gray-200">
+                  <div className="mt-auto p-4 border-t border-white/20">
+                    <Link
+                      to="/consultation"
+                      onClick={() => setIsMobileMenuOpen(false)}
+                      className="block w-full py-3 px-4 text-center rounded-full bg-white text-[#db2777] font-semibold hover:bg-slate-100 transition-colors"
+                    >
+                      Book Free Consultation
+                    </Link>
                     {!currentUser ? (
-                      <div className="space-y-2">
-                        <Link 
-                          to="/signin" 
+                      <div className="mt-3 space-y-2">
+                        <Link
+                          to="/signin"
                           onClick={() => setIsMobileMenuOpen(false)}
-                          className="block w-full py-2 px-4 text-center bg-white text-[#db2777] rounded-lg hover:bg-gray-200"
+                          className="block w-full py-2 px-4 text-center rounded-lg bg-[#ffffff]/90 text-[#db2777] hover:bg-white transition-colors"
                         >
                           Sign In
                         </Link>
-                        <Link 
+                        <Link
                           to="/signup"
                           onClick={() => setIsMobileMenuOpen(false)}
-                          className="block w-full py-2 px-4 text-center border border-white text-white rounded-lg hover:bg-[#b91c1c]"
+                          className="block w-full py-2 px-4 text-center rounded-lg border border-white text-white hover:bg-[#b91c1c] transition-colors"
                         >
                           Sign Up
-                        </Link>
-                        <Link 
-                          to="/venue-owner/auth"
-                          onClick={() => setIsMobileMenuOpen(false)}
-                          className="block w-full py-2 px-4 text-center bg-[#b91c1c] text-white rounded-lg"
-                        >
-                          Register Venue
                         </Link>
                       </div>
                     ) : (
                       <button
                         onClick={handleSignOut}
-                        className="w-full py-2 px-4 text-center bg-[#b91c1c] text-white rounded-lg"
+                        className="mt-3 w-full py-2 px-4 text-center rounded-lg bg-[#b91c1c] text-white hover:bg-[#a81a45] transition-colors"
                       >
                         Sign Out
                       </button>

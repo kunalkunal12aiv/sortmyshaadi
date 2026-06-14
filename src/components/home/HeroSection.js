@@ -1,62 +1,28 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
-import { FaSearch } from 'react-icons/fa';
+
+const guestOptions = [
+  { value: 'two', label: 'Just the Two of Us' },
+  { value: 'small', label: 'Small (1–24)' },
+  { value: 'medium', label: 'Medium (25–49)' },
+  { value: 'large', label: 'Large (50–99)' },
+  { value: 'grand', label: 'Grand Affair (100+)' }
+];
 
 function HeroSection() {
-  const [budget, setBudget] = useState('');
-  const [guests, setGuests] = useState('');
-  const [rooms, setRooms] = useState('');
-  const [extraBeds, setExtraBeds] = useState('');
-  const [checkIn, setCheckIn] = useState('');
-  const [checkOut, setCheckOut] = useState('');
+  const [dateSeason, setDateSeason] = useState('');
+  const [guestCount, setGuestCount] = useState('small');
   const navigate = useNavigate();
 
-  const calculateAccommodation = (guests) => {
-    const doubleRooms = Math.ceil(guests / 2.3);
-    const capacity = doubleRooms * 2;
-    const extraBeds = Math.max(0, guests - capacity);
-    return { doubleRooms, extraBeds };
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    navigate('/consultation');
   };
-
-  const handleBudgetChange = (e) => {
-    const rawVal = e.target.value.replace(/,/g, '');
-    if (!isNaN(rawVal)) {
-      const formatted = rawVal ? Number(rawVal).toLocaleString('en-IN') : '';
-      setBudget(formatted);
-    }
-  };
-
-  const handleGuestChange = (e) => {
-    const newGuests = Number(e.target.value);
-    setGuests(newGuests);
-    const { doubleRooms, extraBeds } = calculateAccommodation(newGuests);
-    setRooms(doubleRooms);
-    setExtraBeds(extraBeds);
-  };
-
-  const handleSearch = () => {
-    navigate(`/venues?budget=${budget}&guests=${guests}&rooms=${rooms}&extraBeds=${extraBeds}&checkIn=${checkIn}&checkOut=${checkOut}`);
-  };
-
-  const formatDateForInput = (date) => {
-    const d = new Date(date);
-    let month = '' + (d.getMonth() + 1);
-    let day = '' + d.getDate();
-    const year = d.getFullYear();
-
-    if (month.length < 2) month = '0' + month;
-    if (day.length < 2) day = '0' + day;
-
-    return [year, month, day].join('-');
-  };
-
-  const today = formatDateForInput(new Date());
-  const tomorrow = formatDateForInput(new Date().setDate(new Date().getDate() + 1));
 
   return (
-    <div className="relative min-h-[60vh] flex items-center justify-center">
-      <div 
+    <section className="relative min-h-[88vh] flex items-center justify-center bg-[#f7eef4]">
+      <div
         className="absolute inset-0 z-0"
         style={{
           backgroundImage: "url('/assets/hero.jpg')",
@@ -64,100 +30,87 @@ function HeroSection() {
           backgroundPosition: 'center'
         }}
       >
-        <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/50 to-black/60" />
+        <div className="absolute inset-0 bg-black/35" />
       </div>
 
-      <div className="relative z-10 w-full max-w-3xl mx-auto px-4">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="text-center space-y-8"
-        >
-          <h2 className="text-2xl  md:text-4xl font-playfair text-white mb-4 leading-tight">
-          Let's sort the best hotel deals for you!          </h2>
+      <div className="relative z-10 w-full max-w-7xl mx-auto px-6 py-16">
+        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>
+          <div className="grid gap-12 lg:grid-cols-[1.2fr_0.8fr] items-center">
+            <div className="text-center lg:text-left">
+              <span className="inline-flex rounded-full bg-white/20 px-4 py-2 text-xs uppercase tracking-[0.3em] font-semibold text-white/90">
+                Venue & hotel deal specialists
+              </span>
+              <h1 className="mt-7 text-4xl md:text-5xl xl:text-6xl font-extrabold leading-tight text-white">
+                Better Wedding Venue Deals. Less Stress.
+              </h1>
+              <p className="mt-6 max-w-2xl text-lg md:text-xl text-white/80 leading-relaxed">
+                We compare venues, negotiate with hotels, and help couples uncover better rates, added perks, and better overall value for their wedding budget.
+              </p>
 
-          <div className="bg-white/10 backdrop-blur-md p-6 rounded-2xl shadow-2xl max-w-xl mx-auto border border-white/20">
-            <div className="grid grid-cols-2 gap-3">
-              <input
-                type="text"
-                value={budget}
-                onChange={handleBudgetChange}
-                placeholder="Total Wedding Budget"
-                className="col-span-2 w-full px-4 py-2 bg-white/20 border border-white/30 rounded-xl text-white placeholder-white text-sm focus:outline-none focus:ring-2 focus:ring-[#db2777] transition-all duration-300"
-              />
-              <input
-                type="number"
-                value={guests}
-                onChange={handleGuestChange}
-                placeholder="No. of Guests"
-                className="col-span-2 w-full px-4 py-2 bg-white/20 border border-white/30 rounded-xl text-white placeholder-white text-sm focus:outline-none focus:ring-2 focus:ring-[#db2777] transition-all duration-300"
-              />
-              <div>
-                <label className="block text-white text-xs mb-1">Rooms</label>
-                <input
-                  type="number"
-                  value={rooms}
-                  onChange={(e) => setRooms(e.target.value)}
-                  placeholder="Rooms"
-                  className="w-full px-4 py-2 bg-white/20 border border-white/30 rounded-xl text-white placeholder-white text-sm focus:outline-none focus:ring-2 focus:ring-[#db2777] transition-all duration-300"
-                />
-                {guests && (
-                  <div className="text-xs text-white">
-                    Suggested: {calculateAccommodation(guests).doubleRooms}
-                  </div>
-                )}
-              </div>
-              <div>
-                <label className="block text-white text-xs mb-1">Extra Beds</label>
-                <input
-                  type="number"
-                  value={extraBeds}
-                  onChange={(e) => setExtraBeds(e.target.value)}
-                  placeholder="Extra Beds"
-                  className="w-full px-4 py-2 bg-white/20 border border-white/30 rounded-xl text-white placeholder-white text-sm focus:outline-none focus:ring-2 focus:ring-[#db2777] transition-all duration-300"
-                />
-                {guests && (
-                  <div className="text-xs text-white">
-                    Suggested: {calculateAccommodation(guests).extraBeds}
-                  </div>
-                )}
-              </div>
-              <div>
-                <label className="block text-white text-xs mb-1">Check In Date</label>
-                <input
-                  type="date"
-                  value={checkIn}
-                  onChange={(e) => setCheckIn(e.target.value)}
-                  min={today}
-                  onKeyDown={(e) => e.preventDefault()}
-                  className="w-full px-4 py-2 bg-white/20 border border-white/30 rounded-xl text-white text-sm focus:outline-none focus:ring-2 focus:ring-[#db2777] transition-all duration-300"
-                />
-              </div>
-              <div>
-                <label className="block text-white text-xs mb-1">Check Out Date</label>
-                <input
-                  type="date"
-                  value={checkOut}
-                  onChange={(e) => setCheckOut(e.target.value)}
-                  min={checkIn || tomorrow}
-                  onKeyDown={(e) => e.preventDefault()}
-                  className="w-full px-4 py-2 bg-white/20 border border-white/30 rounded-xl text-white text-sm focus:outline-none focus:ring-2 focus:ring-[#db2777] transition-all duration-300"
-                />
+              <div className="mt-10 flex flex-col items-center gap-4 sm:flex-row sm:justify-center lg:justify-start">
+                <button
+                  type="button"
+                  onClick={() => navigate('/consultation')}
+                  className="inline-flex items-center justify-center rounded-full bg-[#db2777] px-8 py-4 text-sm font-semibold text-white shadow-lg shadow-pink-500/20 hover:bg-[#c21d54] transition-colors"
+                >
+                  Book a Free 30-Minute Consultation
+                </button>
+                <div className="text-sm text-white/80">
+                  Receive tailored venue recommendations within one week.
+                </div>
               </div>
             </div>
-            <button
-              onClick={handleSearch}
-              className="mt-4 w-full px-6 py-2.5 bg-[#db2777] text-white rounded-xl hover:bg-[#db2777]/90 transition-all duration-300 shadow-lg shadow-[#db2777]/20 hover:shadow-[#db2777]/40 font-medium text-sm flex items-center justify-center gap-2"
-            >
-              <FaSearch className="text-xs" />
-              Search
-            </button>
+
+            <div className="rounded-[36px] border border-white/20 bg-white/95 p-8 shadow-2xl shadow-slate-900/10">
+              <div className="text-center mb-6">
+                <span className="text-sm uppercase tracking-[0.3em] text-pink-600 font-semibold">Qualification Form</span>
+                <h2 className="mt-3 text-2xl font-semibold text-slate-900">Get matched with a wedding specialist</h2>
+              </div>
+
+              <form onSubmit={handleSubmit} className="space-y-5">
+                <label className="block text-sm font-medium text-slate-600">
+                  Wedding Date / Wedding Season
+                  <input
+                    type="text"
+                    value={dateSeason}
+                    onChange={(e) => setDateSeason(e.target.value)}
+                    placeholder="e.g. Dec 2026 or Winter wedding"
+                    className="mt-3 w-full rounded-3xl border border-slate-200 bg-white px-4 py-3 text-sm text-slate-900 shadow-sm focus:border-pink-500 focus:outline-none focus:ring-2 focus:ring-pink-100"
+                  />
+                </label>
+
+                <div>
+                  <p className="text-sm font-medium text-slate-600 mb-3">Guest Count</p>
+                  <div className="grid gap-3 sm:grid-cols-2">
+                    {guestOptions.map((option) => (
+                      <button
+                        key={option.value}
+                        type="button"
+                        onClick={() => setGuestCount(option.value)}
+                        className={`rounded-3xl border px-4 py-3 text-left text-sm transition-all ${guestCount === option.value ? 'border-pink-600 bg-pink-50 text-pink-700' : 'border-slate-200 bg-white text-slate-700 hover:border-pink-600 hover:bg-pink-50'}`}
+                      >
+                        <span className="block font-semibold">{option.label}</span>
+                      </button>
+                    ))}
+                  </div>
+                </div>
+
+                <button
+                  type="submit"
+                  className="w-full rounded-full bg-slate-900 px-6 py-4 text-sm font-semibold text-white shadow-lg shadow-slate-900/10 hover:bg-slate-800 transition-colors"
+                >
+                  Get Matched With A Wedding Specialist
+                </button>
+
+                <p className="text-xs text-slate-500">
+                  One quick step to book your free consultation and begin a specialist-led venue negotiation process.
+                </p>
+              </form>
+            </div>
           </div>
         </motion.div>
       </div>
-
-      <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-black/20 to-transparent" />
-    </div>
+    </section>
   );
 }
 
