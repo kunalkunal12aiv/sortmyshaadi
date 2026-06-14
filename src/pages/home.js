@@ -2,10 +2,6 @@ import React from 'react';
 import { Helmet } from 'react-helmet-async';
 import HeroSection from '../components/home/HeroSection';
 import Features from '../components/home/Features';
-import NegotiationValues from '../components/home/NegotiationValues';
-import WhyChooseUs from '../components/home/WhyChooseUs';
-import FAQs from '../components/home/FAQs';
-import VendorCTA from '../components/home/VendorCTA';
 
 function Home() {
   return (
@@ -28,10 +24,6 @@ function Home() {
         <div className="relative">
           <HeroSection />
           <Features />
-          <NegotiationValues />
-          <WhyChooseUs />
-          <FAQs />
-          <VendorCTA />
         </div>
       </div>
     </>

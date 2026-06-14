@@ -4,9 +4,9 @@ import { useNavigate } from 'react-router-dom';
 
 const guestOptions = [
   { value: 'two', label: 'Just the Two of Us' },
-  { value: 'small', label: 'Small (1–24)' },
-  { value: 'medium', label: 'Medium (25–49)' },
-  { value: 'large', label: 'Large (50–99)' },
+  { value: 'small', label: 'Small (1ï¿½24)' },
+  { value: 'medium', label: 'Medium (25ï¿½49)' },
+  { value: 'large', label: 'Large (50ï¿½99)' },
   { value: 'grand', label: 'Grand Affair (100+)' }
 ];
 
@@ -25,7 +25,7 @@ function HeroSection() {
       <div
         className="absolute inset-0 z-0"
         style={{
-          backgroundImage: "url('/assets/hero.jpg')",
+          backgroundImage: "url('/assets/taj%20hotel.jpg')",
           backgroundSize: 'cover',
           backgroundPosition: 'center'
         }}
@@ -38,25 +38,25 @@ function HeroSection() {
           <div className="grid gap-12 lg:grid-cols-[1.2fr_0.8fr] items-center">
             <div className="text-center lg:text-left">
               <span className="inline-flex rounded-full bg-white/20 px-4 py-2 text-xs uppercase tracking-[0.3em] font-semibold text-white/90">
-                Venue & hotel deal specialists
+                Hotel deals, sorted
               </span>
               <h1 className="mt-7 text-4xl md:text-5xl xl:text-6xl font-extrabold leading-tight text-white">
-                Better Wedding Venue Deals. Less Stress.
+                SortMyShaadi
               </h1>
               <p className="mt-6 max-w-2xl text-lg md:text-xl text-white/80 leading-relaxed">
-                We compare venues, negotiate with hotels, and help couples uncover better rates, added perks, and better overall value for their wedding budget.
+                Best Hotel Deals, Sorted. Not a planner. Not a directory. Not a platform.
               </p>
 
               <div className="mt-10 flex flex-col items-center gap-4 sm:flex-row sm:justify-center lg:justify-start">
                 <button
                   type="button"
-                  onClick={() => navigate('/consultation')}
+                  onClick={() => window.open('https://calendly.com/sortmyshaadi/consultation', '_blank')}
                   className="inline-flex items-center justify-center rounded-full bg-[#db2777] px-8 py-4 text-sm font-semibold text-white shadow-lg shadow-pink-500/20 hover:bg-[#c21d54] transition-colors"
                 >
-                  Book a Free 30-Minute Consultation
+                  Book a Consultation
                 </button>
                 <div className="text-sm text-white/80">
-                  Receive tailored venue recommendations within one week.
+                  Speak with a specialist who negotiates hotel value for your wedding.
                 </div>
               </div>
             </div>
